@@ -45,53 +45,59 @@ async function main() {
 
   console.log('Site ayarları oluşturuldu');
 
-  // Menü yapısı
-  const kurumsal = await prisma.menu.create({
-    data: {
-      title: 'Kurumsal',
-      url: '#',
-      order: 1,
-      children: {
-        create: [
-          { title: 'KYSD Yönetim Kurulu Listesi', url: '/sayfa/kysd-yonetim-kurulu-listesi', order: 1 },
-          { title: 'Kuruluş ve Amaçlarımız', url: '/sayfa/kurulus-ve-amaclarimiz', order: 2 },
-          { title: 'Faaliyetlerimiz', url: '/sayfa/faaliyetlerimiz', order: 3 },
-          { title: 'Tüzüğümüz', url: '/sayfa/tuzugumuz', order: 4 }
-        ]
+  // Menü yapısı - sadece menü yoksa oluştur
+  const existingMenus = await prisma.menu.count();
+
+  if (existingMenus === 0) {
+    const kurumsal = await prisma.menu.create({
+      data: {
+        title: 'Kurumsal',
+        url: '#',
+        order: 1,
+        children: {
+          create: [
+            { title: 'KYSD Yönetim Kurulu Listesi', url: '/sayfa/kysd-yonetim-kurulu-listesi', order: 1 },
+            { title: 'Kuruluş ve Amaçlarımız', url: '/sayfa/kurulus-ve-amaclarimiz', order: 2 },
+            { title: 'Faaliyetlerimiz', url: '/sayfa/faaliyetlerimiz', order: 3 },
+            { title: 'Tüzüğümüz', url: '/sayfa/tuzugumuz', order: 4 }
+          ]
+        }
       }
-    }
-  });
+    });
 
-  const sanayiGruplari = await prisma.menu.create({
-    data: {
-      title: 'Sanayi Grupları ve Üyeler',
-      url: '#',
-      order: 2,
-      children: {
-        create: [
-          { title: 'Askı Sanayi Grubu Üyeleri', url: '/sanayi-grubu/aski-sanayi-grubu-uyeleri', order: 1 },
-          { title: 'Dar Dokuma ve Örme Sanayi', url: '/sanayi-grubu/dar-dokuma-ve-orme-sanayi', order: 2 },
-          { title: 'Düğme – Toka ve Metal Aksesuar Sanayi', url: '/sanayi-grubu/dugme-toka-ve-metal-aksesuar-sanayi', order: 3 },
-          { title: 'Etiket Sanayi', url: '/sanayi-grubu/etiket-sanayi', order: 4 },
-          { title: 'Fermuar Sanayi Grubu Üyeleri', url: '/sanayi-grubu/fermuar-sanayi-grubu-uyeleri', order: 5 },
-          { title: 'İplik Sanayi', url: '/sanayi-grubu/iplik-sanayi', order: 6 },
-          { title: 'Kapitone Sanayi', url: '/sanayi-grubu/kapitone-sanayi', order: 7 },
-          { title: 'Tele Elyaf ve Vatka Sanayi', url: '/sanayi-grubu/tele-elyaf-ve-vatka-sanayi', order: 8 }
-        ]
+    const sanayiGruplari = await prisma.menu.create({
+      data: {
+        title: 'Sanayi Grupları ve Üyeler',
+        url: '#',
+        order: 2,
+        children: {
+          create: [
+            { title: 'Askı Sanayi Grubu Üyeleri', url: '/sanayi-grubu/aski-sanayi-grubu-uyeleri', order: 1 },
+            { title: 'Dar Dokuma ve Örme Sanayi', url: '/sanayi-grubu/dar-dokuma-ve-orme-sanayi', order: 2 },
+            { title: 'Düğme – Toka ve Metal Aksesuar Sanayi', url: '/sanayi-grubu/dugme-toka-ve-metal-aksesuar-sanayi', order: 3 },
+            { title: 'Etiket Sanayi', url: '/sanayi-grubu/etiket-sanayi', order: 4 },
+            { title: 'Fermuar Sanayi Grubu Üyeleri', url: '/sanayi-grubu/fermuar-sanayi-grubu-uyeleri', order: 5 },
+            { title: 'İplik Sanayi', url: '/sanayi-grubu/iplik-sanayi', order: 6 },
+            { title: 'Kapitone Sanayi', url: '/sanayi-grubu/kapitone-sanayi', order: 7 },
+            { title: 'Tele Elyaf ve Vatka Sanayi', url: '/sanayi-grubu/tele-elyaf-ve-vatka-sanayi', order: 8 }
+          ]
+        }
       }
-    }
-  });
+    });
 
-  await prisma.menu.createMany({
-    data: [
-      { title: 'KYSD Akademi', url: '/kysd-akademi', order: 3 },
-      { title: 'Duyurular', url: '/duyurular', order: 4 },
-      { title: 'Haberler', url: '/haberler', order: 5 },
-      { title: 'İletişim', url: '/iletisim', order: 6 }
-    ]
-  });
+    await prisma.menu.createMany({
+      data: [
+        { title: 'KYSD Akademi', url: '/kysd-akademi', order: 3 },
+        { title: 'Duyurular', url: '/duyurular', order: 4 },
+        { title: 'Haberler', url: '/haberler', order: 5 },
+        { title: 'İletişim', url: '/iletisim', order: 6 }
+      ]
+    });
 
-  console.log('Menü yapısı oluşturuldu');
+    console.log('Menü yapısı oluşturuldu');
+  } else {
+    console.log('Menüler zaten mevcut, atlanıyor');
+  }
 
   // Sanayi Grupları
   const industryGroups = [
