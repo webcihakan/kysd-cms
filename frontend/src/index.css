@@ -1,0 +1,562 @@
+/* Slick Carousel - must be first */
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+    font-family: 'Saira', system-ui, -apple-system, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Saira', system-ui, -apple-system, sans-serif;
+    @apply font-bold;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary-800 text-white hover:bg-primary-700 focus:ring-primary-500;
+  }
+
+  .btn-secondary {
+    @apply btn bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-400 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600;
+  }
+
+  .btn-accent {
+    @apply btn bg-accent-500 text-white hover:bg-accent-600 focus:ring-accent-400;
+  }
+
+  .btn-outline {
+    @apply btn border-2 border-primary-800 text-primary-800 hover:bg-primary-800 hover:text-white focus:ring-primary-500 dark:border-primary-400 dark:text-primary-400;
+  }
+
+  .input {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden dark:bg-gray-800 dark:border-gray-700;
+  }
+
+  .section-title {
+    @apply text-2xl md:text-3xl font-bold text-gray-900 dark:text-white;
+  }
+
+  .link {
+    @apply text-primary-600 hover:text-primary-800 transition-colors duration-200 dark:text-primary-400 dark:hover:text-primary-300;
+  }
+
+  /* Dark mode table styles */
+  .dark table {
+    @apply text-gray-200;
+  }
+
+  .dark thead {
+    @apply bg-gray-700;
+  }
+
+  .dark tbody tr {
+    @apply border-gray-700;
+  }
+
+  .dark tbody tr:hover {
+    background-color: #374151;
+  }
+
+  /* Dark mode form elements */
+  .dark select {
+    @apply bg-gray-700 border-gray-600 text-white;
+  }
+
+  .dark textarea {
+    @apply bg-gray-700 border-gray-600 text-white placeholder-gray-400;
+  }
+
+  /* Dark mode badges */
+  .dark .bg-green-100 {
+    @apply bg-green-900/30 text-green-400;
+  }
+
+  .dark .bg-gray-100 {
+    @apply bg-gray-700 text-gray-300;
+  }
+
+  .dark .bg-red-100 {
+    @apply bg-red-900/30 text-red-400;
+  }
+
+  .dark .bg-yellow-100 {
+    @apply bg-yellow-900/30 text-yellow-400;
+  }
+
+  .dark .bg-blue-100 {
+    @apply bg-blue-900/30 text-blue-400;
+  }
+
+  .dark .bg-amber-100 {
+    @apply bg-amber-900/30 text-amber-400;
+  }
+
+  .dark .bg-purple-100 {
+    @apply bg-purple-900/30 text-purple-400;
+  }
+
+  .dark .bg-indigo-100 {
+    @apply bg-indigo-900/30 text-indigo-400;
+  }
+
+  .dark .bg-orange-100 {
+    @apply bg-orange-900/30 text-orange-400;
+  }
+
+  /* Dark mode text colors */
+  .dark .text-gray-800 {
+    @apply text-white;
+  }
+
+  .dark .text-gray-900 {
+    @apply text-white;
+  }
+
+  .dark .text-gray-700 {
+    @apply text-gray-200;
+  }
+
+  .dark .text-gray-600 {
+    @apply text-gray-300;
+  }
+
+  .dark .text-gray-500 {
+    @apply text-gray-400;
+  }
+
+  /* Dark mode backgrounds */
+  .dark .bg-gray-50 {
+    @apply bg-gray-700;
+  }
+
+  .dark .bg-white {
+    @apply bg-gray-800;
+  }
+
+  /* Dark mode borders */
+  .dark .border-gray-100 {
+    @apply border-gray-700;
+  }
+
+  .dark .border-gray-200 {
+    @apply border-gray-600;
+  }
+
+  .dark .border-gray-300 {
+    @apply border-gray-600;
+  }
+
+  /* Dark mode default borders */
+  .dark .border-b {
+    border-color: rgb(55 65 81);
+  }
+
+  .dark .border-t {
+    border-color: rgb(55 65 81);
+  }
+
+  .dark .border-l {
+    border-color: rgb(55 65 81);
+  }
+
+  .dark .border-r {
+    border-color: rgb(55 65 81);
+  }
+
+  .dark .border {
+    border-color: rgb(55 65 81);
+  }
+
+  .dark .divide-y > :not([hidden]) ~ :not([hidden]) {
+    @apply border-gray-700;
+  }
+
+  .dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]) {
+    @apply border-gray-700;
+  }
+
+  .dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+    @apply border-gray-700;
+  }
+
+  /* Dark mode ring colors */
+  .dark .ring-1 {
+    --tw-ring-color: rgb(75 85 99);
+  }
+
+  /* Dark mode shadow adjustments */
+  .dark .shadow {
+    --tw-shadow-color: rgb(0 0 0 / 0.3);
+  }
+
+  /* Dark mode hover states */
+  .dark .hover\:bg-gray-50:hover {
+    @apply bg-gray-700;
+  }
+
+  .dark .hover\:bg-gray-100:hover {
+    @apply bg-gray-600;
+  }
+
+  .dark .hover\:bg-blue-50:hover {
+    @apply bg-blue-900/30;
+  }
+
+  .dark .hover\:bg-red-50:hover {
+    @apply bg-red-900/30;
+  }
+
+  .dark .hover\:bg-green-50:hover {
+    @apply bg-green-900/30;
+  }
+
+  .dark .hover\:bg-gray-200:hover {
+    @apply bg-gray-600;
+  }
+
+  /* Dark mode primary colors */
+  .dark .bg-primary-50 {
+    @apply bg-primary-900/30;
+  }
+
+  .dark .text-primary-700 {
+    @apply text-primary-400;
+  }
+
+  .dark .text-primary-600 {
+    @apply text-primary-400;
+  }
+
+  .dark .hover\:bg-primary-50:hover {
+    @apply bg-primary-900/30;
+  }
+
+  /* Dark mode blue colors */
+  .dark .hover\:bg-blue-50:hover {
+    @apply bg-blue-900/30;
+  }
+
+  .dark .text-blue-500 {
+    @apply text-blue-400;
+  }
+
+  .dark .text-blue-600 {
+    @apply text-blue-400;
+  }
+
+  .dark .text-blue-700 {
+    @apply text-blue-400;
+  }
+
+  .dark .bg-blue-50 {
+    @apply bg-blue-900/30 text-blue-400;
+  }
+
+  /* Dark mode green colors */
+  .dark .text-green-600 {
+    @apply text-green-400;
+  }
+
+  .dark .text-green-700 {
+    @apply text-green-400;
+  }
+
+  .dark .hover\:bg-green-100:hover {
+    @apply bg-green-900/30;
+  }
+
+  /* Dark mode red colors */
+  .dark .hover\:bg-red-100:hover {
+    @apply bg-red-900/30;
+  }
+}
+
+/* Quill Editor Styles */
+.ql-container {
+  @apply border-gray-300 rounded-b-lg;
+  min-height: 200px;
+}
+
+.ql-toolbar {
+  @apply border-gray-300 rounded-t-lg bg-gray-50;
+}
+
+.ql-editor {
+  min-height: 200px;
+}
+
+/* Quill Dark Mode */
+.dark .ql-container {
+  @apply border-gray-600 bg-gray-700;
+}
+
+.dark .ql-toolbar {
+  @apply border-gray-600 bg-gray-800;
+}
+
+.dark .ql-toolbar button {
+  @apply text-gray-300;
+}
+
+.dark .ql-toolbar button:hover,
+.dark .ql-toolbar button.ql-active {
+  @apply text-white;
+}
+
+.dark .ql-toolbar .ql-stroke {
+  stroke: #9ca3af;
+}
+
+.dark .ql-toolbar .ql-fill {
+  fill: #9ca3af;
+}
+
+.dark .ql-toolbar button:hover .ql-stroke,
+.dark .ql-toolbar button.ql-active .ql-stroke {
+  stroke: #fff;
+}
+
+.dark .ql-toolbar button:hover .ql-fill,
+.dark .ql-toolbar button.ql-active .ql-fill {
+  fill: #fff;
+}
+
+.dark .ql-toolbar .ql-picker {
+  @apply text-gray-300;
+}
+
+.dark .ql-toolbar .ql-picker-options {
+  @apply bg-gray-700 border-gray-600;
+}
+
+.dark .ql-editor {
+  @apply text-white;
+}
+
+.dark .ql-editor.ql-blank::before {
+  @apply text-gray-400;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  @apply bg-gray-800;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-gray-600;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}
+
+/* Slider Animations */
+@keyframes progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.animate-progress {
+  animation: progress 6s linear forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+
+.animate-kenburns {
+  animation: kenburns 8s ease-out forwards;
+}
+
+/* Slick Carousel Custom Styles */
+.slick-dots {
+  bottom: 20px;
+}
+
+.slick-dots li {
+  margin: 0 4px;
+}
+
+.slick-dots li button:before {
+  font-size: 10px;
+  color: white;
+  opacity: 0.5;
+}
+
+.slick-dots li.slick-active button:before {
+  color: #f59e0b;
+  opacity: 1;
+}
+
+.slick-slide {
+  padding: 0 8px;
+}
+
+.slick-list {
+  margin: 0 -8px;
+}
+
+/* TIAD Style Slider */
+.tiad-slider .slick-track {
+  display: flex !important;
+}
+
+.tiad-slider .slick-slide {
+  height: auto;
+}
+
+.tiad-slider .slick-slide > div {
+  height: 100%;
+}
+
+.tiad-slider .slick-list {
+  margin: 0 -8px;
+}
+
+.tiad-slider .slick-dots {
+  position: relative;
+  bottom: auto;
+  margin-top: 20px;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.tiad-slider .slick-dots li {
+  margin: 0;
+  padding: 0;
+  width: auto;
+  height: auto;
+}
+
+.tiad-slider .slick-dots li button {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0;
+  line-height: 0;
+}
+
+.tiad-slider .slick-dots li button:before {
+  display: none;
+}
+
+.tiad-slider .slick-dots li.slick-active button {
+  background-color: #1e40af;
+  transform: scale(1.2);
+}
+
+/* Corporate Slider */
+.corporate-slider {
+  width: 100%;
+  max-width: 100%;
+}
+
+.corporate-slider .slick-list {
+  margin: 0;
+  overflow: hidden;
+}
+
+.corporate-slider .slick-slide {
+  padding: 0;
+}
+
+.corporate-slider .slick-slide > div {
+  width: 100%;
+}
+
+.corporate-slider .slick-dots {
+  position: relative;
+  bottom: auto;
+  margin-top: 12px;
+}
+
+@media (min-width: 640px) {
+  .corporate-slider .slick-dots {
+    margin-top: 16px;
+  }
+}
+
+.corporate-slider .slick-dots li button:before {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 8px;
+}
+
+@media (min-width: 640px) {
+  .corporate-slider .slick-dots li button:before {
+    font-size: 10px;
+  }
+}
+
+.corporate-slider .slick-dots li.slick-active button:before {
+  color: #b8860b;
+}
