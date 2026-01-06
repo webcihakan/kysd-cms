@@ -8,4 +8,4 @@ cmds = ["npm install"]
 cmds = ["npx prisma generate"]
 
 [start]
-cmd = "npx prisma db push && node server.js"
+cmd = "npx prisma db push && node prisma/seed.js && node server.js"
