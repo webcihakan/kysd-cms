@@ -35,8 +35,7 @@ const menuGroups = [
     items: [
       { path: '/admin/sanayi-gruplari', icon: Building2, label: 'Sanayi Grupları' },
       { path: '/admin/uyeler', icon: Users, label: 'Üye Firmalar' },
-      { path: '/admin/uyelik-basvurulari', icon: ClipboardList, label: 'Üyelik Başvuruları' },
-      { path: '/admin/aidatlar', icon: CreditCard, label: 'Aidat Takibi' }
+      { path: '/admin/uyelik-basvurulari', icon: ClipboardList, label: 'Üyelik Başvuruları' }
     ]
   },
   {
@@ -70,6 +69,7 @@ const menuGroups = [
     title: 'Finans',
     icon: Receipt,
     items: [
+      { path: '/admin/aidatlar', icon: CreditCard, label: 'Aidat Takibi' },
       { path: '/admin/giderler', icon: Receipt, label: 'Aylık Giderler' }
     ]
   },
