@@ -48,16 +48,17 @@ router.get('/', async (req, res) => {
       }
     });
 
-    // Bigpara'dan altın fiyatlarını çek
+    // Bigpara'dan altın ve gümüş fiyatlarını çek
+    let goldResponse = null;
     try {
-      const goldResponse = await axios.get('https://bigpara.hurriyet.com.tr/altin/', {
+      goldResponse = await axios.get('https://bigpara.hurriyet.com.tr/altin/', {
         timeout: 10000,
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
         }
       });
 
-      // JavaScript değişkeninden veri çek: var $altinData = [...]
+      // JavaScript değişkeninden altın verisi çek: var $altinData = [...]
       const altinDataMatch = goldResponse.data.match(/var\s+\$altinData\s*=\s*(\[.*?\]);/);
 
       if (altinDataMatch && altinDataMatch[1]) {
@@ -75,14 +76,7 @@ router.get('/', async (req, res) => {
         }
       }
 
-      console.log('[Currency API] Altın:', data.gold);
-
-    } catch (goldError) {
-      console.error('[Currency API] Altın fiyatları alınamadı:', goldError.message);
-    }
-
-    // Gümüş fiyatları da aynı altın sayfasında HTML tablosunda
-    try {
+      // Gümüş fiyatları da aynı sayfada HTML tablosunda
       const $ = cheerio.load(goldResponse.data);
 
       // "SERBEST PİYASA GÜMÜŞ FİYATLARI" bölümünü bul
@@ -108,10 +102,10 @@ router.get('/', async (req, res) => {
         }
       });
 
-      console.log('[Currency API] Gümüş:', data.silver);
+      console.log('[Currency API] Altın:', data.gold, 'Gümüş:', data.silver);
 
-    } catch (silverError) {
-      console.error('[Currency API] Gümüş fiyatları alınamadı:', silverError.message);
+    } catch (goldError) {
+      console.error('[Currency API] Altın/Gümüş fiyatları alınamadı:', goldError.message);
     }
 
     // Cache için 5 dakika header ekle
