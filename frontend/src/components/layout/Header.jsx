@@ -76,73 +76,100 @@ export default function Header() {
       {/* Top Bar */}
       <div className="bg-primary-900 text-white">
         <div className="container mx-auto px-4 py-2 flex justify-between items-center text-xs">
-          {/* Sol taraf - Döviz ve Altın Bilgileri */}
-          <div className="flex items-center gap-3 divide-x divide-primary-700 flex-1">
-            {!currency.loading && !currency.error && (
-              <>
-                {currency.usd && (
-                  <div className="flex items-center gap-1.5 pr-3">
-                    <TrendingUp className="w-3.5 h-3.5 text-green-400" />
-                    <span className="font-medium">USD:</span>
-                    <span className="text-accent-300">{currency.usd.selling?.toFixed(2)} ₺</span>
-                  </div>
-                )}
-                {currency.eur && (
-                  <div className="flex items-center gap-1.5 pl-3 pr-3">
-                    <TrendingUp className="w-3.5 h-3.5 text-green-400" />
-                    <span className="font-medium">EUR:</span>
-                    <span className="text-accent-300">{currency.eur.selling?.toFixed(2)} ₺</span>
-                  </div>
-                )}
-                {currency.gold && (
-                  <div className="hidden sm:flex items-center gap-1.5 pl-3 pr-3">
-                    <TrendingUp className="w-3.5 h-3.5 text-yellow-400" />
-                    <span className="font-medium">Altın:</span>
-                    <span className="text-accent-300">{currency.gold?.toFixed(2)} ₺</span>
-                  </div>
-                )}
-                {currency.silver && (
-                  <div className="hidden md:flex items-center gap-1.5 pl-3">
-                    <TrendingUp className="w-3.5 h-3.5 text-gray-300" />
-                    <span className="font-medium">Gümüş:</span>
-                    <span className="text-accent-300">{currency.silver?.toFixed(2)} ₺</span>
-                  </div>
-                )}
-              </>
+          {/* Sol taraf - Telefon ve Email */}
+          <div className="hidden sm:flex items-center divide-x divide-primary-700">
+            {settings.contact_phone && (
+              <a href={`tel:${settings.contact_phone}`} className="flex items-center gap-2 pr-4 hover:text-accent-300 transition-colors">
+                <Phone className="w-3.5 h-3.5" />
+                <span>{settings.contact_phone}</span>
+              </a>
+            )}
+            {settings.contact_email && (
+              <a href={`mailto:${settings.contact_email}`} className="flex items-center gap-2 pl-4 hover:text-accent-300 transition-colors">
+                <Mail className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">{settings.contact_email}</span>
+              </a>
             )}
           </div>
 
-          {/* Sağ taraf - Hesap Makinesi ve Kullanıcı Butonları */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Hesap Makinesi */}
-            <button
-              onClick={() => setShowCalculator(true)}
-              className="flex items-center gap-1.5 hover:text-accent-300 transition-colors px-2 py-1 hover:bg-primary-800 rounded"
-              title="Hesap Makinesi"
-            >
-              <CalculatorIcon className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Hesap</span>
-            </button>
-
-            <span className="text-primary-600">|</span>
-
-            {user ? (
-              <button onClick={logout} className="hover:text-accent-300 transition-colors">
-                Cikis
-              </button>
-            ) : (
-              <>
-                <Link to="/giris" className="hover:text-accent-300 transition-colors">
-                  Giris
-                </Link>
-                <Link
-                  to={ctaLink}
-                  className="bg-accent-500 hover:bg-accent-600 text-white px-3 py-1.5 rounded text-xs font-semibold tracking-wide uppercase transition-colors"
-                >
-                  {ctaText}
-                </Link>
-              </>
+          {/* Mobilde sadece telefon */}
+          <div className="sm:hidden">
+            {settings.contact_phone && (
+              <a href={`tel:${settings.contact_phone}`} className="flex items-center gap-2 hover:text-accent-300 transition-colors">
+                <Phone className="w-4 h-4" />
+                <span>Ara</span>
+              </a>
             )}
+          </div>
+
+          {/* Sağ taraf - Döviz, Altın, Hesap Makinesi ve Kullanıcı */}
+          <div className="flex items-center gap-2 divide-x divide-primary-700">
+            {/* Döviz ve Altın Bilgileri */}
+            {!currency.loading && !currency.error && (
+              <div className="flex items-center gap-2 pr-2">
+                {currency.usd && (
+                  <div className="flex items-center gap-1">
+                    <TrendingUp className="w-3 h-3 text-green-400" />
+                    <span className="font-medium">USD:</span>
+                    <span className="text-accent-300">{currency.usd.selling?.toFixed(2)}</span>
+                  </div>
+                )}
+                {currency.eur && (
+                  <div className="hidden sm:flex items-center gap-1 ml-2">
+                    <TrendingUp className="w-3 h-3 text-green-400" />
+                    <span className="font-medium">EUR:</span>
+                    <span className="text-accent-300">{currency.eur.selling?.toFixed(2)}</span>
+                  </div>
+                )}
+                {currency.gold && (
+                  <div className="hidden md:flex items-center gap-1 ml-2">
+                    <TrendingUp className="w-3 h-3 text-yellow-400" />
+                    <span className="font-medium">Altın:</span>
+                    <span className="text-accent-300">{currency.gold?.toFixed(2)}</span>
+                  </div>
+                )}
+                {currency.silver && (
+                  <div className="hidden lg:flex items-center gap-1 ml-2">
+                    <TrendingUp className="w-3 h-3 text-gray-300" />
+                    <span className="font-medium">Gümüş:</span>
+                    <span className="text-accent-300">{currency.silver?.toFixed(2)}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Hesap Makinesi ve Kullanıcı Butonları */}
+            <div className="flex items-center gap-2 pl-2">
+              {/* Hesap Makinesi */}
+              <button
+                onClick={() => setShowCalculator(true)}
+                className="flex items-center gap-1 hover:text-accent-300 transition-colors px-1.5 py-1 hover:bg-primary-800 rounded"
+                title="Hesap Makinesi"
+              >
+                <CalculatorIcon className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline text-xs">Hesap</span>
+              </button>
+
+              <span className="text-primary-600">|</span>
+
+              {user ? (
+                <button onClick={logout} className="hover:text-accent-300 transition-colors text-xs">
+                  Cikis
+                </button>
+              ) : (
+                <>
+                  <Link to="/giris" className="hover:text-accent-300 transition-colors text-xs">
+                    Giris
+                  </Link>
+                  <Link
+                    to={ctaLink}
+                    className="bg-accent-500 hover:bg-accent-600 text-white px-3 py-1.5 rounded text-xs font-semibold tracking-wide uppercase transition-colors"
+                  >
+                    {ctaText}
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
