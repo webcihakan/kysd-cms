@@ -119,7 +119,7 @@ export default function BoardMembers() {
         </div>
 
         {/* Yönetim Kurulu Üyeleri */}
-        <div>
+        <div className="mb-16">
           <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">Yönetim Kurulu Üyeleri</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {regularMembers.map((member) => (
@@ -146,6 +146,92 @@ export default function BoardMembers() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Eski Yönetim Kurulları */}
+        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 md:p-10">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Geçmiş Dönem Yönetim Kurulları</h2>
+              <p className="text-gray-600">KYSD'yi bugünlere taşıyan değerli yöneticilerimiz</p>
+            </div>
+
+            <div className="space-y-6">
+              {/* 2020-2022 Dönemi */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-100">
+                  <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                    <span className="text-primary-700 font-bold text-sm">2020</span>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-800">2020 - 2022 Dönemi</h3>
+                    <p className="text-sm text-gray-500">12. Dönem Yönetim Kurulu</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-start gap-3">
+                    <Crown className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-gray-800">Başkan</p>
+                      <p className="text-sm text-gray-600">[Önceki Dönem Başkanı]</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Star className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-gray-800">Başkan Vekili</p>
+                      <p className="text-sm text-gray-600">[Önceki Dönem Başkan Vekili]</p>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mt-4 text-center italic">
+                  * Geçmiş dönem yöneticilerin detaylı bilgileri için lütfen dernek ile iletişime geçiniz.
+                </p>
+              </div>
+
+              {/* 2018-2020 Dönemi */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-100">
+                  <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                    <span className="text-primary-700 font-bold text-sm">2018</span>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-800">2018 - 2020 Dönemi</h3>
+                    <p className="text-sm text-gray-500">11. Dönem Yönetim Kurulu</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-start gap-3">
+                    <Crown className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-gray-800">Başkan</p>
+                      <p className="text-sm text-gray-600">[Önceki Dönem Başkanı]</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Star className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-gray-800">Başkan Vekili</p>
+                      <p className="text-sm text-gray-600">[Önceki Dönem Başkan Vekili]</p>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mt-4 text-center italic">
+                  * Geçmiş dönem yöneticilerin detaylı bilgileri için lütfen dernek ile iletişime geçiniz.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-8 text-center">
+              <p className="text-sm text-gray-500">
+                Daha eski dönemlere ait bilgiler için{' '}
+                <a href="/iletisim" className="text-primary-600 hover:text-primary-700 font-medium">
+                  iletişime geçiniz
+                </a>
+                .
+              </p>
+            </div>
           </div>
         </div>
       </div>
