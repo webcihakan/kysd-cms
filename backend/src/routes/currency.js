@@ -81,35 +81,32 @@ router.get('/', async (req, res) => {
       console.error('[Currency API] Altın fiyatları alınamadı:', goldError.message);
     }
 
-    // Bigpara'dan gümüş fiyatlarını çek
+    // Gümüş fiyatları da aynı altın sayfasında HTML tablosunda
     try {
-      const silverResponse = await axios.get('https://bigpara.hurriyet.com.tr/gumus/', {
-        timeout: 10000,
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      const $ = cheerio.load(goldResponse.data);
+
+      // "SERBEST PİYASA GÜMÜŞ FİYATLARI" bölümünü bul
+      let foundSilver = false;
+      $('ul').each((i, ul) => {
+        const $ul = $(ul);
+        const text = $ul.text();
+
+        // "Gümüş (TL/GR)" satırını bul
+        if (text.includes('Gümüş (TL/GR)') && !foundSilver) {
+          const cells = $ul.find('li');
+
+          if (cells.length >= 3) {
+            // 2. sütun: Alış, 3. sütun: Satış
+            const sellingText = cells.eq(2).text().trim().replace(/[^\d,]/g, '').replace(',', '.');
+            const selling = parseFloat(sellingText);
+
+            if (!isNaN(selling) && selling > 0) {
+              data.silver = parseFloat(selling.toFixed(2));
+              foundSilver = true;
+            }
+          }
         }
       });
-
-      // JavaScript değişkeninden veri çek
-      const gumusDataMatch = silverResponse.data.match(/var\s+\$gumusData\s*=\s*(\[.*?\]);/);
-
-      if (gumusDataMatch && gumusDataMatch[1]) {
-        try {
-          const gumusData = JSON.parse(gumusDataMatch[1]);
-
-          // Gram Gümüş (TL/GR)
-          const gramGumus = gumusData.find(item =>
-            item.aciklama && item.aciklama.includes('Gümüş (TL/GR)')
-          );
-
-          if (gramGumus && gramGumus.satis) {
-            data.silver = parseFloat(gramGumus.satis.toFixed(2));
-          }
-
-        } catch (parseError) {
-          console.error('[Currency API] Gümüş verisi parse hatası:', parseError.message);
-        }
-      }
 
       console.log('[Currency API] Gümüş:', data.silver);
 
