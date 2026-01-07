@@ -675,3 +675,46 @@ model VirtualBoothProduct {
 
   @@map("virtual_booth_products")
 }
+
+// =====================
+// TUR REHBERİ SİSTEMİ
+// =====================
+
+// Tur Rehberi (Fuar Ülkeleri için Gezilecek Yerler)
+model TravelGuide {
+  id               Int       @id @default(autoincrement())
+  country          String    // Ülke (Fairs tablosundan)
+  city             String?   // Şehir
+  name             String    // Yer adı
+  slug             String    @unique
+  description      String?   @db.Text
+  category         String    // historical, religious, restaurant, shopping
+  address          String?   @db.Text
+  googleMapsEmbed  String?   @db.Text // iframe embed kodu
+  phone            String?
+  website          String?
+  openingHours     String?   @db.Text
+  priceRange       String?   // $, $$, $$$
+  isActive         Boolean   @default(true)
+  order            Int       @default(0)
+  viewCount        Int       @default(0)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  images           TravelGuideImage[]
+
+  @@map("travel_guides")
+}
+
+// Tur Rehberi Resimleri
+model TravelGuideImage {
+  id          Int       @id @default(autoincrement())
+  guideId     Int
+  image       String
+  title       String?
+  description String?   @db.Text
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  guide       TravelGuide @relation(fields: [guideId], references: [id], onDelete: Cascade)
+
+  @@map("travel_guide_images")
+}

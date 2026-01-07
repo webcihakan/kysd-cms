@@ -30,6 +30,7 @@ import Trainings from './pages/public/Trainings'
 import Projects from './pages/public/Projects'
 import Fairs from './pages/public/Fairs'
 import Gallery from './pages/public/Gallery'
+import TravelGuide from './pages/public/TravelGuide'
 
 // Admin Pages
 import Dashboard from './pages/admin/Dashboard'
@@ -72,6 +73,8 @@ import VirtualFairsForm from './pages/admin/VirtualFairsForm'
 import VirtualBoothApplicationsList from './pages/admin/VirtualBoothApplicationsList'
 import VirtualBoothsList from './pages/admin/VirtualBoothsList'
 import VirtualBoothForm from './pages/admin/VirtualBoothForm'
+import TravelGuidesList from './pages/admin/TravelGuidesList'
+import TravelGuideForm from './pages/admin/TravelGuideForm'
 
 // Virtual Fair Public Pages
 import VirtualFairs from './pages/public/VirtualFairs'
@@ -124,6 +127,7 @@ export default function App() {
         <Route path="/projeler" element={<Projects />} />
         <Route path="/fuarlar" element={<Fairs />} />
         <Route path="/galeri" element={<Gallery />} />
+        <Route path="/tur-rehberi" element={<TravelGuide />} />
         <Route path="/sanal-fuarlar" element={<VirtualFairs />} />
         <Route path="/sanal-fuar/:slug" element={<VirtualFairDetail />} />
         <Route path="/sanal-stant/:id" element={<VirtualBoothDetail />} />
@@ -177,6 +181,9 @@ export default function App() {
         <Route path="fuarlar" element={<FairsList />} />
         <Route path="fuarlar/yeni" element={<FairForm />} />
         <Route path="fuarlar/:id" element={<FairForm />} />
+        <Route path="tur-rehberi" element={<TravelGuidesList />} />
+        <Route path="tur-rehberi/yeni" element={<TravelGuideForm />} />
+        <Route path="tur-rehberi/:id" element={<TravelGuideForm />} />
         <Route path="mevzuat" element={<LegislationsList />} />
         <Route path="mevzuat/yeni" element={<LegislationForm />} />
         <Route path="mevzuat/:id" element={<LegislationForm />} />

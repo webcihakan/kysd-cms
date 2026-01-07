@@ -4,7 +4,7 @@ import {
   LayoutDashboard, FileText, Newspaper, Bell, Building2, Image, Images,
   Megaphone, Menu as MenuIcon, Users, Mail, Settings, LogOut,
   ChevronLeft, ChevronRight, X, ClipboardList, FolderOpen, GraduationCap, Building,
-  Sun, Moon, User, ChevronDown, ExternalLink, Scale, CreditCard, Receipt, Monitor, Crown
+  Sun, Moon, User, ChevronDown, ExternalLink, Scale, CreditCard, Receipt, Monitor, Crown, MapPin
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
@@ -44,7 +44,8 @@ const menuGroups = [
     items: [
       { path: '/admin/projeler', icon: FolderOpen, label: 'Projeler' },
       { path: '/admin/egitimler', icon: GraduationCap, label: 'Eğitimler' },
-      { path: '/admin/fuarlar', icon: Building, label: 'Fuarlar' }
+      { path: '/admin/fuarlar', icon: Building, label: 'Fuarlar' },
+      { path: '/admin/tur-rehberi', icon: MapPin, label: 'Tur Rehberi' }
     ]
   },
   {

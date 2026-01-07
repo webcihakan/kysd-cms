@@ -31,6 +31,7 @@ const industryMemberRoutes = require('./src/routes/industryMembers');
 const scraperRoutes = require('./src/routes/scraperRoutes');
 const scraperService = require('./src/services/scraperService');
 const currencyRoutes = require('./src/routes/currency');
+const travelGuideRoutes = require('./src/routes/travelGuides');
 
 // Sanal Fuar Routes
 const virtualFairRoutes = require('./src/routes/virtualFairs');
@@ -80,6 +81,7 @@ app.use('/api/company-profile', companyProfileRoutes);
 app.use('/api/industry-members', industryMemberRoutes);
 app.use('/api/scrapers', scraperRoutes);
 app.use('/api/currency', currencyRoutes);
+app.use('/api/travel-guides', travelGuideRoutes);
 
 // Sanal Fuar Routes
 app.use('/api/virtual-fairs', virtualFairRoutes);
