@@ -1,0 +1,53 @@
+  Projeniz Natro VPS'te başarıyla çalışıyor! İşte detaylar:
+
+  🌐 Erişim Bilgileri
+
+  Website: http://37.148.208.249
+  Admin Panel: http://37.148.208.249/admin
+
+  🔑 Admin Giriş Bilgileri
+
+  - Email: admin@kysd.org.tr
+  - Şifre: Seed dosyasında tanımlı şifre (backend/prisma/seed.js'te kontrol edebilirsiniz)
+
+  🔧 Veritabanı Bilgileri
+
+  - Database: kysd_cms
+  - User: kysd_user
+  - Password: Kysd2024!DbPass
+  - MySQL Root Password: Kysd2024!Secure
+
+  📊 Servis Durumu
+
+  ✅ Backend API: Çalışıyor (PM2 ile)
+  ✅ Nginx: Çalışıyor
+  ✅ MySQL: Çalışıyor
+  ✅ Frontend: Build edildi ve serve ediliyor
+
+  📝 Faydalı Komutlar
+
+  VPS'e SSH ile bağlandığınızda kullanabileceğiniz komutlar:
+
+  # PM2 durumu
+  pm2 status
+
+  # Backend logları
+  pm2 logs kysd-backend
+
+  # Backend'i yeniden başlat
+  pm2 restart kysd-backend
+
+  # Nginx durumu
+  systemctl status nginx
+
+  # Nginx'i yeniden başlat
+  systemctl restart nginx
+
+  🚀 Sonraki Adımlar
+
+  1. Admin Panele Giriş Yapın: http://37.148.208.249/admin
+  2. Şifrenizi Değiştirin: İlk girişte admin şifrenizi güncelleyin
+  3. Domain Ekleyin (Opsiyonel): Domain aldıysanız DNS ayarlarını VPS IP'sine yönlendirin
+  4. SSL Sertifikası (Önerilir): Let's Encrypt ile ücretsiz SSL kurabilirsiniz
+
+  Başka bir şey yapmamı ister misiniz? 🚀
