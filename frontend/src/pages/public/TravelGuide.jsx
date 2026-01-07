@@ -53,26 +53,44 @@ export default function TravelGuide() {
     try {
       const response = await api.get('/travel-guides/countries')
       setCountries(response.data)
-      if (response.data.length > 0) {
-        setSelectedCountry(response.data[0])
-      }
+      // İlk açılışta tüm ülkeleri göster
+      fetchAllGuides()
     } catch (error) {
       console.error('Ülkeler yüklenemedi:', error)
     }
   }
 
   const fetchGuides = async () => {
-    if (!selectedCountry) return
-
     setLoading(true)
     try {
       const params = {}
       if (selectedCategory) params.category = selectedCategory
 
-      const response = await api.get(`/travel-guides/country/${selectedCountry}`, { params })
+      let response
+      if (selectedCountry) {
+        response = await api.get(`/travel-guides/country/${selectedCountry}`, { params })
+      } else {
+        // Tüm ülkeleri getir
+        response = await api.get('/travel-guides/all', { params })
+      }
       setGuides(response.data)
     } catch (error) {
       console.error('Rehberler yüklenemedi:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchAllGuides = async () => {
+    setLoading(true)
+    try {
+      const params = {}
+      if (selectedCategory) params.category = selectedCategory
+      const response = await api.get('/travel-guides/all', { params })
+      setGuides(response.data)
+    } catch (error) {
+      console.error('Tüm rehberler yüklenemedi:', error)
+      setGuides([])
     } finally {
       setLoading(false)
     }
@@ -139,6 +157,7 @@ export default function TravelGuide() {
                   onChange={(e) => setSelectedCountry(e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 >
+                  <option value="">Tüm Ülkeler</option>
                   {countries.map((country) => (
                     <option key={country} value={country}>
                       {country}

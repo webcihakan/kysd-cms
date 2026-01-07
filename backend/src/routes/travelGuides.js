@@ -70,6 +70,35 @@ router.get('/countries', async (req, res) => {
   }
 })
 
+// Tum ulkelerin rehberleri (public)
+router.get('/all', async (req, res) => {
+  try {
+    const { category } = req.query
+    const where = {
+      isActive: true
+    }
+
+    if (category) {
+      where.category = category
+    }
+
+    const guides = await prisma.travelGuide.findMany({
+      where,
+      include: {
+        images: {
+          orderBy: { order: 'asc' },
+          take: 3
+        }
+      },
+      orderBy: [{ country: 'asc' }, { order: 'asc' }, { createdAt: 'desc' }]
+    })
+    res.json(guides)
+  } catch (error) {
+    console.error('Tum rehberler getirilemedi:', error)
+    res.status(500).json({ error: 'Rehberler getirilemedi' })
+  }
+})
+
 // Ulkeye gore rehberler (public)
 router.get('/country/:country', async (req, res) => {
   try {
