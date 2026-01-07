@@ -10,13 +10,32 @@ import {
   ArrowRight,
   Clock,
   TrendingUp,
-  Star
+  Star,
+  Filter,
+  X
 } from 'lucide-react'
 import api from '../../utils/api'
 import { formatDate, truncateText, stripHtml } from '../../utils/helpers'
 import AdBanner from '../../components/common/AdBanner'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+
+// Filtreleme seçenekleri
+const categoryOptions = [
+  { value: 'all', label: 'Tüm Haberler' },
+  { value: 'ekonomi', label: 'Ekonomi' },
+  { value: 'sektor', label: 'Sektör Haberleri' },
+  { value: 'ihracat', label: 'İhracat' },
+  { value: 'uretim', label: 'Üretim' },
+  { value: 'yatirim', label: 'Yatırım' }
+]
+
+const dateFilterOptions = [
+  { value: 'all', label: 'Tüm Zamanlar' },
+  { value: '7', label: 'Son 7 Gün' },
+  { value: '30', label: 'Son 30 Gün' },
+  { value: '90', label: 'Son 3 Ay' }
+]
 
 export default function NewsList() {
   const [news, setNews] = useState([])
@@ -25,15 +44,33 @@ export default function NewsList() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [searchTerm, setSearchTerm] = useState('')
+  const [categoryFilter, setCategoryFilter] = useState('all')
+  const [dateFilter, setDateFilter] = useState('all')
+  const [showFilters, setShowFilters] = useState(false)
 
   useEffect(() => {
     fetchNews()
-  }, [page])
+  }, [page, categoryFilter, dateFilter])
 
   const fetchNews = async () => {
     try {
       setLoading(true)
-      const response = await api.get(`/news?page=${page}&limit=9`)
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: '9'
+      })
+
+      // Kategori filtresi
+      if (categoryFilter !== 'all') {
+        params.append('category', categoryFilter)
+      }
+
+      // Tarih filtresi
+      if (dateFilter !== 'all') {
+        params.append('days', dateFilter)
+      }
+
+      const response = await api.get(`/news?${params.toString()}`)
       const allNews = response.data.news
 
       // Öne çıkan haberleri ayır
@@ -52,6 +89,15 @@ export default function NewsList() {
     item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (item.excerpt && item.excerpt.toLowerCase().includes(searchTerm.toLowerCase()))
   )
+
+  const clearFilters = () => {
+    setCategoryFilter('all')
+    setDateFilter('all')
+    setSearchTerm('')
+    setPage(1)
+  }
+
+  const hasActiveFilters = categoryFilter !== 'all' || dateFilter !== 'all' || searchTerm !== ''
 
   const getImageUrl = (image) => {
     if (!image) return null
@@ -95,26 +141,135 @@ export default function NewsList() {
         </div>
       </div>
 
-      {/* Search Bar */}
+      {/* Search Bar & Filters */}
       <div className="container mx-auto px-4 -mt-8 relative z-20 mb-8">
         <div className="bg-white rounded-2xl shadow-xl p-6">
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-            <div className="relative flex-1 w-full">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Haber ara..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-              />
-            </div>
-            <div className="flex items-center gap-4 text-sm text-gray-500">
-              <div className="flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-primary-600" />
-                <span><strong className="text-gray-900">{news.length}</strong> haber</span>
+          <div className="flex flex-col gap-4">
+            {/* Search and Filter Toggle */}
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+              <div className="relative flex-1 w-full">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Haber ara..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                />
+              </div>
+              <div className="flex items-center gap-3 w-full md:w-auto">
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className={`flex items-center gap-2 px-4 py-3 rounded-xl border transition-colors ${
+                    hasActiveFilters
+                      ? 'bg-primary-600 text-white border-primary-600'
+                      : 'border-gray-200 hover:bg-gray-50'
+                  }`}
+                >
+                  <Filter className="w-5 h-5" />
+                  <span className="font-medium">Filtrele</span>
+                  {hasActiveFilters && (
+                    <span className="bg-white text-primary-600 text-xs font-bold px-2 py-0.5 rounded-full">
+                      ●
+                    </span>
+                  )}
+                </button>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <TrendingUp className="w-5 h-5 text-primary-600" />
+                  <span><strong className="text-gray-900">{news.length}</strong> haber</span>
+                </div>
               </div>
             </div>
+
+            {/* Filter Options */}
+            {showFilters && (
+              <div className="border-t border-gray-100 pt-4 space-y-4">
+                <div className="grid md:grid-cols-2 gap-4">
+                  {/* Category Filter */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Kategori
+                    </label>
+                    <select
+                      value={categoryFilter}
+                      onChange={(e) => setCategoryFilter(e.target.value)}
+                      className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                    >
+                      {categoryOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Date Filter */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Tarih Aralığı
+                    </label>
+                    <select
+                      value={dateFilter}
+                      onChange={(e) => setDateFilter(e.target.value)}
+                      className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                    >
+                      {dateFilterOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Active Filters and Clear Button */}
+                {hasActiveFilters && (
+                  <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {categoryFilter !== 'all' && (
+                        <span className="inline-flex items-center gap-1 bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm">
+                          {categoryOptions.find(o => o.value === categoryFilter)?.label}
+                          <button
+                            onClick={() => setCategoryFilter('all')}
+                            className="hover:text-primary-900"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      )}
+                      {dateFilter !== 'all' && (
+                        <span className="inline-flex items-center gap-1 bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm">
+                          {dateFilterOptions.find(o => o.value === dateFilter)?.label}
+                          <button
+                            onClick={() => setDateFilter('all')}
+                            className="hover:text-primary-900"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      )}
+                      {searchTerm && (
+                        <span className="inline-flex items-center gap-1 bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm">
+                          "{searchTerm}"
+                          <button
+                            onClick={() => setSearchTerm('')}
+                            className="hover:text-primary-900"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      onClick={clearFilters}
+                      className="text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors"
+                    >
+                      Tümünü Temizle
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

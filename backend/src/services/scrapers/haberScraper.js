@@ -157,14 +157,69 @@ const newsSources = [
   }
 ]
 
-// RSS Feed kaynaklari
+// RSS Feed kaynaklari - Turkiye Ekonomi Haberleri
 const rssFeeds = [
   {
-    name: 'Ekonomi Haberleri',
+    name: 'TRT Haber Ekonomi',
     url: 'https://www.trthaber.com/ekonomi_articles.rss',
-    keywords: ['tekstil', 'konfeksiyon', 'ihracat', 'sanayi', 'üretim', 'moda', 'giyim']
+    keywords: ['tekstil', 'konfeksiyon', 'ihracat', 'sanayi', 'üretim', 'moda', 'giyim', 'ticaret', 'şirket', 'yatırım']
+  },
+  {
+    name: 'AA Ekonomi',
+    url: 'https://www.aa.com.tr/tr/rss/default?cat=ekonomi',
+    keywords: ['tekstil', 'konfeksiyon', 'ihracat', 'sanayi', 'üretim', 'firma', 'yatırım']
   }
 ]
+
+// RSS Feed parser
+async function parseRSS(url, keywords) {
+  try {
+    console.log(`[HaberScraper] RSS feed okunuyor: ${url}`)
+    const xml = await fetchUrl(url, 20000)
+    const $ = cheerio.load(xml, { xmlMode: true })
+    const items = []
+
+    $('item').each((i, item) => {
+      if (i >= 20) return
+
+      const $item = $(item)
+      const title = $item.find('title').text().trim()
+      const link = $item.find('link').text().trim()
+      const description = $item.find('description').text().trim().replace(/<[^>]+>/g, '')
+
+      let imageUrl = $item.find('enclosure').attr('url') ||
+                     $item.find('media\\:content, media\\:thumbnail').attr('url')
+
+      // Icerik veya aciklama icinde img tag var mi kontrol et
+      if (!imageUrl) {
+        const content = $item.find('content\\:encoded, description').html() || ''
+        const imgMatch = content.match(/<img[^>]+src="([^">]+)"/)
+        if (imgMatch) imageUrl = imgMatch[1]
+      }
+
+      // Anahtar kelime filtresi - haberin konuyla alakali olup olmadigini kontrol et
+      const fullText = (title + ' ' + description).toLowerCase()
+      const hasKeyword = !keywords || keywords.length === 0 ||
+        keywords.some(kw => fullText.includes(kw.toLowerCase()))
+
+      if (hasKeyword && title && title.length > 10) {
+        items.push({
+          title,
+          link,
+          excerpt: description,
+          imageUrl,
+          source: 'RSS'
+        })
+      }
+    })
+
+    console.log(`[HaberScraper] RSS'den ${items.length} alakali haber bulundu`)
+    return items
+  } catch (err) {
+    console.log(`[HaberScraper] RSS parse hatasi: ${err.message}`)
+    return []
+  }
+}
 
 // Bir haber kaynagindan haberleri cek
 async function scrapeNewsSource(source) {
@@ -271,18 +326,37 @@ async function scrape(prisma) {
   let newCount = 0
   const tumHaberler = []
 
-  // Tum kaynaklardan haberleri topla
+  // RSS Feed kaynaklarindan haberleri topla (ONCE RSS!)
+  for (const feed of rssFeeds) {
+    try {
+      console.log(`[HaberScraper] ${feed.name} RSS taraniyor...`)
+      const items = await parseRSS(feed.url, feed.keywords)
+      tumHaberler.push(...items.map(item => ({
+        ...item,
+        sourceName: feed.name
+      })))
+    } catch (err) {
+      console.log(`[HaberScraper] ${feed.name} RSS hatasi: ${err.message}`)
+    }
+  }
+
+  // Tum web kaynaklarindan haberleri topla (SONRA Web Scraping)
   for (const source of newsSources) {
     try {
       const haberler = await scrapeNewsSource(source)
-      tumHaberler.push(...haberler)
+      tumHaberler.push(...haberler.map(h => ({
+        ...h,
+        sourceName: h.source
+      })))
     } catch (err) {
       console.log(`[HaberScraper] ${source.name} atlandi: ${err.message}`)
     }
   }
 
-  // Haberleri veritabanina kaydet
-  for (const haber of tumHaberler) {
+  console.log(`[HaberScraper] Toplam ${tumHaberler.length} haber bulundu, veritabanina kaydediliyor...`)
+
+  // Haberleri veritabanina kaydet (max 15 haber)
+  for (const haber of tumHaberler.slice(0, 15)) {
     try {
       // Ayni baslikta haber var mi kontrol et
       const existing = await prisma.news.findFirst({
@@ -291,24 +365,30 @@ async function scrape(prisma) {
 
       if (existing) continue
 
-      // Haber detayini cek
+      // Haber icerigi olustur
       let content = null
-      if (haber.link) {
+      const isRSSNews = haber.source === 'RSS'
+
+      // RSS haberleri icin detay sayfadan cekilmez, ozet kullanilir
+      if (!isRSSNews && haber.link) {
         content = await scrapeNewsContent(haber.link)
       }
 
       if (!content) {
-        content = `<p>${haber.excerpt}</p><p><strong>Kaynak:</strong> ${haber.source}</p>`
-        if (haber.link) {
-          content += `<p><a href="${haber.link}" target="_blank" rel="noopener">Haberin devami icin tiklayiniz</a></p>`
-        }
+        content = `<div class="ekonomi-haber">
+          <p>${haber.excerpt}</p>
+          ${haber.link ? `<p><a href="${haber.link}" target="_blank" rel="noopener" class="btn btn-primary">Haberin Devamı</a></p>` : ''}
+          <p class="haber-kaynak"><strong>Kaynak:</strong> ${haber.sourceName}</p>
+        </div>`
       }
 
-      // Resmi indir
+      // Resmi indir (RSS'de imageUrl, web scrapingde image)
       let imagePath = null
-      if (haber.image) {
-        const imageFilename = `haber-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.jpg`
-        imagePath = await downloadImage(haber.image, imageFilename)
+      const imageUrl = haber.imageUrl || haber.image
+      if (imageUrl) {
+        const ext = imageUrl.match(/\.(jpg|jpeg|png|webp)/i)?.[1] || 'jpg'
+        const imageFilename = `ekonomi-${Date.now()}-${Math.random().toString(36).substr(2, 6)}.${ext}`
+        imagePath = await downloadImage(imageUrl, imageFilename)
       }
 
       // Slug olustur
@@ -328,22 +408,21 @@ async function scrape(prisma) {
       })
 
       newCount++
-      console.log(`[HaberScraper] Yeni haber: ${haber.title.substring(0, 50)}...`)
+      console.log(`[HaberScraper] Eklendi: ${haber.title.substring(0, 60)}... (Kaynak: ${haber.sourceName})`)
 
     } catch (err) {
       console.log(`[HaberScraper] Kayit hatasi: ${err.message}`)
     }
   }
 
-  // Eger yeterli haber cekilemediyse, ornek haberler ekle
-  if (newCount === 0) {
-    console.log('[HaberScraper] Kaynaklardan haber cekilemedi, ornek haberler ekleniyor...')
-    newCount = await addSampleNews(prisma)
+  // Eger hic haber cekilemediyse bilgi ver
+  if (newCount === 0 && tumHaberler.length === 0) {
+    console.log('[HaberScraper] Kaynaklardan haber cekilemedi.')
   }
 
   return {
     count: newCount,
-    message: `${newCount} yeni haber eklendi`
+    message: `${newCount} yeni ekonomi haberi eklendi`
   }
 }
 

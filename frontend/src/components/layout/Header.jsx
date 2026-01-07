@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, ChevronDown, ChevronRight, Phone, Mail, ArrowRight, ExternalLink } from 'lucide-react'
+import { Menu, X, ChevronDown, ChevronRight, Phone, Mail, ArrowRight, ExternalLink, Calculator as CalculatorIcon, TrendingUp } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import api from '../../utils/api'
+import { useCurrency } from '../../hooks/useCurrency'
+import Calculator from '../Calculator'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -10,8 +12,10 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [menus, setMenus] = useState([])
   const [settings, setSettings] = useState({})
+  const [showCalculator, setShowCalculator] = useState(false)
   const { user, logout } = useAuth()
   const location = useLocation()
+  const currency = useCurrency()
 
   useEffect(() => {
     fetchMenus()
@@ -71,49 +75,69 @@ export default function Header() {
 
       {/* Top Bar */}
       <div className="bg-primary-900 text-white">
-        <div className="container mx-auto px-4 py-2 flex justify-between items-center text-xs sm:text-sm">
-          <div className="hidden sm:flex items-center divide-x divide-primary-700">
-            {settings.contact_phone && (
-              <a href={`tel:${settings.contact_phone}`} className="flex items-center gap-2 pr-4 hover:text-accent-300 transition-colors">
-                <Phone className="w-3.5 h-3.5" />
-                <span>{settings.contact_phone}</span>
-              </a>
-            )}
-            {settings.contact_email && (
-              <a href={`mailto:${settings.contact_email}`} className="flex items-center gap-2 pl-4 hover:text-accent-300 transition-colors">
-                <Mail className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">{settings.contact_email}</span>
-              </a>
-            )}
-          </div>
-          {/* Mobilde sadece telefon ikonu */}
-          <div className="sm:hidden">
-            {settings.contact_phone && (
-              <a href={`tel:${settings.contact_phone}`} className="flex items-center gap-2 hover:text-accent-300 transition-colors">
-                <Phone className="w-4 h-4" />
-                <span>Ara</span>
-              </a>
-            )}
-          </div>
-          <div className="flex items-center gap-2 sm:gap-4">
-            {user ? (
+        <div className="container mx-auto px-4 py-2 flex justify-between items-center text-xs">
+          {/* Sol taraf - Döviz ve Altın Bilgileri */}
+          <div className="flex items-center gap-3 divide-x divide-primary-700">
+            {!currency.loading && !currency.error && (
               <>
-                <Link to="/admin" className="hover:text-accent-300 transition-colors font-medium">
-                  Yonetim Paneli
-                </Link>
-                <span className="text-primary-600">|</span>
-                <button onClick={logout} className="hover:text-accent-300 transition-colors">
-                  Cikis
-                </button>
+                {currency.usd && (
+                  <div className="flex items-center gap-1.5 pr-3">
+                    <TrendingUp className="w-3.5 h-3.5 text-green-400" />
+                    <span className="font-medium">USD:</span>
+                    <span className="text-accent-300">{currency.usd.selling?.toFixed(2)} ₺</span>
+                  </div>
+                )}
+                {currency.eur && (
+                  <div className="hidden sm:flex items-center gap-1.5 pl-3 pr-3">
+                    <TrendingUp className="w-3.5 h-3.5 text-green-400" />
+                    <span className="font-medium">EUR:</span>
+                    <span className="text-accent-300">{currency.eur.selling?.toFixed(2)} ₺</span>
+                  </div>
+                )}
+                {currency.gold && (
+                  <div className="hidden md:flex items-center gap-1.5 pl-3 pr-3">
+                    <TrendingUp className="w-3.5 h-3.5 text-yellow-400" />
+                    <span className="font-medium">Altın:</span>
+                    <span className="text-accent-300">{currency.gold.selling?.toFixed(2)} ₺</span>
+                  </div>
+                )}
+                {currency.silver && (
+                  <div className="hidden lg:flex items-center gap-1.5 pl-3">
+                    <TrendingUp className="w-3.5 h-3.5 text-gray-300" />
+                    <span className="font-medium">Gümüş:</span>
+                    <span className="text-accent-300">{currency.silver.selling?.toFixed(2)} ₺</span>
+                  </div>
+                )}
               </>
+            )}
+          </div>
+
+          {/* Sağ taraf - Hesap Makinesi ve Kullanıcı Butonları */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Hesap Makinesi */}
+            <button
+              onClick={() => setShowCalculator(true)}
+              className="flex items-center gap-1.5 hover:text-accent-300 transition-colors px-2 py-1 hover:bg-primary-800 rounded"
+              title="Hesap Makinesi"
+            >
+              <CalculatorIcon className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Hesap</span>
+            </button>
+
+            <span className="text-primary-600">|</span>
+
+            {user ? (
+              <button onClick={logout} className="hover:text-accent-300 transition-colors">
+                Cikis
+              </button>
             ) : (
               <>
                 <Link to="/giris" className="hover:text-accent-300 transition-colors">
-                  Giris Yap
+                  Giris
                 </Link>
                 <Link
                   to={ctaLink}
-                  className="bg-accent-500 hover:bg-accent-600 text-white px-4 py-1.5 rounded text-xs font-semibold tracking-wide uppercase transition-colors"
+                  className="bg-accent-500 hover:bg-accent-600 text-white px-3 py-1.5 rounded text-xs font-semibold tracking-wide uppercase transition-colors"
                 >
                   {ctaText}
                 </Link>
@@ -280,6 +304,9 @@ export default function Header() {
           </>
         )}
       </div>
+
+      {/* Calculator Modal */}
+      <Calculator isOpen={showCalculator} onClose={() => setShowCalculator(false)} />
     </header>
   )
 }

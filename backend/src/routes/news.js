@@ -7,23 +7,54 @@ const { auth, editorOrAdmin } = require('../middleware/auth');
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// Get all news (public)
+// Get all news (public) - with filtering support
 router.get('/', async (req, res) => {
   try {
-    const { page = 1, limit = 10, featured, all } = req.query;
+    const { page = 1, limit = 10, featured, all, category, days } = req.query;
     const skip = (page - 1) * limit;
 
-    const where = all === 'true' ? {} : { isActive: true };
-    if (featured === 'true') where.isFeatured = true;
+    // Base where clause
+    const where = { AND: [] };
+
+    // Active filter
+    if (all !== 'true') {
+      where.AND.push({ isActive: true });
+    }
+
+    // Featured filter
+    if (featured === 'true') {
+      where.AND.push({ isFeatured: true });
+    }
+
+    // Kategori filtresi (title, excerpt ve content'te arama - MySQL için)
+    if (category && category !== 'all') {
+      where.AND.push({
+        OR: [
+          { title: { contains: category } },
+          { excerpt: { contains: category } },
+          { content: { contains: category } }
+        ]
+      });
+    }
+
+    // Tarih filtresi (son X gün)
+    if (days && days !== 'all') {
+      const daysAgo = new Date();
+      daysAgo.setDate(daysAgo.getDate() - parseInt(days));
+      where.AND.push({ createdAt: { gte: daysAgo } });
+    }
+
+    // If no filters, remove AND
+    const finalWhere = where.AND.length > 0 ? where : {};
 
     const [news, total] = await Promise.all([
       prisma.news.findMany({
-        where,
+        where: finalWhere,
         skip: parseInt(skip),
         take: parseInt(limit),
         orderBy: { createdAt: 'desc' }
       }),
-      prisma.news.count({ where })
+      prisma.news.count({ where: finalWhere })
     ]);
 
     res.json({ news, total, page: parseInt(page), totalPages: Math.ceil(total / limit) });
