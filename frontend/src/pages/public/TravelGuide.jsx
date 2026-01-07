@@ -365,12 +365,16 @@ export default function TravelGuide() {
 
               {/* Kategori ve Konum */}
               <div className="flex flex-wrap gap-2 mb-4">
-                {selectedGuide.category && (
-                  <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold ${categoryConfig[selectedGuide.category]?.color} border-2`}>
-                    {React.createElement(categoryConfig[selectedGuide.category]?.icon || MapPin, { className: "w-4 h-4" })}
-                    {categoryConfig[selectedGuide.category]?.label}
-                  </span>
-                )}
+                {selectedGuide.category && (() => {
+                  const config = categoryConfig[selectedGuide.category] || {}
+                  const CategoryIcon = config.icon || MapPin
+                  return (
+                    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold ${config.color} border-2`}>
+                      <CategoryIcon className="w-4 h-4" />
+                      {config.label}
+                    </span>
+                  )
+                })()}
                 {selectedGuide.priceRange && (
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">
                     <DollarSign className="w-4 h-4" />
