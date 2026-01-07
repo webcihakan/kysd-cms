@@ -48,7 +48,7 @@ router.get('/', async (req, res) => {
       }
     });
 
-    // Bigpara'dan altın ve gümüş fiyatlarını çek
+    // Bigpara'dan altın fiyatlarını çek
     try {
       const goldResponse = await axios.get('https://bigpara.hurriyet.com.tr/altin/', {
         timeout: 10000,
@@ -57,51 +57,64 @@ router.get('/', async (req, res) => {
         }
       });
 
-      const $ = cheerio.load(goldResponse.data);
+      // JavaScript değişkeninden veri çek: var $altinData = [...]
+      const altinDataMatch = goldResponse.data.match(/var\s+\$altinData\s*=\s*(\[.*?\]);/);
 
-      // Gram Altın fiyatı - tablo içinden çek
-      $('table tr').each((i, row) => {
-        const rowText = $(row).text();
+      if (altinDataMatch && altinDataMatch[1]) {
+        try {
+          const altinData = JSON.parse(altinDataMatch[1]);
 
-        // "Gram Altın" veya "ALTIN (TL/GR)" içeren satırı bul
-        if (rowText.includes('Gram Altın') || rowText.includes('ALTIN (TL/GR)')) {
-          const cells = $(row).find('td');
-          if (cells.length >= 2) {
-            // Alış ve satış fiyatlarını al
-            const buyingText = cells.eq(1).text().trim().replace(/[^\d,]/g, '').replace(',', '.');
-            const sellingText = cells.eq(2).text().trim().replace(/[^\d,]/g, '').replace(',', '.');
-
-            const buying = parseFloat(buyingText);
-            const selling = parseFloat(sellingText);
-
-            if (!isNaN(buying) && !isNaN(selling) && buying > 0) {
-              data.gold = parseFloat(selling.toFixed(2));
-            }
+          // Gram Altın (GLDGR)
+          const gramAltin = altinData.find(item => item.sembolkisa === 'GLDGR');
+          if (gramAltin && gramAltin.satis) {
+            data.gold = parseFloat(gramAltin.satis.toFixed(2));
           }
+
+        } catch (parseError) {
+          console.error('[Currency API] Altın verisi parse hatası:', parseError.message);
         }
+      }
 
-        // Gram Gümüş fiyatı
-        if (rowText.includes('Gümüş (TL/GR)') || rowText.includes('GÜMÜŞ (TL/GR)')) {
-          const cells = $(row).find('td');
-          if (cells.length >= 2) {
-            const buyingText = cells.eq(1).text().trim().replace(/[^\d,]/g, '').replace(',', '.');
-            const sellingText = cells.eq(2).text().trim().replace(/[^\d,]/g, '').replace(',', '.');
+      console.log('[Currency API] Altın:', data.gold);
 
-            const buying = parseFloat(buyingText);
-            const selling = parseFloat(sellingText);
+    } catch (goldError) {
+      console.error('[Currency API] Altın fiyatları alınamadı:', goldError.message);
+    }
 
-            if (!isNaN(buying) && !isNaN(selling) && buying > 0) {
-              data.silver = parseFloat(selling.toFixed(2));
-            }
-          }
+    // Bigpara'dan gümüş fiyatlarını çek
+    try {
+      const silverResponse = await axios.get('https://bigpara.hurriyet.com.tr/gumus/', {
+        timeout: 10000,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
         }
       });
 
-      console.log('[Currency API] Altın:', data.gold, 'Gümüş:', data.silver);
+      // JavaScript değişkeninden veri çek
+      const gumusDataMatch = silverResponse.data.match(/var\s+\$gumusData\s*=\s*(\[.*?\]);/);
 
-    } catch (goldError) {
-      console.error('[Currency API] Altın/Gümüş fiyatları alınamadı:', goldError.message);
-      // Altın/gümüş hatası varsa sadece döviz kurlarını dön
+      if (gumusDataMatch && gumusDataMatch[1]) {
+        try {
+          const gumusData = JSON.parse(gumusDataMatch[1]);
+
+          // Gram Gümüş (TL/GR)
+          const gramGumus = gumusData.find(item =>
+            item.aciklama && item.aciklama.includes('Gümüş (TL/GR)')
+          );
+
+          if (gramGumus && gramGumus.satis) {
+            data.silver = parseFloat(gramGumus.satis.toFixed(2));
+          }
+
+        } catch (parseError) {
+          console.error('[Currency API] Gümüş verisi parse hatası:', parseError.message);
+        }
+      }
+
+      console.log('[Currency API] Gümüş:', data.silver);
+
+    } catch (silverError) {
+      console.error('[Currency API] Gümüş fiyatları alınamadı:', silverError.message);
     }
 
     // Cache için 5 dakika header ekle
