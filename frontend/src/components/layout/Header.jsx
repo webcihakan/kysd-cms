@@ -77,7 +77,7 @@ export default function Header() {
       <div className="bg-primary-900 text-white">
         <div className="container mx-auto px-4 py-2 flex justify-between items-center text-xs">
           {/* Sol taraf - Döviz ve Altın Bilgileri */}
-          <div className="flex items-center gap-3 divide-x divide-primary-700">
+          <div className="flex items-center gap-3 divide-x divide-primary-700 flex-1">
             {!currency.loading && !currency.error && (
               <>
                 {currency.usd && (
@@ -88,24 +88,24 @@ export default function Header() {
                   </div>
                 )}
                 {currency.eur && (
-                  <div className="hidden sm:flex items-center gap-1.5 pl-3 pr-3">
+                  <div className="flex items-center gap-1.5 pl-3 pr-3">
                     <TrendingUp className="w-3.5 h-3.5 text-green-400" />
                     <span className="font-medium">EUR:</span>
                     <span className="text-accent-300">{currency.eur.selling?.toFixed(2)} ₺</span>
                   </div>
                 )}
                 {currency.gold && (
-                  <div className="hidden md:flex items-center gap-1.5 pl-3 pr-3">
+                  <div className="hidden sm:flex items-center gap-1.5 pl-3 pr-3">
                     <TrendingUp className="w-3.5 h-3.5 text-yellow-400" />
                     <span className="font-medium">Altın:</span>
-                    <span className="text-accent-300">{currency.gold.selling?.toFixed(2)} ₺</span>
+                    <span className="text-accent-300">{currency.gold?.toFixed(2)} ₺</span>
                   </div>
                 )}
                 {currency.silver && (
-                  <div className="hidden lg:flex items-center gap-1.5 pl-3">
+                  <div className="hidden md:flex items-center gap-1.5 pl-3">
                     <TrendingUp className="w-3.5 h-3.5 text-gray-300" />
                     <span className="font-medium">Gümüş:</span>
-                    <span className="text-accent-300">{currency.silver.selling?.toFixed(2)} ₺</span>
+                    <span className="text-accent-300">{currency.silver?.toFixed(2)} ₺</span>
                   </div>
                 )}
               </>
