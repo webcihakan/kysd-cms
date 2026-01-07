@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Search, MapPin, Phone, Globe, Clock, DollarSign, X, ChevronLeft, ChevronRight, Landmark, Church, UtensilsCrossed, ShoppingBag } from 'lucide-react'
 import api from '../../utils/api'
 
@@ -29,6 +30,7 @@ const categoryConfig = {
 }
 
 export default function TravelGuide() {
+  const [searchParams] = useSearchParams()
   const [countries, setCountries] = useState([])
   const [selectedCountry, setSelectedCountry] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
@@ -41,6 +43,11 @@ export default function TravelGuide() {
 
   useEffect(() => {
     fetchCountries()
+    // URL'den country parametresini al
+    const countryParam = searchParams.get('country')
+    if (countryParam) {
+      setSelectedCountry(decodeURIComponent(countryParam))
+    }
   }, [])
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Building, ChevronRight, Search, Calendar, MapPin, Globe,
-  ExternalLink, ArrowRight, Star, Users, Clock, Monitor, Building2, Package
+  ExternalLink, ArrowRight, Star, Users, Clock, Monitor, Building2, Package, Plane
 } from 'lucide-react'
 import api from '../../utils/api'
 import AdBanner from '../../components/common/AdBanner'
@@ -322,17 +322,28 @@ export default function Fairs() {
                     )}
                   </div>
 
-                  {fair.website && (
-                    <a
-                      href={fair.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-accent-400 hover:text-accent-300 text-sm font-medium"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      Web Sitesi
-                    </a>
-                  )}
+                  <div className="flex items-center gap-4">
+                    {fair.website && (
+                      <a
+                        href={fair.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-accent-400 hover:text-accent-300 text-sm font-medium"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        Web Sitesi
+                      </a>
+                    )}
+                    {fair.country && (
+                      <Link
+                        to={`/tur-rehberi?country=${encodeURIComponent(fair.country)}`}
+                        className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm font-medium"
+                      >
+                        <Plane className="w-4 h-4" />
+                        Tur Rehberi
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -498,6 +509,15 @@ export default function Fairs() {
                             <ExternalLink className="w-4 h-4" />
                             Web Sitesi
                           </a>
+                        )}
+                        {fair.country && (
+                          <Link
+                            to={`/tur-rehberi?country=${encodeURIComponent(fair.country)}`}
+                            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
+                          >
+                            <Plane className="w-4 h-4" />
+                            Tur Rehberi
+                          </Link>
                         )}
                       </div>
                     </div>
