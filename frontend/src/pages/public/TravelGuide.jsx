@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Search, MapPin, Phone, Globe, Clock, DollarSign, X, ChevronLeft, ChevronRight, Landmark, Church, UtensilsCrossed, ShoppingBag } from 'lucide-react'
+import { Search, MapPin, Phone, Globe, Clock, X, ChevronLeft, ChevronRight, Landmark, Church, UtensilsCrossed, ShoppingBag } from 'lucide-react'
 import api from '../../utils/api'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
@@ -323,12 +323,6 @@ export default function TravelGuide() {
                               Açılış Saatleri
                             </span>
                           )}
-                          {guide.priceRange && (
-                            <span className="flex items-center gap-1">
-                              <DollarSign className="w-3 h-3" />
-                              {guide.priceRange}
-                            </span>
-                          )}
                         </div>
                       </div>
                     </div>
@@ -401,12 +395,6 @@ export default function TravelGuide() {
                     </span>
                   )
                 })()}
-                {selectedGuide.priceRange && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">
-                    <DollarSign className="w-4 h-4" />
-                    {selectedGuide.priceRange}
-                  </span>
-                )}
               </div>
 
               {/* Açıklama */}
