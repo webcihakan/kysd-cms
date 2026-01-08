@@ -691,6 +691,8 @@ model TravelGuide {
   category         String    // historical, religious, restaurant, shopping
   address          String?   @db.Text
   googleMapsEmbed  String?   @db.Text // iframe embed kodu
+  latitude         Float?    // Enlem
+  longitude        Float?    // Boylam
   phone            String?
   website          String?
   openingHours     String?   @db.Text

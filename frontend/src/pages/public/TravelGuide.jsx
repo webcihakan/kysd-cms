@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Search, MapPin, Phone, Globe, Clock, X, ChevronLeft, ChevronRight, Landmark, Church, UtensilsCrossed, ShoppingBag } from 'lucide-react'
+import { Search, MapPin, Phone, Globe, Clock, X, ChevronLeft, ChevronRight, Landmark, Church, UtensilsCrossed, ShoppingBag, Navigation } from 'lucide-react'
 import api from '../../utils/api'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
@@ -453,6 +453,25 @@ export default function TravelGuide() {
                   </div>
                 )}
               </div>
+
+              {/* Yol Tarifi Butonu */}
+              {(selectedGuide.latitude && selectedGuide.longitude) || selectedGuide.address ? (
+                <div className="mb-6">
+                  <a
+                    href={
+                      selectedGuide.latitude && selectedGuide.longitude
+                        ? `https://www.google.com/maps/dir/?api=1&destination=${selectedGuide.latitude},${selectedGuide.longitude}`
+                        : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(selectedGuide.address)}`
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-colors shadow-lg hover:shadow-xl"
+                  >
+                    <Navigation className="w-5 h-5" />
+                    Yol Tarifi Al
+                  </a>
+                </div>
+              ) : null}
 
               {/* Google Maps */}
               {selectedGuide.googleMapsEmbed && (

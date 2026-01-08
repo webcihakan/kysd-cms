@@ -202,7 +202,7 @@ router.post('/', auth, adminOnly, async (req, res) => {
   try {
     const {
       country, city, name, description, category,
-      address, googleMapsEmbed, phone, website,
+      address, googleMapsEmbed, latitude, longitude, phone, website,
       openingHours, priceRange, isActive, order
     } = req.body
 
@@ -222,6 +222,8 @@ router.post('/', auth, adminOnly, async (req, res) => {
         category,
         address,
         googleMapsEmbed,
+        latitude: latitude ? parseFloat(latitude) : null,
+        longitude: longitude ? parseFloat(longitude) : null,
         phone,
         website,
         openingHours,
@@ -244,7 +246,7 @@ router.put('/:id', auth, adminOnly, async (req, res) => {
     const id = parseInt(req.params.id)
     const {
       country, city, name, description, category,
-      address, googleMapsEmbed, phone, website,
+      address, googleMapsEmbed, latitude, longitude, phone, website,
       openingHours, priceRange, isActive, order
     } = req.body
 
@@ -263,6 +265,8 @@ router.put('/:id', auth, adminOnly, async (req, res) => {
         category,
         address,
         googleMapsEmbed,
+        latitude: latitude ? parseFloat(latitude) : null,
+        longitude: longitude ? parseFloat(longitude) : null,
         phone,
         website,
         openingHours,
