@@ -251,11 +251,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Sidebar Reklam Alanı */}
-      <section className="py-8 bg-white border-b border-corporate-100">
-        <div className="container mx-auto px-4 flex justify-center gap-6 flex-wrap">
-          <AdBanner code="homepage-sidebar" />
-          <AdBanner code="sidebar-square" />
+      {/* Banner Reklam Alanı */}
+      <section className="py-12 bg-white border-b border-corporate-100">
+        <div className="container mx-auto px-8 md:px-12">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8">
+            {/* Sol Banner */}
+            <div className="flex justify-center">
+              <AdBanner code="homepage-banner-left" />
+            </div>
+            {/* Sağ Banner */}
+            <div className="flex justify-center">
+              <AdBanner code="homepage-banner-right" />
+            </div>
+          </div>
         </div>
       </section>
 

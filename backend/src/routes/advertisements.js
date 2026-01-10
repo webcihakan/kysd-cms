@@ -178,7 +178,39 @@ router.put('/:id', auth, adminOnly, async (req, res) => {
   }
 });
 
-// Ödeme işaretle
+// Ödeme bilgilerini güncelle (yeni endpoint - admin)
+router.put('/:id/payment', auth, adminOnly, async (req, res) => {
+  try {
+    const { paymentStatus, paidAmount, paidDate, paymentMethod, invoiceNo, paymentNotes } = req.body;
+
+    const ad = await prisma.advertisement.findUnique({
+      where: { id: parseInt(req.params.id) }
+    });
+
+    if (!ad) {
+      return res.status(404).json({ error: 'Reklam bulunamadı' });
+    }
+
+    const updated = await prisma.advertisement.update({
+      where: { id: parseInt(req.params.id) },
+      data: {
+        paymentStatus: paymentStatus || ad.paymentStatus,
+        paidAmount: paidAmount !== undefined ? (paidAmount ? parseFloat(paidAmount) : null) : undefined,
+        paidDate: paidDate !== undefined ? (paidDate ? new Date(paidDate) : null) : undefined,
+        paymentMethod: paymentMethod || ad.paymentMethod,
+        invoiceNo: invoiceNo !== undefined ? invoiceNo : undefined,
+        paymentNotes: paymentNotes !== undefined ? paymentNotes : undefined
+      }
+    });
+
+    res.json(updated);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Ödeme bilgileri güncellenemedi' });
+  }
+});
+
+// Ödeme işaretle (eski endpoint - hızlı ödeme için)
 router.patch('/:id/pay', auth, adminOnly, async (req, res) => {
   try {
     const { paidAmount, paymentMethod, invoiceNo, paymentNotes } = req.body;

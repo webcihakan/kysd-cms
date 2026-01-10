@@ -32,6 +32,15 @@ const scraperRoutes = require('./src/routes/scraperRoutes');
 const scraperService = require('./src/services/scraperService');
 const currencyRoutes = require('./src/routes/currency');
 const travelGuideRoutes = require('./src/routes/travelGuides');
+const holidayRoutes = require('./src/routes/holidays');
+const calendarRoutes = require('./src/routes/calendar');
+const magazineRoutes = require('./src/routes/magazines');
+const economicIndicatorRoutes = require('./src/routes/economicIndicators');
+
+// Katalog Routes
+const catalogRoutes = require('./src/routes/catalogs');
+const catalogPackageRoutes = require('./src/routes/catalogPackages');
+const catalogPaymentRoutes = require('./src/routes/catalogPayments');
 
 // Sanal Fuar Routes
 const virtualFairRoutes = require('./src/routes/virtualFairs');
@@ -82,6 +91,15 @@ app.use('/api/industry-members', industryMemberRoutes);
 app.use('/api/scrapers', scraperRoutes);
 app.use('/api/currency', currencyRoutes);
 app.use('/api/travel-guides', travelGuideRoutes);
+app.use('/api/holidays', holidayRoutes);
+app.use('/api/calendar', calendarRoutes);
+app.use('/api/magazines', magazineRoutes);
+app.use('/api/economic-indicators', economicIndicatorRoutes);
+
+// Katalog Routes
+app.use('/api/catalogs', catalogRoutes);
+app.use('/api/catalog-packages', catalogPackageRoutes);
+app.use('/api/catalog-payments', catalogPaymentRoutes);
 
 // Sanal Fuar Routes
 app.use('/api/virtual-fairs', virtualFairRoutes);
@@ -89,11 +107,9 @@ app.use('/api/virtual-booth-types', virtualBoothTypeRoutes);
 app.use('/api/virtual-booth-applications', virtualBoothApplicationRoutes);
 app.use('/api/virtual-booths', virtualBoothRoutes);
 
-// Cron job'lari baslat (uretim modunda)
-if (process.env.NODE_ENV === 'production') {
-  scraperService.startCronJobs();
-  console.log('Otomatik veri guncelleme cron job\'lari aktif');
-}
+// Cron job'lari baslat
+scraperService.startCronJobs();
+console.log('Otomatik veri guncelleme cron job\'lari aktif');
 
 // Health check
 app.get('/api/health', (req, res) => {

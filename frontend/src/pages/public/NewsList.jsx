@@ -18,7 +18,7 @@ import api from '../../utils/api'
 import { formatDate, truncateText, stripHtml } from '../../utils/helpers'
 import AdBanner from '../../components/common/AdBanner'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000'
 
 // Filtreleme seçenekleri
 const categoryOptions = [
@@ -99,10 +99,12 @@ export default function NewsList() {
 
   const hasActiveFilters = categoryFilter !== 'all' || dateFilter !== 'all' || searchTerm !== ''
 
-  const getImageUrl = (image) => {
-    if (!image) return null
-    if (image.startsWith('http')) return image
-    return `${API_URL}${image}`
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return null
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      return imagePath
+    }
+    return `${API_BASE_URL}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`
   }
 
   return (
@@ -302,6 +304,10 @@ export default function NewsList() {
                             src={getImageUrl(item.image)}
                             alt={item.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            onError={(e) => {
+                              e.target.onerror = null
+                              e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23f3f4f6" width="400" height="300"/%3E%3Ctext fill="%239ca3af" font-family="sans-serif" font-size="48" font-weight="bold" text-anchor="middle" x="200" y="165"%3EKYSD%3C/text%3E%3C/svg%3E'
+                            }}
                           />
                         ) : (
                           <div className="w-full h-full bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center">
@@ -353,6 +359,10 @@ export default function NewsList() {
                         src={getImageUrl(item.image)}
                         alt={item.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => {
+                          e.target.onerror = null
+                          e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23f3f4f6" width="400" height="300"/%3E%3Ctext fill="%239ca3af" font-family="sans-serif" font-size="48" font-weight="bold" text-anchor="middle" x="200" y="165"%3EKYSD%3C/text%3E%3C/svg%3E'
+                        }}
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">

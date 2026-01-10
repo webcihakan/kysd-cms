@@ -55,6 +55,7 @@ function fetchUrl(url, timeout = 30000) {
 async function downloadImage(imageUrl, filename) {
   return new Promise((resolve, reject) => {
     if (!imageUrl || !imageUrl.startsWith('http')) {
+      console.log(`[HaberScraper] Gecersiz resim URL: ${imageUrl}`)
       resolve(null)
       return
     }
@@ -69,22 +70,28 @@ async function downloadImage(imageUrl, filename) {
 
     const protocol = imageUrl.startsWith('https') ? https : http
 
+    console.log(`[HaberScraper] Resim indiriliyor: ${imageUrl}`)
+
     protocol.get(imageUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Accept': 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
+        'Referer': imageUrl.split('/').slice(0, 3).join('/')
       },
       timeout: 15000
     }, (response) => {
       if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
         file.close()
-        fs.unlinkSync(filePath)
+        if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
+        console.log(`[HaberScraper] Resim redirect: ${response.headers.location}`)
         downloadImage(response.headers.location, filename).then(resolve).catch(reject)
         return
       }
 
       if (response.statusCode !== 200) {
         file.close()
-        fs.unlinkSync(filePath)
+        if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
+        console.log(`[HaberScraper] Resim indirilemedi (HTTP ${response.statusCode}): ${imageUrl}`)
         resolve(null)
         return
       }
@@ -92,11 +99,18 @@ async function downloadImage(imageUrl, filename) {
       response.pipe(file)
       file.on('finish', () => {
         file.close()
+        console.log(`[HaberScraper] Resim indirildi: ${filename}`)
         resolve(`/uploads/news/${filename}`)
       })
     }).on('error', (err) => {
       file.close()
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
+      console.log(`[HaberScraper] Resim indirme hatasi: ${err.message}`)
+      resolve(null)
+    }).on('timeout', () => {
+      file.close()
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
+      console.log(`[HaberScraper] Resim indirme zaman asimi: ${imageUrl}`)
       resolve(null)
     })
   })
@@ -168,6 +182,11 @@ const rssFeeds = [
     name: 'AA Ekonomi',
     url: 'https://www.aa.com.tr/tr/rss/default?cat=ekonomi',
     keywords: ['tekstil', 'konfeksiyon', 'ihracat', 'sanayi', 'üretim', 'firma', 'yatırım']
+  },
+  {
+    name: 'Dünya Gazetesi',
+    url: 'https://www.dunya.com/rss',
+    keywords: ['tekstil', 'konfeksiyon', 'ihracat', 'sanayi', 'üretim', 'moda', 'giyim', 'ticaret', 'firma', 'yatırım', 'şirket']
   }
 ]
 
@@ -187,15 +206,33 @@ async function parseRSS(url, keywords) {
       const link = $item.find('link').text().trim()
       const description = $item.find('description').text().trim().replace(/<[^>]+>/g, '')
 
+      // Resim URL'ini bul - cesitli kaynaklari dene
       let imageUrl = $item.find('enclosure').attr('url') ||
-                     $item.find('media\\:content, media\\:thumbnail').attr('url')
+                     $item.find('media\\:content').attr('url') ||
+                     $item.find('media\\:thumbnail').attr('url') ||
+                     $item.find('media\\:content').first().attr('url')
 
       // Icerik veya aciklama icinde img tag var mi kontrol et
       if (!imageUrl) {
         const content = $item.find('content\\:encoded, description').html() || ''
-        const imgMatch = content.match(/<img[^>]+src="([^">]+)"/)
+        const imgMatch = content.match(/<img[^>]+src=["']([^"'>]+)["']/)
         if (imgMatch) imageUrl = imgMatch[1]
       }
+
+      // TRT Haber icin ozel: thumbUrl kullan
+      if (!imageUrl) {
+        imageUrl = $item.find('thumbUrl').text().trim()
+      }
+
+      // AA Haber icin ozel: medya tag'larini kontrol et
+      if (!imageUrl) {
+        const mediaGroup = $item.find('media\\:group media\\:content')
+        if (mediaGroup.length) {
+          imageUrl = mediaGroup.first().attr('url')
+        }
+      }
+
+      console.log(`[HaberScraper] RSS Haber: "${title.substring(0, 50)}" - Resim: ${imageUrl || 'YOK'}`)
 
       // Anahtar kelime filtresi - haberin konuyla alakali olup olmadigini kontrol et
       const fullText = (title + ' ' + description).toLowerCase()
@@ -385,10 +422,23 @@ async function scrape(prisma) {
       // Resmi indir (RSS'de imageUrl, web scrapingde image)
       let imagePath = null
       const imageUrl = haber.imageUrl || haber.image
+
+      // SADECE resimli haberleri ekle
+      if (!imageUrl) {
+        console.log(`[HaberScraper] ATLANDI (resim yok): ${haber.title.substring(0, 60)}...`)
+        continue
+      }
+
       if (imageUrl) {
         const ext = imageUrl.match(/\.(jpg|jpeg|png|webp)/i)?.[1] || 'jpg'
         const imageFilename = `ekonomi-${Date.now()}-${Math.random().toString(36).substr(2, 6)}.${ext}`
         imagePath = await downloadImage(imageUrl, imageFilename)
+
+        // Resim indirilemezse haberi ekleme
+        if (!imagePath) {
+          console.log(`[HaberScraper] ATLANDI (resim indirilemedi): ${haber.title.substring(0, 60)}...`)
+          continue
+        }
       }
 
       // Slug olustur

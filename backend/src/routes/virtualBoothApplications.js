@@ -247,6 +247,44 @@ router.put('/:id/status', auth, async (req, res) => {
   }
 })
 
+// Ödeme bilgilerini güncelle
+router.put('/:id/payment', auth, async (req, res) => {
+  try {
+    const id = parseInt(req.params.id)
+    const { paymentStatus, paidAmount, paidDate, paymentMethod, invoiceNo, paymentNotes } = req.body
+
+    const application = await prisma.virtualBoothApplication.findUnique({
+      where: { id }
+    })
+
+    if (!application) {
+      return res.status(404).json({ error: 'Başvuru bulunamadı' })
+    }
+
+    const updatedApp = await prisma.virtualBoothApplication.update({
+      where: { id },
+      data: {
+        paymentStatus: paymentStatus || application.paymentStatus,
+        paidAmount: paidAmount !== undefined ? (paidAmount ? parseFloat(paidAmount) : null) : undefined,
+        paidDate: paidDate !== undefined ? (paidDate ? new Date(paidDate) : null) : undefined,
+        paymentMethod: paymentMethod || application.paymentMethod,
+        invoiceNo: invoiceNo !== undefined ? invoiceNo : undefined,
+        paymentNotes: paymentNotes !== undefined ? paymentNotes : undefined
+      },
+      include: {
+        fair: true,
+        boothType: true,
+        booth: true
+      }
+    })
+
+    res.json(updatedApp)
+  } catch (error) {
+    console.error('Ödeme bilgileri güncellenemedi:', error)
+    res.status(500).json({ error: 'Ödeme bilgileri güncellenemedi' })
+  }
+})
+
 // Başvuru sil
 router.delete('/:id', auth, async (req, res) => {
   try {

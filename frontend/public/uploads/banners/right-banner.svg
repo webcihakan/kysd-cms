@@ -1,0 +1,26 @@
+<svg width="400" height="100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gradient Background -->
+  <defs>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#28A745;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#218838;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="100" fill="url(#greenGrad)" rx="6"/>
+
+  <!-- Pattern decoration -->
+  <circle cx="30" cy="70" r="25" fill="#FFFFFF" opacity="0.1"/>
+  <circle cx="370" cy="30" r="20" fill="#FFFFFF" opacity="0.1"/>
+
+  <!-- Main Text -->
+  <text x="200" y="50" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
+    SAĞ BANNER ALANI
+  </text>
+
+  <!-- Subtitle -->
+  <text x="200" y="75" font-family="Arial, sans-serif" font-size="12" fill="#E3F2FD" text-anchor="middle">
+    Reklam vermek için iletişime geçin - 400 x 100 px
+  </text>
+</svg>

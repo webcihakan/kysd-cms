@@ -186,6 +186,50 @@ export default function NewsForm() {
             </div>
 
             <div className="card p-6">
+              <h3 className="font-semibold text-gray-800 mb-4">Kategori & Kaynak</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                  <select
+                    name="category"
+                    value={formData.category || 'genel'}
+                    onChange={handleChange}
+                    className="input"
+                  >
+                    <option value="genel">Genel</option>
+                    <option value="ekonomi">Ekonomi</option>
+                    <option value="sanayi">Sanayi</option>
+                    <option value="teknoloji">Teknoloji</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Haber Kaynağı</label>
+                  <input
+                    type="text"
+                    name="source"
+                    value={formData.source || ''}
+                    onChange={handleChange}
+                    className="input"
+                    placeholder="Ör: Dünya Gazetesi"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Kaynak URL</label>
+                  <input
+                    type="url"
+                    name="sourceUrl"
+                    value={formData.sourceUrl || ''}
+                    onChange={handleChange}
+                    className="input"
+                    placeholder="https://www.dunya.com"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="card p-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">Görsel</label>
               {formData.image ? (
                 <div className="relative">

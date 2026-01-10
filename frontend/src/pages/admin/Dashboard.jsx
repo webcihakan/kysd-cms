@@ -4,7 +4,8 @@ import {
   FileText, Newspaper, Bell, Building2, Users, Mail, Eye,
   CreditCard, Receipt, FolderOpen, GraduationCap, Building,
   DollarSign, Check, Clock, AlertTriangle, TrendingUp, TrendingDown,
-  UserPlus, RefreshCw, Database, CheckCircle, XCircle, Loader2
+  UserPlus, RefreshCw, Database, CheckCircle, XCircle, Loader2,
+  Megaphone, Monitor, BookOpen
 } from 'lucide-react'
 import api from '../../utils/api'
 
@@ -34,6 +35,12 @@ export default function Dashboard() {
   })
   const [duesStats, setDuesStats] = useState(null)
   const [expensesStats, setExpensesStats] = useState(null)
+  const [paymentStats, setPaymentStats] = useState({
+    advertisements: { total: 0, pending: 0, paid: 0, pendingAmount: 0, paidAmount: 0 },
+    virtualBooths: { total: 0, pending: 0, paid: 0, pendingAmount: 0, paidAmount: 0 },
+    magazines: { total: 0, pending: 0, paid: 0, pendingAmount: 0, paidAmount: 0 },
+    catalogs: { total: 0, pending: 0, paid: 0, pendingAmount: 0, paidAmount: 0 }
+  })
   const [membershipApplications, setMembershipApplications] = useState([])
   const [recentNews, setRecentNews] = useState([])
   const [recentContacts, setRecentContacts] = useState([])
@@ -85,7 +92,7 @@ export default function Dashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const [pagesRes, newsRes, announcementsRes, groupsRes, membersRes, usersRes, contactsRes, projectsRes, trainingsRes, fairsRes, duesRes, expensesRes, applicationsRes] = await Promise.all([
+      const [pagesRes, newsRes, announcementsRes, groupsRes, membersRes, usersRes, contactsRes, projectsRes, trainingsRes, fairsRes, duesRes, expensesRes, applicationsRes, adsRes, boothsRes, magazinesRes, catalogsRes] = await Promise.all([
         api.get('/pages?all=true'),
         api.get('/news?all=true&limit=5'),
         api.get('/announcements?all=true'),
@@ -98,7 +105,11 @@ export default function Dashboard() {
         api.get('/fairs'),
         api.get(`/member-dues/summary?year=${currentYear}`),
         api.get(`/expenses?year=${currentYear}`),
-        api.get('/membership-applications?status=pending').catch(() => ({ data: [] }))
+        api.get('/membership-applications?status=pending').catch(() => ({ data: [] })),
+        api.get('/advertisements').catch(() => ({ data: [] })),
+        api.get('/virtual-booth-applications').catch(() => ({ data: [] })),
+        api.get('/magazines').catch(() => ({ data: [] })),
+        api.get('/catalog-orders').catch(() => ({ data: [] }))
       ])
 
       setStats({
@@ -133,6 +144,28 @@ export default function Dashboard() {
       // Üyelik başvuruları
       const applications = applicationsRes.data.applications || applicationsRes.data || []
       setMembershipApplications(applications.slice(0, 5))
+
+      // Ödeme istatistiklerini hesapla
+      const calculatePaymentStats = (items, priceField = 'price') => {
+        const total = items.length
+        const pending = items.filter(item => item.paymentStatus === 'PENDING').length
+        const paid = items.filter(item => item.paymentStatus === 'PAID').length
+        const pendingAmount = items
+          .filter(item => item.paymentStatus === 'PENDING')
+          .reduce((sum, item) => sum + parseFloat(item[priceField] || 0), 0)
+        const paidAmount = items
+          .filter(item => item.paymentStatus === 'PAID')
+          .reduce((sum, item) => sum + parseFloat(item.paidAmount || 0), 0)
+
+        return { total, pending, paid, pendingAmount, paidAmount }
+      }
+
+      setPaymentStats({
+        advertisements: calculatePaymentStats(adsRes.data),
+        virtualBooths: calculatePaymentStats(boothsRes.data.applications || boothsRes.data || []),
+        magazines: calculatePaymentStats(magazinesRes.data),
+        catalogs: calculatePaymentStats(catalogsRes.data.orders || catalogsRes.data || [], 'totalPrice')
+      })
     } catch (error) {
       console.error('Dashboard verileri yüklenemedi:', error)
     } finally {
@@ -288,6 +321,78 @@ export default function Dashboard() {
             </div>
           </Link>
         ))}
+      </div>
+
+      {/* Ödeme Takibi Genel Özet */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+        <div className="p-4 border-b dark:border-gray-700">
+          <h2 className="font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+            <CreditCard className="w-5 h-5 text-purple-600" />
+            Ödeme Takibi Özeti
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
+          {[
+            {
+              label: 'Reklam Ödemeleri',
+              icon: Megaphone,
+              color: 'bg-orange-500',
+              link: '/admin/reklamlar/odemeler',
+              data: paymentStats.advertisements
+            },
+            {
+              label: 'Sanal Fuar Ödemeleri',
+              icon: Monitor,
+              color: 'bg-blue-500',
+              link: '/admin/sanal-fuar-odemeler',
+              data: paymentStats.virtualBooths
+            },
+            {
+              label: 'Dergi Ödemeleri',
+              icon: FileText,
+              color: 'bg-purple-500',
+              link: '/admin/dergi-odemeler',
+              data: paymentStats.magazines
+            },
+            {
+              label: 'Katalog Ödemeleri',
+              icon: BookOpen,
+              color: 'bg-green-500',
+              link: '/admin/kataloglar',
+              data: paymentStats.catalogs
+            }
+          ].map((item) => (
+            <Link
+              key={item.label}
+              to={item.link}
+              className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className={`w-10 h-10 ${item.color} rounded-lg flex items-center justify-center`}>
+                  <item.icon className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{item.label}</p>
+                  <p className="text-lg font-bold text-gray-800 dark:text-white">{item.data.total}</p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-gray-600 dark:text-gray-400">Bekleyen</span>
+                  <span className="font-semibold text-yellow-600">
+                    {item.data.pending} ({formatCurrency(item.data.pendingAmount)})
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-gray-600 dark:text-gray-400">Ödenen</span>
+                  <span className="font-semibold text-green-600">
+                    {item.data.paid} ({formatCurrency(item.data.paidAmount)})
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
 
       {/* Aidat ve Gider Özeti */}

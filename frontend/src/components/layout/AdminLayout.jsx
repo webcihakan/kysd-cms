@@ -4,7 +4,7 @@ import {
   LayoutDashboard, FileText, Newspaper, Bell, Building2, Image, Images,
   Megaphone, Menu as MenuIcon, Users, Mail, Settings, LogOut,
   ChevronLeft, ChevronRight, X, ClipboardList, FolderOpen, GraduationCap, Building,
-  Sun, Moon, User, ChevronDown, ExternalLink, Scale, CreditCard, Receipt, Monitor, Crown, MapPin
+  Sun, Moon, User, ChevronDown, ExternalLink, Scale, CreditCard, Receipt, Monitor, Crown, MapPin, PartyPopper, BookOpen, Package, BarChart3
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
@@ -26,6 +26,7 @@ const menuGroups = [
       { path: '/admin/haberler', icon: Newspaper, label: 'Haberler' },
       { path: '/admin/duyurular', icon: Bell, label: 'Duyurular' },
       { path: '/admin/mevzuat', icon: Scale, label: 'Mevzuat' },
+      { path: '/admin/ekonomik-gostergeler', icon: BarChart3, label: 'Ekonomik Göstergeler' },
       { path: '/admin/yonetim-kurulu', icon: Crown, label: 'Yönetim Kurulu' }
     ]
   },
@@ -45,7 +46,8 @@ const menuGroups = [
       { path: '/admin/projeler', icon: FolderOpen, label: 'Projeler' },
       { path: '/admin/egitimler', icon: GraduationCap, label: 'Eğitimler' },
       { path: '/admin/fuarlar', icon: Building, label: 'Fuarlar' },
-      { path: '/admin/tur-rehberi', icon: MapPin, label: 'Tur Rehberi' }
+      { path: '/admin/tur-rehberi', icon: MapPin, label: 'Tur Rehberi' },
+      { path: '/admin/tatiller', icon: PartyPopper, label: 'Tatiller' }
     ]
   },
   {
@@ -62,6 +64,8 @@ const menuGroups = [
     items: [
       { path: '/admin/slider', icon: Image, label: 'Slider' },
       { path: '/admin/galeri', icon: Images, label: 'Galeri' },
+      { path: '/admin/dergiler', icon: BookOpen, label: 'Sektörel Dergiler' },
+      { path: '/admin/katalog-paketleri', icon: Package, label: 'Katalog Paketleri' },
       { path: '/admin/reklamlar', icon: Megaphone, label: 'Reklamlar' },
       { path: '/admin/reklam-alanlari', icon: Monitor, label: 'Reklam Alanları' }
     ]
@@ -71,7 +75,11 @@ const menuGroups = [
     icon: Receipt,
     items: [
       { path: '/admin/aidatlar', icon: CreditCard, label: 'Aidat Takibi' },
-      { path: '/admin/giderler', icon: Receipt, label: 'Aylık Giderler' }
+      { path: '/admin/giderler', icon: Receipt, label: 'Aylık Giderler' },
+      { path: '/admin/kataloglar', icon: BookOpen, label: 'Katalog Ödemeleri' },
+      { path: '/admin/reklamlar/odemeler', icon: Megaphone, label: 'Reklam Ödemeleri' },
+      { path: '/admin/sanal-fuar-odemeler', icon: Monitor, label: 'Sanal Fuar Ödemeleri' },
+      { path: '/admin/dergi-odemeler', icon: FileText, label: 'Dergi Ödemeleri' }
     ]
   },
   {

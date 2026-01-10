@@ -7,6 +7,7 @@ const egitimScraper = require('./scrapers/egitimScraper')
 const fuarScraper = require('./scrapers/fuarScraper')
 const projeScraper = require('./scrapers/projeScraper')
 const haberScraper = require('./scrapers/haberScraper')
+const notificationService = require('./notificationService')
 
 const prisma = new PrismaClient()
 
@@ -108,6 +109,14 @@ function startCronJobs() {
   cron.schedule('0 9 * * 1', async () => {
     console.log('[Cron] Haftalik tam guncelleme basliyor...')
     await runAllScrapers()
+  }, {
+    timezone: 'Europe/Istanbul'
+  })
+
+  // Her gün saat 09:00'da 7 gün sonraki etkinlikler için bildirim gönder
+  cron.schedule('0 9 * * *', async () => {
+    console.log('[Cron] Günlük etkinlik bildirimleri gönderiliyor...')
+    await notificationService.checkUpcomingEvents()
   }, {
     timezone: 'Europe/Istanbul'
   })

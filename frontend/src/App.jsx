@@ -31,6 +31,12 @@ import Projects from './pages/public/Projects'
 import Fairs from './pages/public/Fairs'
 import Gallery from './pages/public/Gallery'
 import TravelGuide from './pages/public/TravelGuide'
+import Calendar from './pages/public/Calendar'
+import Magazines from './pages/public/Magazines'
+import MagazineDetail from './pages/public/MagazineDetail'
+import Catalogs from './pages/public/Catalogs'
+import CatalogDetail from './pages/public/CatalogDetail'
+import TurkeyReports from './pages/public/TurkeyReports'
 
 // Admin Pages
 import Dashboard from './pages/admin/Dashboard'
@@ -75,12 +81,30 @@ import VirtualBoothsList from './pages/admin/VirtualBoothsList'
 import VirtualBoothForm from './pages/admin/VirtualBoothForm'
 import TravelGuidesList from './pages/admin/TravelGuidesList'
 import TravelGuideForm from './pages/admin/TravelGuideForm'
+import HolidaysList from './pages/admin/HolidaysList'
+import HolidayForm from './pages/admin/HolidayForm'
+import MagazinesList from './pages/admin/MagazinesList'
+import MagazineForm from './pages/admin/MagazineForm'
+import CatalogsList from './pages/admin/CatalogsList'
+import AdminCatalogDetail from './pages/admin/CatalogDetail'
+import CatalogPackagesList from './pages/admin/CatalogPackagesList'
+import CatalogPackageForm from './pages/admin/CatalogPackageForm'
+import AdPayments from './pages/admin/AdPayments'
+import VirtualFairPayments from './pages/admin/VirtualFairPayments'
+import MagazinePayments from './pages/admin/MagazinePayments'
+import EconomicIndicatorsList from './pages/admin/EconomicIndicatorsList'
+import EconomicIndicatorForm from './pages/admin/EconomicIndicatorForm'
 
 // Virtual Fair Public Pages
 import VirtualFairs from './pages/public/VirtualFairs'
 import VirtualFairDetail from './pages/public/VirtualFairDetail'
 import VirtualBoothDetail from './pages/public/VirtualBoothDetail'
 import VirtualBoothApplication from './pages/public/VirtualBoothApplication'
+
+// Member Pages
+import MyCatalogs from './pages/member/MyCatalogs'
+import CatalogSubmit from './pages/member/CatalogSubmit'
+import CatalogPayment from './pages/member/CatalogPayment'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -94,6 +118,24 @@ function ProtectedRoute({ children }) {
   }
 
   if (!user || !['ADMIN', 'EDITOR'].includes(user.role)) {
+    return <Login />
+  }
+
+  return children
+}
+
+function MemberRoute({ children }) {
+  const { user, loading } = useAuth()
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-800"></div>
+      </div>
+    )
+  }
+
+  if (!user || user.role !== 'MEMBER') {
     return <Login />
   }
 
@@ -120,6 +162,7 @@ export default function App() {
         <Route path="/neden-uye-olmaliyim" element={<WhyJoin />} />
         <Route path="/hakkimizda" element={<About />} />
         <Route path="/tuzuk" element={<Statute />} />
+        <Route path="/q-belgesi" element={<Page slug="q-belgesi" />} />
         <Route path="/sektor-raporlari" element={<SectorReports />} />
         <Route path="/mevzuat" element={<Legislation />} />
         <Route path="/tesvik-ve-destekler" element={<Incentives />} />
@@ -128,6 +171,12 @@ export default function App() {
         <Route path="/fuarlar" element={<Fairs />} />
         <Route path="/galeri" element={<Gallery />} />
         <Route path="/tur-rehberi" element={<TravelGuide />} />
+        <Route path="/takvim" element={<Calendar />} />
+        <Route path="/dergiler" element={<Magazines />} />
+        <Route path="/dergiler/:slug" element={<MagazineDetail />} />
+        <Route path="/katalog" element={<Catalogs />} />
+        <Route path="/katalog/:slug" element={<CatalogDetail />} />
+        <Route path="/turkiye-genel-raporlari" element={<TurkeyReports />} />
         <Route path="/sanal-fuarlar" element={<VirtualFairs />} />
         <Route path="/sanal-fuar/:slug" element={<VirtualFairDetail />} />
         <Route path="/sanal-stant/:id" element={<VirtualBoothDetail />} />
@@ -184,6 +233,23 @@ export default function App() {
         <Route path="tur-rehberi" element={<TravelGuidesList />} />
         <Route path="tur-rehberi/yeni" element={<TravelGuideForm />} />
         <Route path="tur-rehberi/:id" element={<TravelGuideForm />} />
+        <Route path="tatiller" element={<HolidaysList />} />
+        <Route path="tatiller/ekle" element={<HolidayForm />} />
+        <Route path="tatiller/:id" element={<HolidayForm />} />
+        <Route path="dergiler" element={<MagazinesList />} />
+        <Route path="dergiler/ekle" element={<MagazineForm />} />
+        <Route path="dergiler/:id" element={<MagazineForm />} />
+        <Route path="kataloglar" element={<CatalogsList />} />
+        <Route path="kataloglar/:id" element={<AdminCatalogDetail />} />
+        <Route path="katalog-paketleri" element={<CatalogPackagesList />} />
+        <Route path="katalog-paketleri/ekle" element={<CatalogPackageForm />} />
+        <Route path="katalog-paketleri/:id" element={<CatalogPackageForm />} />
+        <Route path="reklamlar/odemeler" element={<AdPayments />} />
+        <Route path="sanal-fuar-odemeler" element={<VirtualFairPayments />} />
+        <Route path="dergi-odemeler" element={<MagazinePayments />} />
+        <Route path="ekonomik-gostergeler" element={<EconomicIndicatorsList />} />
+        <Route path="ekonomik-gostergeler/ekle" element={<EconomicIndicatorForm />} />
+        <Route path="ekonomik-gostergeler/:id" element={<EconomicIndicatorForm />} />
         <Route path="mevzuat" element={<LegislationsList />} />
         <Route path="mevzuat/yeni" element={<LegislationForm />} />
         <Route path="mevzuat/:id" element={<LegislationForm />} />
@@ -202,6 +268,42 @@ export default function App() {
         <Route path="reklam-alanlari" element={<AdPositionsList />} />
         <Route path="profil" element={<Profile />} />
         <Route path="ayarlar" element={<Settings />} />
+      </Route>
+
+      {/* Member Routes */}
+      <Route element={<PublicLayout />}>
+        <Route
+          path="/uye/kataloglarim"
+          element={
+            <MemberRoute>
+              <MyCatalogs />
+            </MemberRoute>
+          }
+        />
+        <Route
+          path="/uye/katalog-ekle"
+          element={
+            <MemberRoute>
+              <CatalogSubmit />
+            </MemberRoute>
+          }
+        />
+        <Route
+          path="/uye/katalog-duzenle/:id"
+          element={
+            <MemberRoute>
+              <CatalogSubmit />
+            </MemberRoute>
+          }
+        />
+        <Route
+          path="/uye/katalog-odeme/:id"
+          element={
+            <MemberRoute>
+              <CatalogPayment />
+            </MemberRoute>
+          }
+        />
       </Route>
     </Routes>
   )
