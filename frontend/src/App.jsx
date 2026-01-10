@@ -37,6 +37,7 @@ import MagazineDetail from './pages/public/MagazineDetail'
 import Catalogs from './pages/public/Catalogs'
 import CatalogDetail from './pages/public/CatalogDetail'
 import TurkeyReports from './pages/public/TurkeyReports'
+import QCertificate from './pages/public/QCertificate'
 
 // Admin Pages
 import Dashboard from './pages/admin/Dashboard'
@@ -177,6 +178,7 @@ export default function App() {
         <Route path="/katalog" element={<Catalogs />} />
         <Route path="/katalog/:slug" element={<CatalogDetail />} />
         <Route path="/turkiye-genel-raporlari" element={<TurkeyReports />} />
+        <Route path="/q-belgesi" element={<QCertificate />} />
         <Route path="/sanal-fuarlar" element={<VirtualFairs />} />
         <Route path="/sanal-fuar/:slug" element={<VirtualFairDetail />} />
         <Route path="/sanal-stant/:id" element={<VirtualBoothDetail />} />
