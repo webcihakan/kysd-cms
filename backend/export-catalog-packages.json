@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "1 Aylık Deneme",
+    "duration": 1,
+    "price": "500",
+    "features": "[\"PDF Katalog Yükleme\",\"Kapak Görseli\",\"Firma İletişim Bilgileri\",\"1 Ay Yayın Süresi\"]",
+    "description": "Sistemi denemek için ideal paket. İlk deneyiminizi yaşayın.",
+    "order": 1,
+    "isActive": true,
+    "createdAt": "2026-01-09T07:13:04.244Z",
+    "updatedAt": "2026-01-09T07:13:04.244Z"
+  },
+  {
+    "id": 2,
+    "name": "3 Aylık Standart",
+    "duration": 3,
+    "price": "1200",
+    "features": "[\"PDF Katalog Yükleme\",\"Kapak Görseli\",\"Firma İletişim Bilgileri\",\"3 Ay Yayın Süresi\",\"Öncelikli Destek\",\"Aylık 400 TL (indirimli)\"]",
+    "description": "En popüler paket! Orta vadeli görünürlük için ideal.",
+    "order": 2,
+    "isActive": true,
+    "createdAt": "2026-01-09T07:13:04.266Z",
+    "updatedAt": "2026-01-09T07:13:04.266Z"
+  },
+  {
+    "id": 3,
+    "name": "6 Aylık Premium",
+    "duration": 6,
+    "price": "2100",
+    "features": "[\"PDF Katalog Yükleme\",\"Kapak Görseli\",\"Firma İletişim Bilgileri\",\"6 Ay Yayın Süresi\",\"Öncelikli Destek\",\"Ana Sayfada Öne Çıkarma\",\"Aylık 350 TL (en avantajlı)\"]",
+    "description": "Uzun vadeli görünürlük ve maksimum fayda. En çok tercih edilen paket!",
+    "order": 3,
+    "isActive": true,
+    "createdAt": "2026-01-09T07:13:04.283Z",
+    "updatedAt": "2026-01-09T07:13:04.283Z"
+  },
+  {
+    "id": 4,
+    "name": "12 Aylık Yıllık",
+    "duration": 12,
+    "price": "3600",
+    "features": "[\"PDF Katalog Yükleme\",\"Kapak Görseli\",\"Firma İletişim Bilgileri\",\"12 Ay Yayın Süresi\",\"VIP Destek\",\"Ana Sayfada Öne Çıkarma\",\"Aylık İstatistik Raporu\",\"Aylık 300 TL (en ekonomik)\"]",
+    "description": "Tam yıl kesintisiz görünürlük. İşletmeniz için en karlı seçim.",
+    "order": 4,
+    "isActive": true,
+    "createdAt": "2026-01-09T07:13:04.292Z",
+    "updatedAt": "2026-01-09T07:13:04.292Z"
+  }
+]

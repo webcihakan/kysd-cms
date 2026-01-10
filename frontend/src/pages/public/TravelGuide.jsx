@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { Search, MapPin, Phone, Globe, Clock, X, ChevronLeft, ChevronRight, Landmark, Church, UtensilsCrossed, ShoppingBag, Navigation } from 'lucide-react'
 import api from '../../utils/api'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace('/api', '')
 
 // Kategori renkleri ve iconları
 const categoryConfig = {

@@ -7,7 +7,7 @@ import {
 import api from '../../utils/api'
 import AdBanner from '../../components/common/AdBanner'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace('/api', '')
 
 export default function Fairs() {
   const [fairs, setFairs] = useState([])
