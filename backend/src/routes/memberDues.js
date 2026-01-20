@@ -4,7 +4,7 @@ const { PrismaClient } = require('@prisma/client')
 const { auth, adminOnly } = require('../middleware/auth')
 const { sendBulkDueNotifications } = require('../utils/mailer')
 
-const prisma = new PrismaClient()
+const prisma = require('../lib/prisma')
 
 // Tüm aidatları getir (Admin)
 router.get('/', auth, adminOnly, async (req, res) => {

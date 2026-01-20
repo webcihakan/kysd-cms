@@ -10,7 +10,7 @@ const haberScraper = require('./scrapers/haberScraper')
 const currencyScraper = require('./scrapers/currencyScraper')
 const notificationService = require('./notificationService')
 
-const prisma = new PrismaClient()
+const prisma = require('../lib/prisma')
 
 // Scraper durumlarini takip et
 let scraperStatus = {

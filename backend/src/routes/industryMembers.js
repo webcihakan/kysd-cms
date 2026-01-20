@@ -4,7 +4,7 @@ const { PrismaClient } = require('@prisma/client')
 const { auth, adminOnly } = require('../middleware/auth')
 const XLSX = require('xlsx')
 
-const prisma = new PrismaClient()
+const prisma = require('../lib/prisma')
 
 // Tüm üyeleri listele (aidat bilgileriyle birlikte)
 router.get('/all', auth, adminOnly, async (req, res) => {
