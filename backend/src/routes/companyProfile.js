@@ -6,7 +6,7 @@ const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
 
-const prisma = new PrismaClient()
+const prisma = require('../lib/prisma')
 
 // Multer ayarları - logo yükleme
 const storage = multer.diskStorage({

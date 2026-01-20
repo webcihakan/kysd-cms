@@ -1,9 +1,9 @@
 const express = require('express');
-const { PrismaClient } = require('@prisma/client');
+
 const { auth, editorOrAdmin, adminOnly } = require('../middleware/auth');
 
 const router = express.Router();
-const prisma = new PrismaClient();
+const prisma = require('../lib/prisma');
 
 // Helper: Slug oluştur
 function createSlug(text) {
@@ -169,12 +169,18 @@ router.get('/meta/categories', async (req, res) => {
 router.get('/member/my-catalogs', auth, async (req, res) => {
   try {
     // User'ın company profile'ını bul
-    const userProfile = await prisma.userCompanyProfile.findUnique({
+    let userProfile = await prisma.userCompanyProfile.findUnique({
       where: { userId: req.user.id }
     });
 
+    // Eğer profil yoksa, otomatik oluştur
     if (!userProfile) {
-      return res.status(404).json({ error: 'Firma profili bulunamadı' });
+      userProfile = await prisma.userCompanyProfile.create({
+        data: {
+          userId: req.user.id,
+          companyName: req.user.name || 'Firma Adı'
+        }
+      });
     }
 
     const catalogs = await prisma.catalog.findMany({
@@ -199,12 +205,18 @@ router.post('/member/create', auth, async (req, res) => {
     const data = req.body;
 
     // User'ın company profile'ını bul
-    const userProfile = await prisma.userCompanyProfile.findUnique({
+    let userProfile = await prisma.userCompanyProfile.findUnique({
       where: { userId: req.user.id }
     });
 
+    // Eğer profil yoksa, otomatik oluştur
     if (!userProfile) {
-      return res.status(404).json({ error: 'Firma profili bulunamadı' });
+      userProfile = await prisma.userCompanyProfile.create({
+        data: {
+          userId: req.user.id,
+          companyName: req.user.name || 'Firma Adı'
+        }
+      });
     }
 
     // Paketi kontrol et
@@ -259,12 +271,18 @@ router.put('/member/:id', auth, async (req, res) => {
     const data = req.body;
 
     // User'ın company profile'ını bul
-    const userProfile = await prisma.userCompanyProfile.findUnique({
+    let userProfile = await prisma.userCompanyProfile.findUnique({
       where: { userId: req.user.id }
     });
 
+    // Eğer profil yoksa, otomatik oluştur
     if (!userProfile) {
-      return res.status(404).json({ error: 'Firma profili bulunamadı' });
+      userProfile = await prisma.userCompanyProfile.create({
+        data: {
+          userId: req.user.id,
+          companyName: req.user.name || 'Firma Adı'
+        }
+      });
     }
 
     // Katalogu kontrol et
@@ -315,12 +333,18 @@ router.delete('/member/:id', auth, async (req, res) => {
     const { id } = req.params;
 
     // User'ın company profile'ını bul
-    const userProfile = await prisma.userCompanyProfile.findUnique({
+    let userProfile = await prisma.userCompanyProfile.findUnique({
       where: { userId: req.user.id }
     });
 
+    // Eğer profil yoksa, otomatik oluştur
     if (!userProfile) {
-      return res.status(404).json({ error: 'Firma profili bulunamadı' });
+      userProfile = await prisma.userCompanyProfile.create({
+        data: {
+          userId: req.user.id,
+          companyName: req.user.name || 'Firma Adı'
+        }
+      });
     }
 
     // Katalogu kontrol et
@@ -357,12 +381,18 @@ router.get('/member/:id', auth, async (req, res) => {
     const { id } = req.params;
 
     // User'ın company profile'ını bul
-    const userProfile = await prisma.userCompanyProfile.findUnique({
+    let userProfile = await prisma.userCompanyProfile.findUnique({
       where: { userId: req.user.id }
     });
 
+    // Eğer profil yoksa, otomatik oluştur
     if (!userProfile) {
-      return res.status(404).json({ error: 'Firma profili bulunamadı' });
+      userProfile = await prisma.userCompanyProfile.create({
+        data: {
+          userId: req.user.id,
+          companyName: req.user.name || 'Firma Adı'
+        }
+      });
     }
 
     const catalog = await prisma.catalog.findFirst({
@@ -393,12 +423,18 @@ router.get('/member/:id/status', auth, async (req, res) => {
     const { id } = req.params;
 
     // User'ın company profile'ını bul
-    const userProfile = await prisma.userCompanyProfile.findUnique({
+    let userProfile = await prisma.userCompanyProfile.findUnique({
       where: { userId: req.user.id }
     });
 
+    // Eğer profil yoksa, otomatik oluştur
     if (!userProfile) {
-      return res.status(404).json({ error: 'Firma profili bulunamadı' });
+      userProfile = await prisma.userCompanyProfile.create({
+        data: {
+          userId: req.user.id,
+          companyName: req.user.name || 'Firma Adı'
+        }
+      });
     }
 
     const catalog = await prisma.catalog.findFirst({

@@ -1,7 +1,7 @@
 const { PrismaClient } = require('@prisma/client')
 const { sendEventNotification } = require('../utils/mailer')
 
-const prisma = new PrismaClient()
+const prisma = require('../lib/prisma')
 
 // 7 gün sonraki etkinlikleri kontrol et ve bildirim gönder
 const checkUpcomingEvents = async () => {

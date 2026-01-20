@@ -3,7 +3,7 @@ const router = express.Router()
 const { PrismaClient } = require('@prisma/client')
 const { auth, adminOnly } = require('../middleware/auth')
 
-const prisma = new PrismaClient()
+const prisma = require('../lib/prisma')
 
 // Public - Reklam pozisyonlarını getir (fiyatlandırma sayfası için)
 router.get('/', async (req, res) => {

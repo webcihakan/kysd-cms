@@ -1,0 +1,4 @@
+TRUNCATE TABLE virtual_fairs;
+INSERT INTO virtual_fairs (id,title,slug,description,startDate,endDate,coverImage,isActive,createdAt,updatedAt) VALUES
+(1,'KYSD Dijital Tekstil Fuari 2025','kysd-dijital-tekstil-fuari-2025','Turkiye nin ilk ve en buyuk online tekstil fuari. Dugme, fermuar, aksesuar ve tekstil yan sanayi firmalarinin bulusma noktasi. Sanal standlarinizla 7/24 erisilebilir olun, urunlerinizi dunya genelinde sergileyin.','2025-02-01','2025-03-31','/uploads/virtual-fairs/fair-1.jpg',1,NOW(),NOW()),
+(2,'Aksesuar ve Yan Sanayi Online Showcase','aksesuar-ve-yan-sanayi-online-showcase','Moda aksesuarlari ve tekstil yan sanayi urunlerinin sergilendigi ozel online platform. Alicilar ve ureticiler arasinda kopru kurun.','2025-04-15','2025-06-15','/uploads/virtual-fairs/fair-2.jpg',1,NOW(),NOW());

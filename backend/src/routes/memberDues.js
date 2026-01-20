@@ -4,7 +4,7 @@ const { PrismaClient } = require('@prisma/client')
 const { auth, adminOnly } = require('../middleware/auth')
 const { sendBulkDueNotifications } = require('../utils/mailer')
 
-const prisma = new PrismaClient()
+const prisma = require('../lib/prisma')
 
 // Tüm aidatları getir (Admin)
 router.get('/', auth, adminOnly, async (req, res) => {
@@ -257,6 +257,114 @@ router.delete('/:id', auth, adminOnly, async (req, res) => {
   } catch (error) {
     console.error('Aidat silinemedi:', error)
     res.status(500).json({ error: 'Aidat silinemedi' })
+  }
+})
+
+// ============================================
+// MEMBER ENDPOINTS
+// ============================================
+
+// Üyenin kendi aidatlarını getir
+router.get('/member/my-dues', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'MEMBER') {
+      return res.status(403).json({ error: 'Yetkisiz erişim' })
+    }
+
+    const companyProfile = await prisma.userCompanyProfile.findUnique({
+      where: { userId: req.user.id }
+    })
+
+    if (!companyProfile || !companyProfile.memberId) {
+      return res.status(404).json({ error: 'Üyelik bilgisi bulunamadı' })
+    }
+
+    const { year, status } = req.query
+
+    const where = { memberId: companyProfile.memberId }
+    if (year) where.year = parseInt(year)
+    if (status) where.status = status
+
+    const dues = await prisma.memberDue.findMany({
+      where,
+      orderBy: [
+        { year: 'desc' },
+        { month: 'desc' }
+      ]
+    })
+
+    res.json(dues)
+  } catch (error) {
+    console.error('Aidatlar getirilemedi:', error)
+    res.status(500).json({ error: 'Aidatlar getirilemedi' })
+  }
+})
+
+// Üyenin son aidatlarını getir
+router.get('/member/recent', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'MEMBER') {
+      return res.status(403).json({ error: 'Yetkisiz erişim' })
+    }
+
+    const companyProfile = await prisma.userCompanyProfile.findUnique({
+      where: { userId: req.user.id }
+    })
+
+    if (!companyProfile || !companyProfile.memberId) {
+      return res.json([])
+    }
+
+    const limit = req.query.limit ? parseInt(req.query.limit) : 5
+
+    const dues = await prisma.memberDue.findMany({
+      where: { memberId: companyProfile.memberId },
+      orderBy: [
+        { year: 'desc' },
+        { month: 'desc' }
+      ],
+      take: limit
+    })
+
+    res.json(dues)
+  } catch (error) {
+    console.error('Son aidatlar getirilemedi:', error)
+    res.status(500).json({ error: 'Son aidatlar getirilemedi' })
+  }
+})
+
+// Üyenin aidat istatistiklerini getir
+router.get('/member/stats', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'MEMBER') {
+      return res.status(403).json({ error: 'Yetkisiz erişim' })
+    }
+
+    const companyProfile = await prisma.userCompanyProfile.findUnique({
+      where: { userId: req.user.id }
+    })
+
+    if (!companyProfile || !companyProfile.memberId) {
+      return res.json({ total: 0, paid: 0, unpaid: 0, overdue: 0, totalAmount: 0, paidAmount: 0 })
+    }
+
+    const dues = await prisma.memberDue.findMany({
+      where: { memberId: companyProfile.memberId }
+    })
+
+    const stats = {
+      total: dues.length,
+      paid: dues.filter(d => d.status === 'PAID').length,
+      unpaid: dues.filter(d => d.status === 'PENDING').length,
+      overdue: dues.filter(d => d.status === 'OVERDUE').length,
+      totalAmount: dues.reduce((sum, d) => sum + parseFloat(d.amount || 0), 0),
+      paidAmount: dues.filter(d => d.status === 'PAID').reduce((sum, d) => sum + parseFloat(d.paidAmount || d.amount || 0), 0)
+    }
+
+    res.json(stats)
+  } catch (error) {
+    console.error('İstatistikler getirilemedi:', error)
+    res.status(500).json({ error: 'İstatistikler getirilemedi' })
   }
 })
 

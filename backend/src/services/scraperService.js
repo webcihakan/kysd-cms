@@ -7,9 +7,10 @@ const egitimScraper = require('./scrapers/egitimScraper')
 const fuarScraper = require('./scrapers/fuarScraper')
 const projeScraper = require('./scrapers/projeScraper')
 const haberScraper = require('./scrapers/haberScraper')
+const currencyScraper = require('./scrapers/currencyScraper')
 const notificationService = require('./notificationService')
 
-const prisma = new PrismaClient()
+const prisma = require('../lib/prisma')
 
 // Scraper durumlarini takip et
 let scraperStatus = {
@@ -19,7 +20,8 @@ let scraperStatus = {
   rapor: { lastRun: null, status: 'idle', count: 0 },
   egitim: { lastRun: null, status: 'idle', count: 0 },
   fuar: { lastRun: null, status: 'idle', count: 0 },
-  proje: { lastRun: null, status: 'idle', count: 0 }
+  proje: { lastRun: null, status: 'idle', count: 0 },
+  currency: { lastRun: null, status: 'idle', count: 0 }
 }
 
 // Tum scraper'lari calistir
@@ -80,7 +82,8 @@ async function runSpecificScraper(scraperName) {
     rapor: raporScraper.scrape,
     egitim: egitimScraper.scrape,
     fuar: fuarScraper.scrape,
-    proje: projeScraper.scrape
+    proje: projeScraper.scrape,
+    currency: currencyScraper.scrape
   }
 
   if (!scrapers[scraperName]) {
@@ -117,6 +120,14 @@ function startCronJobs() {
   cron.schedule('0 9 * * *', async () => {
     console.log('[Cron] Günlük etkinlik bildirimleri gönderiliyor...')
     await notificationService.checkUpcomingEvents()
+  }, {
+    timezone: 'Europe/Istanbul'
+  })
+
+  // Her gün saat 08:00'da kur bilgileri güncelle
+  cron.schedule('0 8 * * *', async () => {
+    console.log('[Cron] Günlük kur bilgileri güncelleniyor...')
+    await runScraper('currency', currencyScraper.scrape)
   }, {
     timezone: 'Europe/Istanbul'
   })
