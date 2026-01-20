@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { TrendingUp, TrendingDown, Calendar, DollarSign, Briefcase, Home as HomeIcon, ExternalLink, BarChart3, Filter } from 'lucide-react'
+import { TrendingUp, TrendingDown, Calendar, DollarSign, Briefcase, Home as HomeIcon, ExternalLink, BarChart3, Filter, Grid, List } from 'lucide-react'
 import api from '../../utils/api'
 
 const categoryInfo = {
@@ -22,6 +22,7 @@ export default function TurkeyReports() {
   const [selectedYear, setSelectedYear] = useState('all')
   const [loading, setLoading] = useState(true)
   const [years, setYears] = useState([])
+  const [viewMode, setViewMode] = useState('grid') // 'grid' veya 'list'
 
   useEffect(() => {
     fetchCategories()
@@ -115,38 +116,69 @@ export default function TurkeyReports() {
       {/* Filters */}
       <div className="bg-white border-b sticky top-0 z-10 shadow-sm">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4 flex-wrap">
-            <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-gray-600" />
-              <span className="font-semibold text-gray-700">Filtreler:</span>
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            {/* Left side - Filters */}
+            <div className="flex items-center gap-4 flex-wrap flex-1">
+              <div className="flex items-center gap-2">
+                <Filter className="w-5 h-5 text-gray-600" />
+                <span className="font-semibold text-gray-700">Filtreler:</span>
+              </div>
+
+              {/* Category Filter */}
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              >
+                <option value="all">Tüm Kategoriler</option>
+                {Object.keys(categoryInfo).map(cat => (
+                  <option key={cat} value={cat}>{categoryInfo[cat].name}</option>
+                ))}
+              </select>
+
+              {/* Year Filter */}
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              >
+                <option value="all">Tüm Yıllar</option>
+                {years.map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
             </div>
 
-            {/* Category Filter */}
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            >
-              <option value="all">Tüm Kategoriler</option>
-              {Object.keys(categoryInfo).map(cat => (
-                <option key={cat} value={cat}>{categoryInfo[cat].name}</option>
-              ))}
-            </select>
+            {/* Right side - View Mode Toggle and Count */}
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-gray-600">
+                <span className="font-medium">{indicators.length}</span> gösterge
+              </div>
 
-            {/* Year Filter */}
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            >
-              <option value="all">Tüm Yıllar</option>
-              {years.map(year => (
-                <option key={year} value={year}>{year}</option>
-              ))}
-            </select>
-
-            <div className="ml-auto text-sm text-gray-600">
-              <span className="font-medium">{indicators.length}</span> gösterge bulundu
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded-lg transition-colors ${
+                    viewMode === 'grid'
+                      ? 'bg-primary-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                  title="Kart Görünümü"
+                >
+                  <Grid className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-lg transition-colors ${
+                    viewMode === 'list'
+                      ? 'bg-primary-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                  title="Liste Görünümü"
+                >
+                  <List className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -164,7 +196,7 @@ export default function TurkeyReports() {
             <h3 className="text-xl font-semibold text-gray-700 mb-2">Gösterge Bulunamadı</h3>
             <p className="text-gray-600">Seçtiğiniz filtrelere uygun gösterge bulunmamaktadır.</p>
           </div>
-        ) : (
+        ) : viewMode === 'grid' ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {indicators.map((indicator) => {
               const info = categoryInfo[indicator.category] || { name: indicator.category, icon: BarChart3, color: 'bg-gray-500' }
@@ -230,6 +262,104 @@ export default function TurkeyReports() {
                       </div>
                     </div>
                   )}
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          /* Liste Görünümü */
+          <div className="space-y-4">
+            {indicators.map((indicator) => {
+              const info = categoryInfo[indicator.category] || { name: indicator.category, icon: BarChart3, color: 'bg-gray-500' }
+              const Icon = info.icon
+              const isPositive = indicator.changePercent && parseFloat(indicator.changePercent) > 0
+
+              return (
+                <div key={indicator.id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-100 overflow-hidden">
+                  <div className="p-6">
+                    {/* Üst Kısım - Mobil ve Desktop */}
+                    <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-6">
+                      {/* Sol: Kategori ve Başlık */}
+                      <div className="flex items-center gap-4 lg:flex-1">
+                        <div className={`${info.color} w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md`}>
+                          <Icon className="w-7 h-7 text-white" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white ${info.color}`}>
+                              {info.name}
+                            </span>
+                          </div>
+                          <h3 className="text-lg font-bold text-gray-900 mb-1">{indicator.title}</h3>
+                          {indicator.description && (
+                            <p className="text-sm text-gray-600 line-clamp-2">
+                              {indicator.description}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Sağ: Değerler */}
+                      <div className="flex flex-wrap items-center gap-4 lg:gap-6 border-t lg:border-t-0 lg:border-l border-gray-100 pt-4 lg:pt-0 lg:pl-6">
+                        {/* Değer */}
+                        <div className="flex-shrink-0">
+                          <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Değer</div>
+                          <div className="text-2xl font-bold text-gray-900">
+                            {formatValue(indicator.value, indicator.unit)}
+                          </div>
+                        </div>
+
+                        {/* Değişim */}
+                        <div className="flex-shrink-0">
+                          <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Değişim</div>
+                          {indicator.changePercent ? (
+                            <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-lg ${
+                              isPositive ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+                            }`}>
+                              {isPositive ? <TrendingUp className="w-5 h-5" /> : <TrendingDown className="w-5 h-5" />}
+                              {isPositive ? '+' : ''}{parseFloat(indicator.changePercent).toFixed(2)}%
+                            </div>
+                          ) : (
+                            <span className="text-gray-400 text-lg">-</span>
+                          )}
+                        </div>
+
+                        {/* Dönem */}
+                        <div className="flex-shrink-0">
+                          <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Dönem</div>
+                          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg">
+                            <Calendar className="w-4 h-4 text-gray-600" />
+                            <span className="text-sm font-semibold text-gray-900">
+                              {formatMonth(indicator.month)} {indicator.year}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Alt Kısım - Kaynak */}
+                    {indicator.source && (
+                      <div className="mt-4 pt-4 border-t border-gray-100">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-medium text-gray-500">Kaynak:</span>
+                            <span className="text-sm font-medium text-gray-700">{indicator.source}</span>
+                          </div>
+                          {indicator.sourceUrl && (
+                            <a
+                              href={indicator.sourceUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary-600 hover:text-primary-700 hover:bg-primary-50 rounded-lg transition-colors"
+                            >
+                              <span>Kaynağa Git</span>
+                              <ExternalLink className="w-4 h-4" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )
             })}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, ChevronDown, ChevronRight, Phone, Mail, ArrowRight, ExternalLink, Calculator as CalculatorIcon, TrendingUp, User, BookOpen, Plus, LogOut, LayoutDashboard } from 'lucide-react'
+import { Menu, X, ChevronDown, ChevronRight, Phone, Mail, ArrowRight, ExternalLink, Calculator as CalculatorIcon, TrendingUp, User, BookOpen, Plus, LogOut, LayoutDashboard, Home, Building2, CreditCard, Briefcase, Users as UsersIcon } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import api from '../../utils/api'
 import { useCurrency } from '../../hooks/useCurrency'
@@ -216,20 +216,54 @@ export default function Header() {
                         {user.role === 'MEMBER' && (
                           <>
                             <Link
+                              to="/uye/dashboard"
+                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setUserMenuOpen(false)}
+                            >
+                              <Home className="w-4 h-4" />
+                              Üye Paneli
+                            </Link>
+                            <Link
+                              to="/uye/profil"
+                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setUserMenuOpen(false)}
+                            >
+                              <Building2 className="w-4 h-4" />
+                              Firma Profili
+                            </Link>
+                            <Link
+                              to="/uye/aidatlar"
+                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setUserMenuOpen(false)}
+                            >
+                              <CreditCard className="w-4 h-4" />
+                              Aidatlarım
+                            </Link>
+                            <div className="border-t border-gray-100 my-1" />
+                            <Link
+                              to="/uye/ilanlarim"
+                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setUserMenuOpen(false)}
+                            >
+                              <Briefcase className="w-4 h-4" />
+                              İş İlanlarım
+                            </Link>
+                            <Link
+                              to="/uye/basvurular"
+                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setUserMenuOpen(false)}
+                            >
+                              <UsersIcon className="w-4 h-4" />
+                              Başvurular
+                            </Link>
+                            <div className="border-t border-gray-100 my-1" />
+                            <Link
                               to="/uye/kataloglarim"
                               className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                               onClick={() => setUserMenuOpen(false)}
                             >
                               <BookOpen className="w-4 h-4" />
                               Kataloglarım
-                            </Link>
-                            <Link
-                              to="/uye/katalog-ekle"
-                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                              onClick={() => setUserMenuOpen(false)}
-                            >
-                              <Plus className="w-4 h-4" />
-                              Yeni Katalog Ekle
                             </Link>
                             <div className="border-t border-gray-100 my-1" />
                           </>

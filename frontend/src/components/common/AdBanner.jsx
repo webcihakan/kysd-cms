@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../../utils/api'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace('/api', '')
 
 export default function AdBanner({ code, className = '', wrapperClassName = '' }) {
   const [ad, setAd] = useState(null)
@@ -15,30 +15,46 @@ export default function AdBanner({ code, className = '', wrapperClassName = '' }
 
   const fetchAd = async () => {
     try {
+      console.log('AdBanner: Fetching ad for code:', code)
+
       // Önce pozisyon bilgisini al
       const posRes = await api.get(`/ad-positions/code/${code}`)
+      console.log('AdBanner: Position response:', posRes.data)
       setPosition(posRes.data)
 
       // Sonra bu pozisyondaki aktif reklamı al
       const adRes = await api.get(`/advertisements/position/${code}`)
+      console.log('AdBanner: Advertisement response:', adRes.data)
+
       if (adRes.data && adRes.data.length > 0) {
         setAd(adRes.data[0])
+        console.log('AdBanner: Ad set:', adRes.data[0])
+      } else {
+        console.log('AdBanner: No active ads found')
       }
     } catch (error) {
-      // Pozisyon bulunamazsa sessizce geç
-      console.log('Reklam yüklenemedi:', code)
+      console.error('AdBanner: Error loading ad:', code, error)
     } finally {
       setLoading(false)
     }
   }
 
-  if (loading) return null
+  if (loading) {
+    console.log('AdBanner: Loading...', code)
+    return null
+  }
 
   // Pozisyon yoksa veya aktif değilse gösterme
-  if (!position || !position.isActive) return null
+  if (!position || !position.isActive) {
+    console.log('AdBanner: Position not active or not found', code, position)
+    return null
+  }
+
+  console.log('AdBanner: Rendering for', code, 'Ad:', ad, 'Position:', position)
 
   // Reklam varsa göster
   if (ad && ad.imageDesktop) {
+    console.log('AdBanner: Rendering image:', `${API_URL}${ad.imageDesktop}`)
     const content = (
       <img
         src={`${API_URL}${ad.imageDesktop}`}

@@ -28,3 +28,10 @@ backend/uploads/*
 
 # Prisma
 backend/prisma/migrations/
+
+# Temporary Claude files
+**/tmpclaude-*/
+
+# Archives
+*.tar.gz
+*.zip

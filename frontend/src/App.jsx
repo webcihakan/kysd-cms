@@ -38,6 +38,8 @@ import Catalogs from './pages/public/Catalogs'
 import CatalogDetail from './pages/public/CatalogDetail'
 import TurkeyReports from './pages/public/TurkeyReports'
 import QCertificate from './pages/public/QCertificate'
+import Careers from './pages/public/Careers'
+import CareerDetail from './pages/public/CareerDetail'
 
 // Admin Pages
 import Dashboard from './pages/admin/Dashboard'
@@ -95,6 +97,9 @@ import VirtualFairPayments from './pages/admin/VirtualFairPayments'
 import MagazinePayments from './pages/admin/MagazinePayments'
 import EconomicIndicatorsList from './pages/admin/EconomicIndicatorsList'
 import EconomicIndicatorForm from './pages/admin/EconomicIndicatorForm'
+import JobPostingsList from './pages/admin/JobPostingsList'
+import JobApplicationsList from './pages/admin/JobApplicationsList'
+import JobPostingForm from './pages/admin/JobPostingForm'
 
 // Virtual Fair Public Pages
 import VirtualFairs from './pages/public/VirtualFairs'
@@ -103,9 +108,15 @@ import VirtualBoothDetail from './pages/public/VirtualBoothDetail'
 import VirtualBoothApplication from './pages/public/VirtualBoothApplication'
 
 // Member Pages
+import MemberDashboard from './pages/member/MemberDashboard'
+import MemberProfile from './pages/member/MemberProfile'
+import MemberDues from './pages/member/MemberDues'
 import MyCatalogs from './pages/member/MyCatalogs'
 import CatalogSubmit from './pages/member/CatalogSubmit'
 import CatalogPayment from './pages/member/CatalogPayment'
+import MyJobPostings from './pages/member/MyJobPostings'
+import MemberJobPostingForm from './pages/member/MemberJobPostingForm'
+import MemberJobApplications from './pages/member/MemberJobApplications'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -183,6 +194,8 @@ export default function App() {
         <Route path="/sanal-fuar/:slug" element={<VirtualFairDetail />} />
         <Route path="/sanal-stant/:id" element={<VirtualBoothDetail />} />
         <Route path="/sanal-fuar-basvurusu/:fairId" element={<VirtualBoothApplication />} />
+        <Route path="/kariyer" element={<Careers />} />
+        <Route path="/kariyer/:slug" element={<CareerDetail />} />
         <Route path="/iletisim" element={<Contact />} />
         <Route path="/giris" element={<Login />} />
         <Route path="/kayit" element={<Register />} />
@@ -252,6 +265,10 @@ export default function App() {
         <Route path="ekonomik-gostergeler" element={<EconomicIndicatorsList />} />
         <Route path="ekonomik-gostergeler/ekle" element={<EconomicIndicatorForm />} />
         <Route path="ekonomik-gostergeler/:id" element={<EconomicIndicatorForm />} />
+        <Route path="kariyer/ilanlar" element={<JobPostingsList />} />
+        <Route path="kariyer/ilanlar/ekle" element={<JobPostingForm />} />
+        <Route path="kariyer/ilanlar/:id" element={<JobPostingForm />} />
+        <Route path="kariyer/basvurular" element={<JobApplicationsList />} />
         <Route path="mevzuat" element={<LegislationsList />} />
         <Route path="mevzuat/yeni" element={<LegislationForm />} />
         <Route path="mevzuat/:id" element={<LegislationForm />} />
@@ -274,6 +291,30 @@ export default function App() {
 
       {/* Member Routes */}
       <Route element={<PublicLayout />}>
+        <Route
+          path="/uye/dashboard"
+          element={
+            <MemberRoute>
+              <MemberDashboard />
+            </MemberRoute>
+          }
+        />
+        <Route
+          path="/uye/profil"
+          element={
+            <MemberRoute>
+              <MemberProfile />
+            </MemberRoute>
+          }
+        />
+        <Route
+          path="/uye/aidatlar"
+          element={
+            <MemberRoute>
+              <MemberDues />
+            </MemberRoute>
+          }
+        />
         <Route
           path="/uye/kataloglarim"
           element={
@@ -303,6 +344,38 @@ export default function App() {
           element={
             <MemberRoute>
               <CatalogPayment />
+            </MemberRoute>
+          }
+        />
+        <Route
+          path="/uye/ilanlarim"
+          element={
+            <MemberRoute>
+              <MyJobPostings />
+            </MemberRoute>
+          }
+        />
+        <Route
+          path="/uye/ilan-ekle"
+          element={
+            <MemberRoute>
+              <MemberJobPostingForm />
+            </MemberRoute>
+          }
+        />
+        <Route
+          path="/uye/ilan-duzenle/:id"
+          element={
+            <MemberRoute>
+              <MemberJobPostingForm />
+            </MemberRoute>
+          }
+        />
+        <Route
+          path="/uye/basvurular"
+          element={
+            <MemberRoute>
+              <MemberJobApplications />
             </MemberRoute>
           }
         />

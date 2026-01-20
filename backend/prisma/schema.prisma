@@ -14,240 +14,241 @@ enum Role {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  email         String    @unique
-  password      String
-  name          String
-  phone         String?
-  company       String?
-  role          Role      @default(MEMBER)
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  phone     String?
+  company   String?
+  role      Role     @default(MEMBER)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  companyProfile UserCompanyProfile?
-  advertisements Advertisement[]
+  companyProfile    UserCompanyProfile?
+  advertisements    Advertisement[]
   boothApplications VirtualBoothApplication[]
-  magazines Magazine[]
+  magazines         Magazine[]
+  jobApplications   JobApplication[]
 
   @@map("users")
 }
 
 model Page {
-  id            Int       @id @default(autoincrement())
-  title         String
-  slug          String    @unique
-  content       String    @db.LongText
-  excerpt       String?   @db.Text
-  image         String?
-  parentId      Int?
-  order         Int       @default(0)
-  isActive      Boolean   @default(true)
-  metaTitle     String?
-  metaDesc      String?   @db.Text
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  title     String
+  slug      String   @unique
+  content   String   @db.LongText
+  excerpt   String?  @db.Text
+  image     String?
+  parentId  Int?
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  metaTitle String?
+  metaDesc  String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  parent        Page?     @relation("PageChildren", fields: [parentId], references: [id])
-  children      Page[]    @relation("PageChildren")
+  parent   Page?  @relation("PageChildren", fields: [parentId], references: [id])
+  children Page[] @relation("PageChildren")
 
   @@map("pages")
 }
 
 model News {
-  id            Int       @id @default(autoincrement())
-  title         String
-  slug          String    @unique
-  content       String    @db.LongText
-  excerpt       String?   @db.Text
-  image         String?
-  category      String    @default("genel") // genel, ekonomi, sanayi, teknoloji
-  source        String?   // Haber kaynağı (Dünya Gazetesi, Ekonomim vb.)
-  sourceUrl     String?   // Kaynak URL
-  isActive      Boolean   @default(true)
-  isFeatured    Boolean   @default(false)
-  viewCount     Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id         Int      @id @default(autoincrement())
+  title      String
+  slug       String   @unique
+  content    String   @db.LongText
+  excerpt    String?  @db.Text
+  image      String?
+  category   String   @default("genel") // genel, ekonomi, sanayi, teknoloji
+  source     String? // Haber kaynağı (Dünya Gazetesi, Ekonomim vb.)
+  sourceUrl  String? // Kaynak URL
+  isActive   Boolean  @default(true)
+  isFeatured Boolean  @default(false)
+  viewCount  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@map("news")
 }
 
 model Announcement {
-  id            Int       @id @default(autoincrement())
-  title         String
-  slug          String    @unique
-  content       String    @db.LongText
-  excerpt       String?   @db.Text
-  image         String?
-  isActive      Boolean   @default(true)
-  isPinned      Boolean   @default(false)
-  startDate     DateTime?
-  endDate       DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int       @id @default(autoincrement())
+  title     String
+  slug      String    @unique
+  content   String    @db.LongText
+  excerpt   String?   @db.Text
+  image     String?
+  isActive  Boolean   @default(true)
+  isPinned  Boolean   @default(false)
+  startDate DateTime?
+  endDate   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   @@map("announcements")
 }
 
 model IndustryGroup {
-  id            Int       @id @default(autoincrement())
-  name          String
-  slug          String    @unique
-  description   String?   @db.Text
-  image         String?
-  order         Int       @default(0)
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  name        String
+  slug        String   @unique
+  description String?  @db.Text
+  image       String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  members       IndustryMember[]
-  applications  MembershipApplication[]
+  members      IndustryMember[]
+  applications MembershipApplication[]
 
   @@map("industry_groups")
 }
 
 model IndustryMember {
-  id            Int       @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   companyName   String
   contactPerson String?
   phone         String?
   email         String?
   website       String?
-  address       String?   @db.Text
+  address       String?  @db.Text
   logo          String?
-  description   String?   @db.Text
-  order         Int       @default(0)
-  isActive      Boolean   @default(true)
+  description   String?  @db.Text
+  order         Int      @default(0)
+  isActive      Boolean  @default(true)
   groupId       Int
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  group         IndustryGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  dues          MemberDue[]
-  userProfiles  UserCompanyProfile[]
+  group        IndustryGroup        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  dues         MemberDue[]
+  userProfiles UserCompanyProfile[]
 
   @@map("industry_members")
 }
 
 model Menu {
-  id            Int       @id @default(autoincrement())
-  title         String
-  url           String?
-  pageId        Int?
-  parentId      Int?
-  order         Int       @default(0)
-  isActive      Boolean   @default(true)
-  target        String    @default("_self")
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  title     String
+  url       String?
+  pageId    Int?
+  parentId  Int?
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  target    String   @default("_self")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  parent        Menu?     @relation("MenuChildren", fields: [parentId], references: [id])
-  children      Menu[]    @relation("MenuChildren")
+  parent   Menu?  @relation("MenuChildren", fields: [parentId], references: [id])
+  children Menu[] @relation("MenuChildren")
 
   @@map("menus")
 }
 
 model Advertisement {
-  id            Int       @id @default(autoincrement())
-  name          String
-  position      String
-  positionId    Int?      // Reklam alanı ID'si
-  duration      Int       @default(1) // Kaç aylık (1, 3, 12)
-  imageDesktop  String?
-  imageMobile   String?
-  link          String?
-  startDate     DateTime?
-  endDate       DateTime?
-  isActive      Boolean   @default(true)
-  clickCount    Int       @default(0)
-  viewCount     Int       @default(0)
+  id           Int       @id @default(autoincrement())
+  name         String
+  position     String
+  positionId   Int? // Reklam alanı ID'si
+  duration     Int       @default(1) // Kaç aylık (1, 3, 12)
+  imageDesktop String?
+  imageMobile  String?
+  link         String?
+  startDate    DateTime?
+  endDate      DateTime?
+  isActive     Boolean   @default(true)
+  clickCount   Int       @default(0)
+  viewCount    Int       @default(0)
 
   // Reklam veren bilgileri
-  userId        Int?      // Hangi üyenin reklamı
-  advertiser    String?   // Reklam veren firma adı
+  userId            Int? // Hangi üyenin reklamı
+  advertiser        String? // Reklam veren firma adı
   advertiserContact String? // İletişim kişisi
-  advertiserPhone String? // Telefon
-  advertiserEmail String? // E-posta
+  advertiserPhone   String? // Telefon
+  advertiserEmail   String? // E-posta
 
   // Ödeme bilgileri
   price         Decimal?  @db.Decimal(10, 2) // Reklam ücreti
   paymentStatus String    @default("PENDING") // PENDING, PAID, PARTIAL, CANCELLED
   paidAmount    Decimal?  @db.Decimal(10, 2) // Ödenen tutar
   paidDate      DateTime? // Ödeme tarihi
-  paymentMethod String?   // Havale, Nakit, Kredi Kartı vb.
-  invoiceNo     String?   // Fatura numarası
+  paymentMethod String? // Havale, Nakit, Kredi Kartı vb.
+  invoiceNo     String? // Fatura numarası
   paymentNotes  String?   @db.Text // Ödeme notları
 
   // Onay bilgileri
-  status        String    @default("PENDING") // PENDING, APPROVED, REJECTED
-  adminNotes    String?   @db.Text // Admin notları
-  reviewedBy    Int?      // Hangi admin onayladı/reddetti
-  reviewedAt    DateTime? // Onay/Red tarihi
+  status     String    @default("PENDING") // PENDING, APPROVED, REJECTED
+  adminNotes String?   @db.Text // Admin notları
+  reviewedBy Int? // Hangi admin onayladı/reddetti
+  reviewedAt DateTime? // Onay/Red tarihi
 
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  user          User?     @relation(fields: [userId], references: [id])
-  adPosition    AdvertisementPosition? @relation(fields: [positionId], references: [id])
+  user       User?                  @relation(fields: [userId], references: [id])
+  adPosition AdvertisementPosition? @relation(fields: [positionId], references: [id])
 
   @@map("advertisements")
 }
 
 model Slider {
-  id            Int       @id @default(autoincrement())
-  title         String?
-  subtitle      String?
-  image         String
-  mobileImage   String?
-  link          String?
-  buttonText    String?
-  order         Int       @default(0)
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  title       String?
+  subtitle    String?
+  image       String
+  mobileImage String?
+  link        String?
+  buttonText  String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("sliders")
 }
 
 model Setting {
-  id            Int       @id @default(autoincrement())
-  key           String    @unique
-  value         String?   @db.LongText
-  type          String    @default("text")
-  group         String    @default("general")
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     String?  @db.LongText
+  type      String   @default("text")
+  group     String   @default("general")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("settings")
 }
 
 model Contact {
-  id            Int       @id @default(autoincrement())
-  name          String
-  email         String
-  phone         String?
-  subject       String?
-  message       String    @db.Text
-  isRead        Boolean   @default(false)
-  createdAt     DateTime  @default(now())
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
 
   @@map("contacts")
 }
 
 model BoardMember {
-  id            Int       @id @default(autoincrement())
-  name          String
-  title         String
-  companyName   String?
-  address       String?   @db.Text
-  phone         String?
-  email         String?
-  photo         String?
-  order         Int       @default(0)
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  name        String
+  title       String
+  companyName String?
+  address     String?  @db.Text
+  phone       String?
+  email       String?
+  photo       String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("board_members")
 }
@@ -259,33 +260,33 @@ enum ApplicationStatus {
 }
 
 model Gallery {
-  id            Int       @id @default(autoincrement())
-  title         String
-  slug          String    @unique
-  description   String?   @db.Text
-  category      String    @default("events")
-  coverImage    String?
-  eventDate     DateTime?
-  isActive      Boolean   @default(true)
-  order         Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int       @id @default(autoincrement())
+  title       String
+  slug        String    @unique
+  description String?   @db.Text
+  category    String    @default("events")
+  coverImage  String?
+  eventDate   DateTime?
+  isActive    Boolean   @default(true)
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  images        GalleryImage[]
+  images GalleryImage[]
 
   @@map("galleries")
 }
 
 model GalleryImage {
-  id            Int       @id @default(autoincrement())
-  galleryId     Int
-  image         String
-  title         String?
-  description   String?   @db.Text
-  order         Int       @default(0)
-  createdAt     DateTime  @default(now())
+  id          Int      @id @default(autoincrement())
+  galleryId   Int
+  image       String
+  title       String?
+  description String?  @db.Text
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
 
-  gallery       Gallery   @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  gallery Gallery @relation(fields: [galleryId], references: [id], onDelete: Cascade)
 
   @@map("gallery_images")
 }
@@ -296,7 +297,7 @@ model Project {
   slug          String    @unique
   description   String    @db.Text
   category      String    @default("national") // eu, national, sector, rd
-  status        String    @default("ongoing")  // ongoing, upcoming, completed
+  status        String    @default("ongoing") // ongoing, upcoming, completed
   startDate     DateTime?
   endDate       DateTime?
   budget        String?
@@ -318,152 +319,152 @@ model Project {
 }
 
 model Training {
-  id            Int       @id @default(autoincrement())
-  title         String
-  slug          String    @unique
-  description   String    @db.Text
-  category      String    @default("seminar") // seminar, workshop, certificate, online
-  instructor    String?
-  duration      String?
-  quota         Int?
-  price         String?
-  location      String?
-  eventDate     DateTime?
-  eventTime     String?
-  image         String?
-  syllabus      String?   @db.Text
-  requirements  String?   @db.Text
-  isFeatured    Boolean   @default(false)
-  isActive      Boolean   @default(true)
-  order         Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id           Int       @id @default(autoincrement())
+  title        String
+  slug         String    @unique
+  description  String    @db.Text
+  category     String    @default("seminar") // seminar, workshop, certificate, online
+  instructor   String?
+  duration     String?
+  quota        Int?
+  price        String?
+  location     String?
+  eventDate    DateTime?
+  eventTime    String?
+  image        String?
+  syllabus     String?   @db.Text
+  requirements String?   @db.Text
+  isFeatured   Boolean   @default(false)
+  isActive     Boolean   @default(true)
+  order        Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   @@map("trainings")
 }
 
 model Fair {
-  id            Int       @id @default(autoincrement())
-  title         String
-  slug          String    @unique
-  description   String?   @db.Text
-  location      String?
-  country       String?
-  startDate     DateTime?
-  endDate       DateTime?
-  deadline      DateTime?
-  organizer     String?
-  website       String?
-  boothInfo     String?
-  discount      String?
-  image         String?
-  isFeatured    Boolean   @default(false)
-  isKysdOrganized Boolean @default(false)
-  isActive      Boolean   @default(true)
-  order         Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id              Int       @id @default(autoincrement())
+  title           String
+  slug            String    @unique
+  description     String?   @db.Text
+  location        String?
+  country         String?
+  startDate       DateTime?
+  endDate         DateTime?
+  deadline        DateTime?
+  organizer       String?
+  website         String?
+  boothInfo       String?
+  discount        String?
+  image           String?
+  isFeatured      Boolean   @default(false)
+  isKysdOrganized Boolean   @default(false)
+  isActive        Boolean   @default(true)
+  order           Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@map("fairs")
 }
 
 model Report {
-  id            Int       @id @default(autoincrement())
-  title         String
-  slug          String    @unique
-  description   String?   @db.Text
-  source        String?   // İTO, İSO, TGSD, İHKİB vb.
-  sourceUrl     String?
-  pdfUrl        String?
-  category      String?   // sektor-raporu, ihracat-raporu, analiz vb.
-  publishDate   DateTime?
-  image         String?
-  isFeatured    Boolean   @default(false)
-  isActive      Boolean   @default(true)
-  order         Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int       @id @default(autoincrement())
+  title       String
+  slug        String    @unique
+  description String?   @db.Text
+  source      String? // İTO, İSO, TGSD, İHKİB vb.
+  sourceUrl   String?
+  pdfUrl      String?
+  category    String? // sektor-raporu, ihracat-raporu, analiz vb.
+  publishDate DateTime?
+  image       String?
+  isFeatured  Boolean   @default(false)
+  isActive    Boolean   @default(true)
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@map("reports")
 }
 
 model Legislation {
-  id            Int       @id @default(autoincrement())
-  title         String
-  slug          String    @unique
-  description   String?   @db.Text
-  category      String    @default("law") // law, regulation, circular, international
-  date          DateTime?
-  source        String?   // Resmi Gazete, Ticaret Bakanlığı, AB, ISO vb.
-  sourceUrl     String?
-  tags          String?   @db.Text // JSON array olarak saklanacak
-  isImportant   Boolean   @default(false)
-  isActive      Boolean   @default(true)
-  order         Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int       @id @default(autoincrement())
+  title       String
+  slug        String    @unique
+  description String?   @db.Text
+  category    String    @default("law") // law, regulation, circular, international
+  date        DateTime?
+  source      String? // Resmi Gazete, Ticaret Bakanlığı, AB, ISO vb.
+  sourceUrl   String?
+  tags        String?   @db.Text // JSON array olarak saklanacak
+  isImportant Boolean   @default(false)
+  isActive    Boolean   @default(true)
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@map("legislations")
 }
 
 model MembershipApplication {
-  id                Int               @id @default(autoincrement())
+  id            Int     @id @default(autoincrement())
   // Firma Bilgileri
-  companyName       String
-  companyType       String?           // Anonim, Limited, Şahıs vb.
-  taxNumber         String?
-  taxOffice         String?
-  tradeRegistry     String?           // Ticaret Sicil No
-  address           String            @db.Text
-  city              String
-  district          String?
-  postalCode        String?
-  phone             String
-  fax               String?
-  email             String
-  website           String?
+  companyName   String
+  companyType   String? // Anonim, Limited, Şahıs vb.
+  taxNumber     String?
+  taxOffice     String?
+  tradeRegistry String? // Ticaret Sicil No
+  address       String  @db.Text
+  city          String
+  district      String?
+  postalCode    String?
+  phone         String
+  fax           String?
+  email         String
+  website       String?
 
   // Yetkili Bilgileri
-  contactName       String
-  contactTitle      String?
-  contactPhone      String?
-  contactEmail      String?
+  contactName  String
+  contactTitle String?
+  contactPhone String?
+  contactEmail String?
 
   // Faaliyet Bilgileri
-  industryGroupId   Int?
-  activityArea      String?           @db.Text  // Faaliyet alanı açıklaması
-  employeeCount     String?           // Çalışan sayısı aralığı
-  foundedYear       String?
+  industryGroupId Int?
+  activityArea    String? @db.Text // Faaliyet alanı açıklaması
+  employeeCount   String? // Çalışan sayısı aralığı
+  foundedYear     String?
 
   // Başvuru Durumu
-  status            ApplicationStatus @default(PENDING)
-  notes             String?           @db.Text  // Admin notları
-  reviewedAt        DateTime?
-  reviewedBy        Int?
+  status     ApplicationStatus @default(PENDING)
+  notes      String?           @db.Text // Admin notları
+  reviewedAt DateTime?
+  reviewedBy Int?
 
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  industryGroup     IndustryGroup?    @relation(fields: [industryGroupId], references: [id])
+  industryGroup IndustryGroup? @relation(fields: [industryGroupId], references: [id])
 
   @@map("membership_applications")
 }
 
 // Reklam Pozisyonları ve Fiyatlandırma
 model AdvertisementPosition {
-  id            Int       @id @default(autoincrement())
-  name          String    // Header Banner, Sidebar Banner vb.
-  code          String    @unique // header-top, sidebar-right vb.
-  description   String?   @db.Text
-  width         Int?      // Piksel cinsinden genişlik
-  height        Int?      // Piksel cinsinden yükseklik
-  priceMonthly  Decimal?  @db.Decimal(10, 2) // Aylık fiyat
+  id             Int      @id @default(autoincrement())
+  name           String // Header Banner, Sidebar Banner vb.
+  code           String   @unique // header-top, sidebar-right vb.
+  description    String?  @db.Text
+  width          Int? // Piksel cinsinden genişlik
+  height         Int? // Piksel cinsinden yükseklik
+  priceMonthly   Decimal? @db.Decimal(10, 2) // Aylık fiyat
   priceQuarterly Decimal? @db.Decimal(10, 2) // 3 aylık fiyat
-  priceYearly   Decimal?  @db.Decimal(10, 2) // Yıllık fiyat
-  isActive      Boolean   @default(true)
-  order         Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  priceYearly    Decimal? @db.Decimal(10, 2) // Yıllık fiyat
+  isActive       Boolean  @default(true)
+  order          Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   advertisements Advertisement[]
 
@@ -472,29 +473,29 @@ model AdvertisementPosition {
 
 // Üyelik Aidatları
 enum DueStatus {
-  PENDING     // Ödeme Bekleniyor
-  PAID        // Ödendi
-  OVERDUE     // Gecikmiş
-  CANCELLED   // İptal
+  PENDING // Ödeme Bekleniyor
+  PAID // Ödendi
+  OVERDUE // Gecikmiş
+  CANCELLED // İptal
 }
 
 model MemberDue {
   id            Int       @id @default(autoincrement())
-  memberId      Int       // IndustryMember ID
-  year          Int       // Aidat yılı
-  month         Int?      // Ay (opsiyonel, yıllık aidat için null)
+  memberId      Int // IndustryMember ID
+  year          Int // Aidat yılı
+  month         Int? // Ay (opsiyonel, yıllık aidat için null)
   amount        Decimal   @db.Decimal(10, 2)
   status        DueStatus @default(PENDING)
-  dueDate       DateTime  // Son ödeme tarihi
+  dueDate       DateTime // Son ödeme tarihi
   paidDate      DateTime? // Ödeme tarihi
   paidAmount    Decimal?  @db.Decimal(10, 2)
-  paymentMethod String?   // Nakit, Havale, Kredi Kartı vb.
-  receiptNo     String?   // Makbuz numarası
+  paymentMethod String? // Nakit, Havale, Kredi Kartı vb.
+  receiptNo     String? // Makbuz numarası
   notes         String?   @db.Text
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  member        IndustryMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  member IndustryMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
 
   @@unique([memberId, year, month])
   @@map("member_dues")
@@ -502,58 +503,59 @@ model MemberDue {
 
 // Dernek Aylık Giderleri
 enum ExpenseCategory {
-  RENT          // Kira
-  UTILITIES     // Faturalar (elektrik, su, doğalgaz)
-  SALARY        // Personel maaşları
-  OFFICE        // Ofis giderleri
-  EVENTS        // Etkinlik giderleri
-  MARKETING     // Pazarlama/Tanıtım
-  TRAVEL        // Seyahat
-  LEGAL         // Hukuk/Danışmanlık
-  TAX           // Vergiler
-  INSURANCE     // Sigorta
-  OTHER         // Diğer
+  RENT // Kira
+  UTILITIES // Faturalar (elektrik, su, doğalgaz)
+  SALARY // Personel maaşları
+  OFFICE // Ofis giderleri
+  EVENTS // Etkinlik giderleri
+  MARKETING // Pazarlama/Tanıtım
+  TRAVEL // Seyahat
+  LEGAL // Hukuk/Danışmanlık
+  TAX // Vergiler
+  INSURANCE // Sigorta
+  OTHER // Diğer
 }
 
 model MonthlyExpense {
-  id            Int             @id @default(autoincrement())
-  year          Int
-  month         Int
-  category      ExpenseCategory
-  description   String
-  amount        Decimal         @db.Decimal(10, 2)
-  isPaid        Boolean         @default(false)
-  paidDate      DateTime?
-  dueDate       DateTime?
-  vendor        String?         // Tedarikçi/Firma
-  invoiceNo     String?         // Fatura numarası
-  receiptUrl    String?         // Makbuz/Fatura dosyası
-  notes         String?         @db.Text
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  id          Int             @id @default(autoincrement())
+  year        Int
+  month       Int
+  category    ExpenseCategory
+  description String
+  amount      Decimal         @db.Decimal(10, 2)
+  isPaid      Boolean         @default(false)
+  paidDate    DateTime?
+  dueDate     DateTime?
+  vendor      String? // Tedarikçi/Firma
+  invoiceNo   String? // Fatura numarası
+  receiptUrl  String? // Makbuz/Fatura dosyası
+  notes       String?         @db.Text
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 
   @@map("monthly_expenses")
 }
 
 // Kullanıcı-Üye Şirket Bağlantısı
 model UserCompanyProfile {
-  id            Int       @id @default(autoincrement())
-  userId        Int       @unique
-  memberId      Int?      // IndustryMember ile bağlantı (onaylandıysa)
-  companyName   String
-  taxNumber     String?
-  phone         String?
-  address       String?   @db.Text
-  website       String?
-  logo          String?
-  description   String?   @db.Text
-  isVerified    Boolean   @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  userId      Int      @unique
+  memberId    Int? // IndustryMember ile bağlantı (onaylandıysa)
+  companyName String
+  taxNumber   String?
+  phone       String?
+  address     String?  @db.Text
+  website     String?
+  logo        String?
+  description String?  @db.Text
+  isVerified  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  member        IndustryMember? @relation(fields: [memberId], references: [id])
-  catalogs      Catalog[]
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  member      IndustryMember? @relation(fields: [memberId], references: [id])
+  catalogs    Catalog[]
+  jobPostings JobPosting[]
 
   @@map("user_company_profiles")
 }
@@ -564,16 +566,16 @@ model UserCompanyProfile {
 
 // Sanal Fuar
 model VirtualFair {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
-  slug        String    @unique
-  description String?   @db.Text
+  slug        String   @unique
+  description String?  @db.Text
   startDate   DateTime
   endDate     DateTime
   coverImage  String?
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   boothTypes   VirtualBoothType[]
   booths       VirtualBooth[]
@@ -584,19 +586,19 @@ model VirtualFair {
 
 // Stant Türleri (Her fuar için özel fiyatlar)
 model VirtualBoothType {
-  id           Int       @id @default(autoincrement())
-  fairId       Int
-  name         String
-  description  String?   @db.Text
-  price        Decimal   @db.Decimal(10,2)
-  features     String?   @db.Text
-  maxProducts  Int       @default(10)
-  order        Int       @default(0)
-  isActive     Boolean   @default(true)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  fairId      Int
+  name        String
+  description String?  @db.Text
+  price       Decimal  @db.Decimal(10, 2)
+  features    String?  @db.Text
+  maxProducts Int      @default(10)
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  fair         VirtualFair @relation(fields: [fairId], references: [id], onDelete: Cascade)
+  fair         VirtualFair               @relation(fields: [fairId], references: [id], onDelete: Cascade)
   applications VirtualBoothApplication[]
   booths       VirtualBooth[]
 
@@ -613,97 +615,97 @@ enum BoothApplicationStatus {
 
 // Stant Başvuruları
 model VirtualBoothApplication {
-  id            Int       @id @default(autoincrement())
-  fairId        Int
-  boothTypeId   Int
-  userId        Int?      // Hangi üyenin başvurusu
+  id          Int  @id @default(autoincrement())
+  fairId      Int
+  boothTypeId Int
+  userId      Int? // Hangi üyenin başvurusu
 
   // Firma Bilgileri
-  companyName   String
-  contactName   String
-  email         String
-  phone         String
-  website       String?
+  companyName String
+  contactName String
+  email       String
+  phone       String
+  website     String?
 
   // Ek Bilgiler
-  message       String?   @db.Text
+  message String? @db.Text
 
   // Ödeme Bilgileri
   price         Decimal?  @db.Decimal(10, 2) // Stant ücreti
   paymentStatus String    @default("PENDING") // PENDING, PAID, PARTIAL, CANCELLED
   paidAmount    Decimal?  @db.Decimal(10, 2) // Ödenen tutar
   paidDate      DateTime? // Ödeme tarihi
-  paymentMethod String?   // Havale, Nakit, Kredi Kartı
-  invoiceNo     String?   // Fatura numarası
+  paymentMethod String? // Havale, Nakit, Kredi Kartı
+  invoiceNo     String? // Fatura numarası
   paymentNotes  String?   @db.Text // Ödeme notları
 
   // Durum
-  status        BoothApplicationStatus @default(PENDING)
-  adminNotes    String?   @db.Text
-  reviewedAt    DateTime?
-  reviewedBy    Int?
+  status     BoothApplicationStatus @default(PENDING)
+  adminNotes String?                @db.Text
+  reviewedAt DateTime?
+  reviewedBy Int?
 
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  user          User?     @relation(fields: [userId], references: [id])
-  fair          VirtualFair       @relation(fields: [fairId], references: [id], onDelete: Cascade)
-  boothType     VirtualBoothType  @relation(fields: [boothTypeId], references: [id])
-  booth         VirtualBooth?
+  user      User?            @relation(fields: [userId], references: [id])
+  fair      VirtualFair      @relation(fields: [fairId], references: [id], onDelete: Cascade)
+  boothType VirtualBoothType @relation(fields: [boothTypeId], references: [id])
+  booth     VirtualBooth?
 
   @@map("virtual_booth_applications")
 }
 
 // Onaylanan Stantlar
 model VirtualBooth {
-  id            Int       @id @default(autoincrement())
+  id            Int @id @default(autoincrement())
   fairId        Int
   boothTypeId   Int
-  applicationId Int       @unique
+  applicationId Int @unique
 
   // Firma Bilgileri
-  companyName   String
-  companyLogo   String?
-  description   String?   @db.Text
-  website       String?
-  email         String?
-  phone         String?
+  companyName String
+  companyLogo String?
+  description String? @db.Text
+  website     String?
+  email       String?
+  phone       String?
 
   // Görsel İçerik
-  bannerImage   String?
-  videoUrl      String?
-  catalogUrl    String?
+  bannerImage String?
+  videoUrl    String?
+  catalogUrl  String?
 
   // Durum
-  isActive      Boolean   @default(true)
-  viewCount     Int       @default(0)
-  order         Int       @default(0)
+  isActive  Boolean @default(true)
+  viewCount Int     @default(0)
+  order     Int     @default(0)
 
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  fair          VirtualFair       @relation(fields: [fairId], references: [id], onDelete: Cascade)
-  boothType     VirtualBoothType  @relation(fields: [boothTypeId], references: [id])
-  application   VirtualBoothApplication @relation(fields: [applicationId], references: [id])
-  products      VirtualBoothProduct[]
+  fair        VirtualFair             @relation(fields: [fairId], references: [id], onDelete: Cascade)
+  boothType   VirtualBoothType        @relation(fields: [boothTypeId], references: [id])
+  application VirtualBoothApplication @relation(fields: [applicationId], references: [id])
+  products    VirtualBoothProduct[]
 
   @@map("virtual_booths")
 }
 
 // Stant Ürünleri
 model VirtualBoothProduct {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   boothId     Int
   name        String
-  description String?   @db.Text
+  description String?  @db.Text
   image       String?
   price       String?
-  order       Int       @default(0)
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  booth       VirtualBooth @relation(fields: [boothId], references: [id], onDelete: Cascade)
+  booth VirtualBooth @relation(fields: [boothId], references: [id], onDelete: Cascade)
 
   @@map("virtual_booth_products")
 }
@@ -714,40 +716,40 @@ model VirtualBoothProduct {
 
 // Tur Rehberi (Fuar Ülkeleri için Gezilecek Yerler)
 model TravelGuide {
-  id               Int       @id @default(autoincrement())
-  country          String    // Ülke (Fairs tablosundan)
-  city             String?   // Şehir
-  name             String    // Yer adı
-  slug             String    @unique
-  description      String?   @db.Text
-  category         String    // historical, religious, restaurant, shopping
-  address          String?   @db.Text
-  googleMapsEmbed  String?   @db.Text // iframe embed kodu
-  latitude         Float?    // Enlem
-  longitude        Float?    // Boylam
-  phone            String?
-  website          String?
-  openingHours     String?   @db.Text
-  priceRange       String?   // $, $$, $$$
-  isActive         Boolean   @default(true)
-  order            Int       @default(0)
-  viewCount        Int       @default(0)
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  images           TravelGuideImage[]
+  id              Int                @id @default(autoincrement())
+  country         String // Ülke (Fairs tablosundan)
+  city            String? // Şehir
+  name            String // Yer adı
+  slug            String             @unique
+  description     String?            @db.Text
+  category        String // historical, religious, restaurant, shopping
+  address         String?            @db.Text
+  googleMapsEmbed String?            @db.Text // iframe embed kodu
+  latitude        Float? // Enlem
+  longitude       Float? // Boylam
+  phone           String?
+  website         String?
+  openingHours    String?            @db.Text
+  priceRange      String? // $, $$, $$$
+  isActive        Boolean            @default(true)
+  order           Int                @default(0)
+  viewCount       Int                @default(0)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  images          TravelGuideImage[]
 
   @@map("travel_guides")
 }
 
 // Tur Rehberi Resimleri
 model TravelGuideImage {
-  id          Int       @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   guideId     Int
   image       String
   title       String?
-  description String?   @db.Text
-  order       Int       @default(0)
-  createdAt   DateTime  @default(now())
+  description String?     @db.Text
+  order       Int         @default(0)
+  createdAt   DateTime    @default(now())
   guide       TravelGuide @relation(fields: [guideId], references: [id], onDelete: Cascade)
 
   @@map("travel_guide_images")
@@ -759,8 +761,8 @@ model TravelGuideImage {
 
 model Holiday {
   id          Int       @id @default(autoincrement())
-  title       String    // "Ramazan Bayramı", "Kurban Bayramı", "Yılbaşı"
-  date        DateTime  // Tatil tarihi
+  title       String // "Ramazan Bayramı", "Kurban Bayramı", "Yılbaşı"
+  date        DateTime // Tatil tarihi
   endDate     DateTime? // Birden fazla gün süren tatiller için
   type        String    @default("national") // national, religious, official
   description String?   @db.Text
@@ -776,44 +778,44 @@ model Holiday {
 // =====================
 
 model Magazine {
-  id              Int       @id @default(autoincrement())
-  title           String    // Dergi başlığı
-  slug            String    @unique
-  description     String?   @db.Text
-  userId          Int?      // Hangi üyenin dergisi (sponsor)
-  publisher       String?   // Yayıncı firma
-  publisherContact String?  // İletişim kişisi
-  publisherEmail  String?   // E-posta
-  publisherPhone  String?   // Telefon
-  issueNumber     String?   // Sayı numarası (örn: "Sayı 42", "2024/01")
-  publishDate     DateTime? // Yayın tarihi
-  category        String    @default("general") // general, industry, technology, economy
-  coverImage      String?   // Kapak görseli
-  pdfFile         String    // PDF dosya yolu
-  pageCount       Int?      // Sayfa sayısı
+  id               Int       @id @default(autoincrement())
+  title            String // Dergi başlığı
+  slug             String    @unique
+  description      String?   @db.Text
+  userId           Int? // Hangi üyenin dergisi (sponsor)
+  publisher        String? // Yayıncı firma
+  publisherContact String? // İletişim kişisi
+  publisherEmail   String? // E-posta
+  publisherPhone   String? // Telefon
+  issueNumber      String? // Sayı numarası (örn: "Sayı 42", "2024/01")
+  publishDate      DateTime? // Yayın tarihi
+  category         String    @default("general") // general, industry, technology, economy
+  coverImage       String? // Kapak görseli
+  pdfFile          String // PDF dosya yolu
+  pageCount        Int? // Sayfa sayısı
 
   // Ödeme Bilgileri (Sponsor dergi için)
-  price           Decimal?  @db.Decimal(10, 2) // Sponsorluk/Yayın ücreti
-  isPaid          Boolean   @default(false) // Ücretli mi?
-  paymentStatus   String    @default("FREE") // FREE, PENDING, PAID, PARTIAL, CANCELLED
-  paidAmount      Decimal?  @db.Decimal(10, 2) // Ödenen tutar
-  paidDate        DateTime? // Ödeme tarihi
-  paymentMethod   String?   // Havale, Nakit, Kredi Kartı
-  invoiceNo       String?   // Fatura numarası
-  paymentNotes    String?   @db.Text // Ödeme notları
+  price         Decimal?  @db.Decimal(10, 2) // Sponsorluk/Yayın ücreti
+  isPaid        Boolean   @default(false) // Ücretli mi?
+  paymentStatus String    @default("FREE") // FREE, PENDING, PAID, PARTIAL, CANCELLED
+  paidAmount    Decimal?  @db.Decimal(10, 2) // Ödenen tutar
+  paidDate      DateTime? // Ödeme tarihi
+  paymentMethod String? // Havale, Nakit, Kredi Kartı
+  invoiceNo     String? // Fatura numarası
+  paymentNotes  String?   @db.Text // Ödeme notları
 
-  isActive        Boolean   @default(true)
-  isFeatured      Boolean   @default(false) // Öne çıkan
-  viewCount       Int       @default(0) // Görüntülenme sayısı
-  downloadCount   Int       @default(0) // İndirilme sayısı
-  order           Int       @default(0)
-  metaTitle       String?
-  metaDesc        String?   @db.Text
-  tags            String?   @db.Text // Virgülle ayrılmış etiketler
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  isActive      Boolean  @default(true)
+  isFeatured    Boolean  @default(false) // Öne çıkan
+  viewCount     Int      @default(0) // Görüntülenme sayısı
+  downloadCount Int      @default(0) // İndirilme sayısı
+  order         Int      @default(0)
+  metaTitle     String?
+  metaDesc      String?  @db.Text
+  tags          String?  @db.Text // Virgülle ayrılmış etiketler
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  user            User?     @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id])
 
   @@map("magazines")
 }
@@ -824,45 +826,45 @@ model Magazine {
 
 // Katalog Durumları
 enum CatalogStatus {
-  PENDING       // Ödeme Bekleniyor
-  PAID          // Ödeme Yapıldı, Admin Onayı Bekleniyor
-  APPROVED      // Onaylandı ve Yayında
-  REJECTED      // Reddedildi
-  EXPIRED       // Süresi Doldu
+  PENDING // Ödeme Bekleniyor
+  PAID // Ödeme Yapıldı, Admin Onayı Bekleniyor
+  APPROVED // Onaylandı ve Yayında
+  REJECTED // Reddedildi
+  EXPIRED // Süresi Doldu
 }
 
 // Ödeme Durumları
 enum PaymentStatus {
-  PENDING       // Ödeme Bekleniyor
-  VERIFYING     // Kontrol Ediliyor
-  VERIFIED      // Onaylandı
-  REJECTED      // Reddedildi
+  PENDING // Ödeme Bekleniyor
+  VERIFYING // Kontrol Ediliyor
+  VERIFIED // Onaylandı
+  REJECTED // Reddedildi
 }
 
 // Katalog Paketleri
 model CatalogPackage {
-  id            Int       @id @default(autoincrement())
-  name          String    // "1 Aylık", "3 Aylık Premium" vb.
-  duration      Int       // Ay cinsinden süre
-  price         Decimal   @db.Decimal(10, 2)
-  features      String?   @db.Text // JSON: ["PDF Katalog", "Kapak Görseli" vb.]
-  description   String?   @db.Text
-  order         Int       @default(0)
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  name        String // "1 Aylık", "3 Aylık Premium" vb.
+  duration    Int // Ay cinsinden süre
+  price       Decimal  @db.Decimal(10, 2)
+  features    String?  @db.Text // JSON: ["PDF Katalog", "Kapak Görseli" vb.]
+  description String?  @db.Text
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  catalogs      Catalog[]
+  catalogs Catalog[]
 
   @@map("catalog_packages")
 }
 
 // Ana Katalog Modeli
 model Catalog {
-  id            Int       @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   // Firma Bilgileri
-  companyId     Int       // UserCompanyProfile ile bağlantı
+  companyId     Int // UserCompanyProfile ile bağlantı
   companyName   String
   contactPerson String?
   phone         String?
@@ -870,50 +872,50 @@ model Catalog {
   website       String?
 
   // Katalog Bilgileri
-  title         String
-  slug          String    @unique
-  description   String?   @db.Text
-  category      String    @default("genel") // tekstil, aksesuar, makine, hammadde, diger
-  tags          String?   @db.Text
+  title       String
+  slug        String  @unique
+  description String? @db.Text
+  category    String  @default("genel") // tekstil, aksesuar, makine, hammadde, diger
+  tags        String? @db.Text
 
   // Dosyalar
-  coverImage    String?
-  pdfFile       String    // PDF katalog dosyası
-  pageCount     Int?
-  fileSize      String?   // MB cinsinden
+  coverImage String?
+  pdfFile    String // PDF katalog dosyası
+  pageCount  Int?
+  fileSize   String? // MB cinsinden
 
   // Paket & Ödeme
-  packageId     Int       // CatalogPackage ile bağlantı
-  price         Decimal   @db.Decimal(10, 2)
-  startDate     DateTime?
-  endDate       DateTime?
+  packageId Int // CatalogPackage ile bağlantı
+  price     Decimal   @db.Decimal(10, 2)
+  startDate DateTime?
+  endDate   DateTime?
 
   // Durum
-  status        CatalogStatus @default(PENDING)
-  adminNotes    String?   @db.Text
-  reviewedAt    DateTime?
-  reviewedBy    Int?      // Admin user ID
+  status     CatalogStatus @default(PENDING)
+  adminNotes String?       @db.Text
+  reviewedAt DateTime?
+  reviewedBy Int? // Admin user ID
 
   // İstatistikler
-  viewCount     Int       @default(0)
-  downloadCount Int       @default(0)
+  viewCount     Int @default(0)
+  downloadCount Int @default(0)
 
   // Timestamps
-  isActive      Boolean   @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  isActive  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  company       UserCompanyProfile @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  package       CatalogPackage @relation(fields: [packageId], references: [id])
-  payment       CatalogPayment?
+  company UserCompanyProfile @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  package CatalogPackage     @relation(fields: [packageId], references: [id])
+  payment CatalogPayment?
 
   @@map("catalogs")
 }
 
 // Ödeme Kayıtları
 model CatalogPayment {
-  id            Int       @id @default(autoincrement())
-  catalogId     Int       @unique
+  id        Int @id @default(autoincrement())
+  catalogId Int @unique
 
   // Ödeme Bilgileri
   amount        Decimal   @db.Decimal(10, 2)
@@ -921,41 +923,223 @@ model CatalogPayment {
   paymentDate   DateTime?
 
   // Havale/EFT Bilgileri
-  bankName      String?
-  senderName    String?
-  referenceNo   String?
-  receiptUrl    String?   // Dekont/Makbuz
+  bankName    String?
+  senderName  String?
+  referenceNo String?
+  receiptUrl  String? // Dekont/Makbuz
 
   // Durum
-  status        PaymentStatus @default(PENDING)
-  verifiedBy    Int?
-  verifiedAt    DateTime?
-  notes         String?   @db.Text
+  status     PaymentStatus @default(PENDING)
+  verifiedBy Int?
+  verifiedAt DateTime?
+  notes      String?       @db.Text
 
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  catalog       Catalog   @relation(fields: [catalogId], references: [id], onDelete: Cascade)
+  catalog Catalog @relation(fields: [catalogId], references: [id], onDelete: Cascade)
 
   @@map("catalog_payments")
 }
 
 model EconomicIndicator {
-  id              Int       @id @default(autoincrement())
-  title           String    // Başlık: "İhracat", "İthalat", "Asgari Ücret" vb
-  category        String    // ihracat, ithalat, asgari_ucret, kira_artis, enflasyon, dolar, euro, altin vb
-  year            Int
-  month           Int?      // Aylık veri varsa
-  value           Decimal   @db.Decimal(15, 2)
-  unit            String    // "Milyar Dolar", "TL", "%" vb
-  changePercent   Decimal?  @db.Decimal(10, 2) // Önceki döneme göre değişim yüzdesi
-  source          String?   // TÜİK, TCMB, Hazine, vb
-  sourceUrl       String?   @db.Text
-  description     String?   @db.Text
-  isActive        Boolean   @default(true)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id            Int      @id @default(autoincrement())
+  title         String // Başlık: "İhracat", "İthalat", "Asgari Ücret" vb
+  category      String // ihracat, ithalat, asgari_ucret, kira_artis, enflasyon, dolar, euro, altin vb
+  year          Int
+  month         Int? // Aylık veri varsa
+  value         Decimal  @db.Decimal(15, 2)
+  unit          String // "Milyar Dolar", "TL", "%" vb
+  changePercent Decimal? @db.Decimal(10, 2) // Önceki döneme göre değişim yüzdesi
+  source        String? // TÜİK, TCMB, Hazine, vb
+  sourceUrl     String?  @db.Text
+  description   String?  @db.Text
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@unique([category, year, month])
   @@map("economic_indicators")
+}
+
+// =====================
+// KARİYER MODÜLÜ
+// =====================
+
+// İş Tipi
+enum JobType {
+  FULL_TIME // Tam Zamanlı
+  PART_TIME // Yarı Zamanlı
+  REMOTE // Uzaktan
+  HYBRID // Hibrit
+  INTERNSHIP // Staj
+  CONTRACT // Sözleşmeli
+}
+
+// Deneyim Seviyesi
+enum ExperienceLevel {
+  ENTRY // Giriş Seviyesi (0-2 yıl)
+  JUNIOR // Junior (2-4 yıl)
+  MID // Orta (4-7 yıl)
+  SENIOR // Kıdemli (7-10 yıl)
+  LEAD // Lider (10+ yıl)
+  EXECUTIVE // Yönetici
+}
+
+// Başvuru Durumu
+enum JobApplicationStatus {
+  PENDING // Başvuru Alındı
+  REVIEWED // İncelendi
+  SHORTLISTED // Ön Elemeyi Geçti
+  INTERVIEW // Mülakat Aşamasında
+  OFFER // Teklif Verildi
+  HIRED // İşe Alındı
+  REJECTED // Reddedildi
+}
+
+// İlan Durumu
+enum JobPostingStatus {
+  DRAFT // Taslak
+  PENDING // Admin Onayı Bekleniyor
+  ACTIVE // Aktif (Yayında)
+  PAUSED // Duraklatıldı
+  CLOSED // Kapatıldı
+  EXPIRED // Süresi Doldu
+}
+
+// İş İlanları
+model JobPosting {
+  id Int @id @default(autoincrement())
+
+  // İlan Bilgileri
+  title            String
+  slug             String  @unique
+  description      String  @db.LongText
+  requirements     String? @db.LongText
+  responsibilities String? @db.LongText
+  benefits         String? @db.Text
+
+  // Pozisyon Detayları
+  jobType         JobType
+  experienceLevel ExperienceLevel
+  city            String
+  district        String?
+  isRemote        Boolean         @default(false)
+
+  // Maaş Bilgileri (Opsiyonel)
+  salaryMin      Decimal? @db.Decimal(10, 2)
+  salaryMax      Decimal? @db.Decimal(10, 2)
+  salaryCurrency String   @default("TRY")
+  showSalary     Boolean  @default(false)
+
+  // Başvuru Bilgileri
+  applicationDeadline DateTime?
+  positions           Int       @default(1)
+  applicationEmail    String?
+  applicationUrl      String?
+
+  // Firma Bilgileri
+  companyId     Int
+  companyName   String
+  companyLogo   String?
+  contactPerson String?
+  contactPhone  String?
+  contactEmail  String?
+
+  // Durum ve Onay
+  status     JobPostingStatus @default(PENDING)
+  isActive   Boolean          @default(true)
+  isFeatured Boolean          @default(false)
+  adminNotes String?          @db.Text
+  reviewedAt DateTime?
+  reviewedBy Int?
+
+  // İstatistikler
+  viewCount        Int @default(0)
+  applicationCount Int @default(0)
+
+  // Timestamps
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+  expiresAt   DateTime?
+
+  // İlişkiler
+  company      UserCompanyProfile @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  applications JobApplication[]
+
+  @@index([status, isActive, expiresAt])
+  @@index([city, jobType, experienceLevel])
+  @@index([companyId])
+  @@map("job_postings")
+}
+
+// İş Başvuruları
+model JobApplication {
+  id Int @id @default(autoincrement())
+
+  // İlan Bilgisi
+  jobPostingId Int
+
+  // Başvuran Bilgileri
+  userId    Int? // Kayıtlı kullanıcı (opsiyonel)
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+  city      String
+  district  String?
+  birthDate DateTime?
+  gender    String?
+
+  // Eğitim Bilgileri
+  educationLevel String
+  university     String?
+  department     String?
+  graduationYear String?
+
+  // Deneyim Bilgileri
+  experienceYears   String
+  currentCompany    String?
+  currentPosition   String?
+  previousCompanies String? @db.Text
+
+  // Beceriler ve Diller
+  skills    String? @db.Text
+  languages String? @db.Text // JSON format
+
+  // CV ve Dökümanlar
+  cvFile       String?
+  coverLetter  String? @db.Text
+  linkedinUrl  String?
+  portfolioUrl String?
+
+  // Ek Bilgiler
+  expectedSalary Decimal?  @db.Decimal(10, 2)
+  availableDate  DateTime?
+  militaryStatus String?
+  drivingLicense String?
+  canRelocate    Boolean   @default(false)
+  hasDisability  Boolean   @default(false)
+
+  // Başvuru Durumu
+  status          JobApplicationStatus @default(PENDING)
+  companyNotes    String?              @db.Text
+  interviewDate   DateTime?
+  offerAmount     Decimal?             @db.Decimal(10, 2)
+  rejectionReason String?              @db.Text
+
+  // Timestamps
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  viewedAt  DateTime?
+
+  // İlişkiler
+  jobPosting JobPosting @relation(fields: [jobPostingId], references: [id], onDelete: Cascade)
+  user       User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([jobPostingId, status])
+  @@index([email])
+  @@index([userId])
+  @@map("job_applications")
 }

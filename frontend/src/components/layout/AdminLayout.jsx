@@ -4,7 +4,7 @@ import {
   LayoutDashboard, FileText, Newspaper, Bell, Building2, Image, Images,
   Megaphone, Menu as MenuIcon, Users, Mail, Settings, LogOut,
   ChevronLeft, ChevronRight, X, ClipboardList, FolderOpen, GraduationCap, Building,
-  Sun, Moon, User, ChevronDown, ExternalLink, Scale, CreditCard, Receipt, Monitor, Crown, MapPin, PartyPopper, BookOpen, Package, BarChart3
+  Sun, Moon, User, ChevronDown, ExternalLink, Scale, CreditCard, Receipt, Monitor, Crown, MapPin, PartyPopper, BookOpen, Package, BarChart3, Briefcase
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
@@ -68,6 +68,14 @@ const menuGroups = [
       { path: '/admin/katalog-paketleri', icon: Package, label: 'Katalog Paketleri' },
       { path: '/admin/reklamlar', icon: Megaphone, label: 'Reklamlar' },
       { path: '/admin/reklam-alanlari', icon: Monitor, label: 'Reklam Alanları' }
+    ]
+  },
+  {
+    title: 'Kariyer',
+    icon: Briefcase,
+    items: [
+      { path: '/admin/kariyer/ilanlar', icon: Briefcase, label: 'İş İlanları' },
+      { path: '/admin/kariyer/basvurular', icon: Users, label: 'Başvurular' }
     ]
   },
   {

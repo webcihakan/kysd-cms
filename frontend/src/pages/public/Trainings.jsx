@@ -8,7 +8,7 @@ import {
 import api from '../../utils/api'
 import AdBanner from '../../components/common/AdBanner'
 
-const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace('/api', '')
+const API_URL = import.meta.env.VITE_UPLOADS_URL || 'http://localhost:5000'
 
 const categories = [
   { id: 'all', name: 'Tümü', icon: BookOpen },

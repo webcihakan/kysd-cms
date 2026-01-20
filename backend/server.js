@@ -24,6 +24,7 @@ const fairRoutes = require('./src/routes/fairs');
 const reportRoutes = require('./src/routes/reports');
 const legislationRoutes = require('./src/routes/legislation');
 const memberDuesRoutes = require('./src/routes/memberDues');
+const membersRoutes = require('./src/routes/members');
 const expenseRoutes = require('./src/routes/expenses');
 const adPositionRoutes = require('./src/routes/adPositions');
 const companyProfileRoutes = require('./src/routes/companyProfile');
@@ -47,6 +48,10 @@ const virtualFairRoutes = require('./src/routes/virtualFairs');
 const virtualBoothTypeRoutes = require('./src/routes/virtualBoothTypes');
 const virtualBoothApplicationRoutes = require('./src/routes/virtualBoothApplications');
 const virtualBoothRoutes = require('./src/routes/virtualBooths');
+
+// Kariyer Routes
+const jobPostingsRoutes = require('./src/routes/jobPostings');
+const jobApplicationsRoutes = require('./src/routes/jobApplications');
 
 const app = express();
 
@@ -84,6 +89,7 @@ app.use('/api/fairs', fairRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/legislations', legislationRoutes);
 app.use('/api/member-dues', memberDuesRoutes);
+app.use('/api/members', membersRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/ad-positions', adPositionRoutes);
 app.use('/api/company-profile', companyProfileRoutes);
@@ -106,6 +112,10 @@ app.use('/api/virtual-fairs', virtualFairRoutes);
 app.use('/api/virtual-booth-types', virtualBoothTypeRoutes);
 app.use('/api/virtual-booth-applications', virtualBoothApplicationRoutes);
 app.use('/api/virtual-booths', virtualBoothRoutes);
+
+// Kariyer Routes
+app.use('/api/job-postings', jobPostingsRoutes);
+app.use('/api/job-applications', jobApplicationsRoutes);
 
 // Cron job'lari baslat
 scraperService.startCronJobs();
@@ -135,3 +145,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server ${PORT} portunda çalışıyor`);
 });
+
+

@@ -5,11 +5,11 @@ import api from '../../utils/api'
 import { useAuth } from '../../context/AuthContext'
 
 const statusConfig = {
-  PENDING: { label: 'Ödeme Bekleniyor', color: 'bg-yellow-100 text-yellow-800', icon: Clock },
-  PAID: { label: 'Onay Bekleniyor', color: 'bg-blue-100 text-blue-800', icon: AlertCircle },
-  APPROVED: { label: 'Yayında', color: 'bg-green-100 text-green-800', icon: CheckCircle },
-  REJECTED: { label: 'Reddedildi', color: 'bg-red-100 text-red-800', icon: XCircle },
-  EXPIRED: { label: 'Süresi Doldu', color: 'bg-gray-100 text-gray-800', icon: Clock }
+  PENDING: { label: 'Ödeme Bekleniyor', color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300', icon: Clock },
+  PAID: { label: 'Onay Bekleniyor', color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300', icon: AlertCircle },
+  APPROVED: { label: 'Yayında', color: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300', icon: CheckCircle },
+  REJECTED: { label: 'Reddedildi', color: 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300', icon: XCircle },
+  EXPIRED: { label: 'Süresi Doldu', color: 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300', icon: Clock }
 }
 
 export default function MyCatalogs() {
@@ -58,56 +58,57 @@ export default function MyCatalogs() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Kataloglarım</h1>
-          <p className="text-gray-600 mt-1">Ürün kataloglarınızı yönetin</p>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Kataloglarım</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">Ürün kataloglarınızı yönetin</p>
+          </div>
+          <Link
+            to="/uye/katalog-ekle"
+            className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 shadow-lg"
+          >
+            <Plus className="w-5 h-5" />
+            Yeni Katalog Ekle
+          </Link>
         </div>
-        <Link
-          to="/uye/katalog-ekle"
-          className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 shadow-lg"
-        >
-          <Plus className="w-5 h-5" />
-          Yeni Katalog Ekle
-        </Link>
-      </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-          <div className="text-gray-500 text-sm mb-1">Toplam</div>
-          <div className="text-2xl font-bold text-gray-900">{catalogs.length}</div>
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="text-gray-500 dark:text-gray-400 text-sm mb-1">Toplam</div>
+          <div className="text-2xl font-bold text-gray-900 dark:text-white">{catalogs.length}</div>
         </div>
-        <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-          <div className="text-yellow-700 text-sm mb-1">Ödeme Bekleniyor</div>
-          <div className="text-2xl font-bold text-yellow-900">
+        <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg border border-yellow-200 dark:border-yellow-800">
+          <div className="text-yellow-700 dark:text-yellow-300 text-sm mb-1">Ödeme Bekleniyor</div>
+          <div className="text-2xl font-bold text-yellow-900 dark:text-yellow-200">
             {catalogs.filter(c => c.status === 'PENDING').length}
           </div>
         </div>
-        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-          <div className="text-blue-700 text-sm mb-1">Onay Bekleniyor</div>
-          <div className="text-2xl font-bold text-blue-900">
+        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+          <div className="text-blue-700 dark:text-blue-300 text-sm mb-1">Onay Bekleniyor</div>
+          <div className="text-2xl font-bold text-blue-900 dark:text-blue-200">
             {catalogs.filter(c => c.status === 'PAID').length}
           </div>
         </div>
-        <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-          <div className="text-green-700 text-sm mb-1">Yayında</div>
-          <div className="text-2xl font-bold text-green-900">
+        <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-200 dark:border-green-800">
+          <div className="text-green-700 dark:text-green-300 text-sm mb-1">Yayında</div>
+          <div className="text-2xl font-bold text-green-900 dark:text-green-200">
             {catalogs.filter(c => c.status === 'APPROVED').length}
           </div>
         </div>
-        <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-          <div className="text-red-700 text-sm mb-1">Reddedilen</div>
-          <div className="text-2xl font-bold text-red-900">
+        <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-200 dark:border-red-800">
+          <div className="text-red-700 dark:text-red-300 text-sm mb-1">Reddedilen</div>
+          <div className="text-2xl font-bold text-red-900 dark:text-red-200">
             {catalogs.filter(c => c.status === 'REJECTED').length}
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
-        <div className="border-b border-gray-200">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
+        <div className="border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-4 px-6 overflow-x-auto">
             {[
               { key: 'all', label: 'Tümü' },
@@ -122,8 +123,8 @@ export default function MyCatalogs() {
                 onClick={() => setActiveTab(tab.key)}
                 className={`py-3 px-2 border-b-2 transition-colors whitespace-nowrap ${
                   activeTab === tab.key
-                    ? 'border-primary-600 text-primary-600 font-semibold'
-                    : 'border-transparent text-gray-600 hover:text-gray-900'
+                    ? 'border-primary-600 text-primary-600 dark:text-primary-400 font-semibold'
+                    : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
                 {tab.label}
@@ -139,10 +140,10 @@ export default function MyCatalogs() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
         </div>
       ) : filteredCatalogs.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-          <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Katalog Bulunamadı</h3>
-          <p className="text-gray-500 mb-6">Henüz katalog eklememişsiniz. Hemen başlayın!</p>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center">
+          <BookOpen className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Katalog Bulunamadı</h3>
+          <p className="text-gray-500 dark:text-gray-400 mb-6">Henüz katalog eklememişsiniz. Hemen başlayın!</p>
           <Link
             to="/uye/katalog-ekle"
             className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold"
@@ -156,7 +157,7 @@ export default function MyCatalogs() {
           {filteredCatalogs.map((catalog) => {
             const StatusIcon = statusConfig[catalog.status]?.icon || Clock
             return (
-              <div key={catalog.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+              <div key={catalog.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow">
                 {/* Cover Image */}
                 <div className="h-48 bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
                   {catalog.coverImage ? (
@@ -169,26 +170,26 @@ export default function MyCatalogs() {
                 {/* Content */}
                 <div className="p-4">
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold text-gray-900 line-clamp-1">{catalog.title}</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-1">{catalog.title}</h3>
                     <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${statusConfig[catalog.status]?.color}`}>
                       <StatusIcon className="w-3 h-3" />
                       {statusConfig[catalog.status]?.label}
                     </span>
                   </div>
 
-                  <div className="space-y-1 text-sm text-gray-600 mb-4">
+                  <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400 mb-4">
                     <div className="flex items-center justify-between">
                       <span>Paket:</span>
-                      <span className="font-medium">{catalog.package?.name}</span>
+                      <span className="font-medium text-gray-900 dark:text-white">{catalog.package?.name}</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span>Fiyat:</span>
-                      <span className="font-semibold text-primary-600">{catalog.price} TL</span>
+                      <span className="font-semibold text-primary-600 dark:text-primary-400">{catalog.price} TL</span>
                     </div>
                     {catalog.startDate && (
                       <div className="flex items-center justify-between">
                         <span>Yayın:</span>
-                        <span className="font-medium">{formatDate(catalog.startDate)} - {formatDate(catalog.endDate)}</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{formatDate(catalog.startDate)} - {formatDate(catalog.endDate)}</span>
                       </div>
                     )}
                   </div>
@@ -242,6 +243,7 @@ export default function MyCatalogs() {
           })}
         </div>
       )}
+      </div>
     </div>
   )
 }
