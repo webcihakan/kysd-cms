@@ -1,9 +1,10 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 
 // Layout
 import PublicLayout from './components/layout/PublicLayout'
-import AdminLayout from './components/layout/AdminLayout'
+const AdminLayout = lazy(() => import('./components/layout/AdminLayout'))
 
 // Public Pages
 import Home from './pages/public/Home'
@@ -41,65 +42,65 @@ import QCertificate from './pages/public/QCertificate'
 import Careers from './pages/public/Careers'
 import CareerDetail from './pages/public/CareerDetail'
 
-// Admin Pages
-import Dashboard from './pages/admin/Dashboard'
-import PagesList from './pages/admin/PagesList'
-import PagesForm from './pages/admin/PagesForm'
-import AdminNewsList from './pages/admin/NewsList'
-import NewsForm from './pages/admin/NewsForm'
-import AdminAnnouncementsList from './pages/admin/AnnouncementsList'
-import AnnouncementsForm from './pages/admin/AnnouncementsForm'
-import IndustryGroupsList from './pages/admin/IndustryGroupsList'
-import IndustryGroupsForm from './pages/admin/IndustryGroupsForm'
-import SlidersList from './pages/admin/SlidersList'
-import SlidersForm from './pages/admin/SlidersForm'
-import AdvertisementsList from './pages/admin/AdvertisementsList'
-import AdvertisementsForm from './pages/admin/AdvertisementsForm'
-import MenusList from './pages/admin/MenusList'
-import UsersList from './pages/admin/UsersList'
-import ContactsList from './pages/admin/ContactsList'
-import MembershipApplicationsList from './pages/admin/MembershipApplicationsList'
-import Settings from './pages/admin/Settings'
-import GalleryList from './pages/admin/GalleryList'
-import GalleryForm from './pages/admin/GalleryForm'
-import ProjectsList from './pages/admin/ProjectsList'
-import ProjectForm from './pages/admin/ProjectForm'
-import TrainingsList from './pages/admin/TrainingsList'
-import TrainingForm from './pages/admin/TrainingForm'
-import FairsList from './pages/admin/FairsList'
-import FairForm from './pages/admin/FairForm'
-import LegislationsList from './pages/admin/LegislationsList'
-import LegislationForm from './pages/admin/LegislationForm'
-import DuesList from './pages/admin/DuesList'
-import ExpensesList from './pages/admin/ExpensesList'
-import AdPositionsList from './pages/admin/AdPositionsList'
-import Profile from './pages/admin/Profile'
-import MembersList from './pages/admin/MembersList'
-import BoardMembersList from './pages/admin/BoardMembersList'
-import BoardMembersForm from './pages/admin/BoardMembersForm'
-import VirtualFairsList from './pages/admin/VirtualFairsList'
-import VirtualFairsForm from './pages/admin/VirtualFairsForm'
-import VirtualBoothApplicationsList from './pages/admin/VirtualBoothApplicationsList'
-import VirtualBoothsList from './pages/admin/VirtualBoothsList'
-import VirtualBoothForm from './pages/admin/VirtualBoothForm'
-import TravelGuidesList from './pages/admin/TravelGuidesList'
-import TravelGuideForm from './pages/admin/TravelGuideForm'
-import HolidaysList from './pages/admin/HolidaysList'
-import HolidayForm from './pages/admin/HolidayForm'
-import MagazinesList from './pages/admin/MagazinesList'
-import MagazineForm from './pages/admin/MagazineForm'
-import CatalogsList from './pages/admin/CatalogsList'
-import AdminCatalogDetail from './pages/admin/CatalogDetail'
-import CatalogPackagesList from './pages/admin/CatalogPackagesList'
-import CatalogPackageForm from './pages/admin/CatalogPackageForm'
-import AdPayments from './pages/admin/AdPayments'
-import VirtualFairPayments from './pages/admin/VirtualFairPayments'
-import MagazinePayments from './pages/admin/MagazinePayments'
-import EconomicIndicatorsList from './pages/admin/EconomicIndicatorsList'
-import EconomicIndicatorForm from './pages/admin/EconomicIndicatorForm'
-import JobPostingsList from './pages/admin/JobPostingsList'
-import JobApplicationsList from './pages/admin/JobApplicationsList'
-import JobPostingForm from './pages/admin/JobPostingForm'
+// Admin Pages - Lazy loaded for performance
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'))
+const PagesList = lazy(() => import('./pages/admin/PagesList'))
+const PagesForm = lazy(() => import('./pages/admin/PagesForm'))
+const AdminNewsList = lazy(() => import('./pages/admin/NewsList'))
+const NewsForm = lazy(() => import('./pages/admin/NewsForm'))
+const AdminAnnouncementsList = lazy(() => import('./pages/admin/AnnouncementsList'))
+const AnnouncementsForm = lazy(() => import('./pages/admin/AnnouncementsForm'))
+const IndustryGroupsList = lazy(() => import('./pages/admin/IndustryGroupsList'))
+const IndustryGroupsForm = lazy(() => import('./pages/admin/IndustryGroupsForm'))
+const SlidersList = lazy(() => import('./pages/admin/SlidersList'))
+const SlidersForm = lazy(() => import('./pages/admin/SlidersForm'))
+const AdvertisementsList = lazy(() => import('./pages/admin/AdvertisementsList'))
+const AdvertisementsForm = lazy(() => import('./pages/admin/AdvertisementsForm'))
+const MenusList = lazy(() => import('./pages/admin/MenusList'))
+const UsersList = lazy(() => import('./pages/admin/UsersList'))
+const ContactsList = lazy(() => import('./pages/admin/ContactsList'))
+const MembershipApplicationsList = lazy(() => import('./pages/admin/MembershipApplicationsList'))
+const Settings = lazy(() => import('./pages/admin/Settings'))
+const GalleryList = lazy(() => import('./pages/admin/GalleryList'))
+const GalleryForm = lazy(() => import('./pages/admin/GalleryForm'))
+const ProjectsList = lazy(() => import('./pages/admin/ProjectsList'))
+const ProjectForm = lazy(() => import('./pages/admin/ProjectForm'))
+const TrainingsList = lazy(() => import('./pages/admin/TrainingsList'))
+const TrainingForm = lazy(() => import('./pages/admin/TrainingForm'))
+const FairsList = lazy(() => import('./pages/admin/FairsList'))
+const FairForm = lazy(() => import('./pages/admin/FairForm'))
+const LegislationsList = lazy(() => import('./pages/admin/LegislationsList'))
+const LegislationForm = lazy(() => import('./pages/admin/LegislationForm'))
+const DuesList = lazy(() => import('./pages/admin/DuesList'))
+const ExpensesList = lazy(() => import('./pages/admin/ExpensesList'))
+const AdPositionsList = lazy(() => import('./pages/admin/AdPositionsList'))
+const Profile = lazy(() => import('./pages/admin/Profile'))
+const MembersList = lazy(() => import('./pages/admin/MembersList'))
+const BoardMembersList = lazy(() => import('./pages/admin/BoardMembersList'))
+const BoardMembersForm = lazy(() => import('./pages/admin/BoardMembersForm'))
+const VirtualFairsList = lazy(() => import('./pages/admin/VirtualFairsList'))
+const VirtualFairsForm = lazy(() => import('./pages/admin/VirtualFairsForm'))
+const VirtualBoothApplicationsList = lazy(() => import('./pages/admin/VirtualBoothApplicationsList'))
+const VirtualBoothsList = lazy(() => import('./pages/admin/VirtualBoothsList'))
+const VirtualBoothForm = lazy(() => import('./pages/admin/VirtualBoothForm'))
+const TravelGuidesList = lazy(() => import('./pages/admin/TravelGuidesList'))
+const TravelGuideForm = lazy(() => import('./pages/admin/TravelGuideForm'))
+const HolidaysList = lazy(() => import('./pages/admin/HolidaysList'))
+const HolidayForm = lazy(() => import('./pages/admin/HolidayForm'))
+const MagazinesList = lazy(() => import('./pages/admin/MagazinesList'))
+const MagazineForm = lazy(() => import('./pages/admin/MagazineForm'))
+const CatalogsList = lazy(() => import('./pages/admin/CatalogsList'))
+const AdminCatalogDetail = lazy(() => import('./pages/admin/CatalogDetail'))
+const CatalogPackagesList = lazy(() => import('./pages/admin/CatalogPackagesList'))
+const CatalogPackageForm = lazy(() => import('./pages/admin/CatalogPackageForm'))
+const AdPayments = lazy(() => import('./pages/admin/AdPayments'))
+const VirtualFairPayments = lazy(() => import('./pages/admin/VirtualFairPayments'))
+const MagazinePayments = lazy(() => import('./pages/admin/MagazinePayments'))
+const EconomicIndicatorsList = lazy(() => import('./pages/admin/EconomicIndicatorsList'))
+const EconomicIndicatorForm = lazy(() => import('./pages/admin/EconomicIndicatorForm'))
+const JobPostingsList = lazy(() => import('./pages/admin/JobPostingsList'))
+const JobApplicationsList = lazy(() => import('./pages/admin/JobApplicationsList'))
+const JobPostingForm = lazy(() => import('./pages/admin/JobPostingForm'))
 
 // Virtual Fair Public Pages
 import VirtualFairs from './pages/public/VirtualFairs'
@@ -206,7 +207,13 @@ export default function App() {
         path="/admin"
         element={
           <ProtectedRoute>
-            <AdminLayout />
+            <Suspense fallback={
+              <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-800"></div>
+              </div>
+            }>
+              <AdminLayout />
+            </Suspense>
           </ProtectedRoute>
         }
       >

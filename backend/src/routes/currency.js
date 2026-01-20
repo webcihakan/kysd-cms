@@ -49,14 +49,17 @@ router.get('/', async (req, res) => {
     });
 
     // Bigpara'dan altın ve gümüş fiyatlarını çek
-    let goldResponse = null;
     try {
-      goldResponse = await axios.get('https://bigpara.hurriyet.com.tr/altin/', {
+      const goldResponse = await axios.get('https://bigpara.hurriyet.com.tr/altin/', {
         timeout: 10000,
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
         }
       });
+
+      if (!goldResponse || !goldResponse.data) {
+        throw new Error('Altın API yanıt verisi boş');
+      }
 
       // JavaScript değişkeninden altın verisi çek: var $altinData = [...]
       const altinDataMatch = goldResponse.data.match(/var\s+\$altinData\s*=\s*(\[.*?\]);/);
@@ -102,10 +105,15 @@ router.get('/', async (req, res) => {
         }
       });
 
-      console.log('[Currency API] Altın:', data.gold, 'Gümüş:', data.silver);
+      if (data.gold || data.silver) {
+        console.log('[Currency API] Altın:', data.gold, 'Gümüş:', data.silver);
+      }
 
     } catch (goldError) {
-      console.error('[Currency API] Altın/Gümüş fiyatları alınamadı:', goldError.message);
+      // Sadece beklenmeyen hataları logla (timeout ve 404 normal)
+      if (goldError.code !== 'ECONNABORTED' && goldError.response?.status !== 404) {
+        console.error('[Currency API] Altın/Gümüş hatası:', goldError.message);
+      }
     }
 
     // Cache için 5 dakika header ekle

@@ -35,3 +35,19 @@ backend/prisma/migrations/
 # Archives
 *.tar.gz
 *.zip
+
+# Temporary/Script Files
+backend/add-*.js
+backend/check-*.js
+backend/clean-*.js
+backend/import-*.js
+backend/update-*.js
+backend/fix-*.js
+backend/seed-test-*.js
+backend/test-*.js
+backend/*.sql
+backend/*.xlsx
+backend/**/*_backup.js
+
+# Temporary text files
+yeni*.txt

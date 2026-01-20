@@ -2,10 +2,9 @@ import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
   Building2, Globe, Mail, Phone, FileText, Package,
-  ChevronRight, ArrowLeft, Eye, Download, ExternalLink, Box, View
+  ChevronRight, ArrowLeft, Eye, Download, ExternalLink
 } from 'lucide-react'
 import api from '../../utils/api'
-import ARBoothViewer from '../../components/ar/ARBoothViewer'
 
 export default function VirtualBoothDetail() {
   const { id } = useParams()
@@ -119,24 +118,16 @@ export default function VirtualBoothDetail() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
-            {/* 3D AR Stant Görünümü */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm">
-              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Box className="w-5 h-5 text-purple-500" />
-                3D Sanal Stant
-                <span className="ml-auto flex items-center gap-1 text-xs font-normal text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                  <View className="w-3 h-3" />
-                  AR Destekli
-                </span>
-              </h2>
-              <ARBoothViewer
-                companyName={booth.companyName}
-                posterUrl={booth.bannerImage}
-              />
-              <p className="text-sm text-gray-500 mt-4 text-center">
-                Fare ile 360° döndürün • Mobil cihazlarda AR butonuna tıklayarak gerçek ortamda görüntüleyin
-              </p>
-            </div>
+            {/* Stant Banner */}
+            {booth.bannerImage && (
+              <div className="bg-white rounded-2xl p-6 shadow-sm">
+                <img
+                  src={booth.bannerImage}
+                  alt={booth.companyName}
+                  className="w-full h-auto rounded-lg"
+                />
+              </div>
+            )}
 
             {/* Açıklama */}
             {booth.description && (
