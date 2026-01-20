@@ -8,6 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        'custom-red': '#dc2626',
         // Kurumsal Lacivert - Ana renk
         primary: {
           50: '#f0f4f8',
