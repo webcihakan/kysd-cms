@@ -37,10 +37,7 @@ router.get('/', async (req, res) => {
     const { category, featured, search, limit = 12, page = 1 } = req.query;
 
     const where = {
-      isActive: true,
-      pdfFile: {
-        not: null
-      }
+      isActive: true
     };
 
     if (category && category !== 'all') {
