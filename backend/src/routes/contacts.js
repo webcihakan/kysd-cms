@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 
 const { auth, editorOrAdmin } = require('../middleware/auth');
+const { sendContactFormNotification } = require('../utils/mailer');
 
 const router = express.Router();
 const prisma = require('../lib/prisma');
@@ -76,6 +77,21 @@ router.post('/', [
     const contact = await prisma.contact.create({
       data: { name, email, phone, subject, message }
     });
+
+    // Email bildirimi gönder (arka planda, hata olsa da kullanıcıya etki etmesin)
+    try {
+      await sendContactFormNotification({
+        name,
+        email,
+        phone,
+        subject,
+        message,
+        created_at: new Date()
+      });
+    } catch (emailError) {
+      console.error('Email gönderilemedi:', emailError);
+      // Email hatası mesaj kaydını etkilemez
+    }
 
     res.status(201).json({ message: 'Mesajınız başarıyla gönderildi', id: contact.id });
   } catch (error) {

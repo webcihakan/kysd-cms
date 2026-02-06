@@ -119,7 +119,7 @@ export default function WhyJoin() {
               <span className="text-accent-400">Olmalısınız?</span>
             </h1>
             <p className="text-lg md:text-xl text-primary-100 max-w-2xl mx-auto mb-10">
-              Türkiye'nin en köklü konfeksiyon yan sanayi derneğine katılın, sektörün gücünden yararlanın.
+              Türkiye'nin en köklü konfeksiyon yan sanayicileri derneğine katılın, sektörün gücünden yararlanın.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link

@@ -73,12 +73,12 @@ export default function Footer() {
             <Link to="/" className="inline-flex items-center gap-3 mb-6">
               <img
                 src={logoUrl}
-                alt={settings.site_name || 'KYSD'}
+                alt={settings.site_name || 'KYSD - Konfeksiyon Yan Sanayicileri Derneği'}
                 className="h-12 rounded"
               />
             </Link>
             <p className="text-primary-300 text-sm leading-relaxed mb-6">
-              {settings.footer_about || settings.site_description || 'Konfeksiyon Yan Sanayi Dernegi olarak sektorun gelisimi icin calisiyoruz.'}
+              {settings.footer_about || settings.site_description || 'Konfeksiyon Yan Sanayicileri Derneği olarak sektorun gelisimi icin calisiyoruz.'}
             </p>
 
             {/* Working Hours */}
@@ -229,7 +229,15 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs sm:text-sm">
             <p className="text-primary-400 text-center md:text-left">
               {settings.footer_copyright || (
-                <>© {new Date().getFullYear()} <span className="text-white font-medium">{settings.site_name || 'KYSD'}</span><span className="hidden sm:inline"> - {settings.site_slogan || 'Konfeksiyon Yan Sanayi Dernegi'}</span>. Tum haklari saklidir.</>
+                <>© {new Date().getFullYear()} <span className="text-white font-medium">{settings.site_name || 'KYSD'}</span><span className="hidden sm:inline"> - {settings.site_slogan || 'Konfeksiyon Yan Sanayicileri Derneği'}</span>. Tum haklari saklidir. Ata Tekstil ve Aksesuar Katkılarıyla Tasarlanmıştır.{' '}
+                <a
+                  href="https://www.goramedya.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent-400 hover:text-accent-300 font-medium transition-colors"
+                >
+                  Goramedya
+                </a></>
               )}
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6">

@@ -310,8 +310,8 @@ export default function NewsList() {
                             }}
                           />
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center">
-                            <span className="text-6xl font-bold text-white/20">KYSD</span>
+                          <div className="w-full h-full bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center p-4">
+                            <span className="text-2xl font-bold text-white/20 text-center">KYSD - Konfeksiyon Yan Sanayicileri Derneği</span>
                           </div>
                         )}
                       </div>
@@ -365,8 +365,8 @@ export default function NewsList() {
                         }}
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                        <span className="text-4xl font-bold text-gray-300">KYSD</span>
+                      <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-4">
+                        <span className="text-lg font-bold text-gray-300 text-center">KYSD - Konfeksiyon Yan Sanayicileri Derneği</span>
                       </div>
                     )}
                   </div>

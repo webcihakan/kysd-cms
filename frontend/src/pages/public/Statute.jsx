@@ -24,7 +24,7 @@ const statuteSections = [
     icon: Building2,
     type: 'info',
     items: [
-      { label: 'Dernek Adı', value: 'Konfeksiyon Yan Sanayi Derneği' },
+      { label: 'Dernek Adı', value: 'Konfeksiyon Yan Sanayicileri Derneği' },
       { label: 'Kısa Adı', value: 'KYSD' },
       { label: 'Merkez', value: 'İstanbul' }
     ]
@@ -181,7 +181,7 @@ export default function Statute() {
               Dernek Tüzüğü
             </h1>
             <p className="text-lg text-primary-100 mb-8">
-              Konfeksiyon Yan Sanayi Derneği'nin kuruluş amacı, üyelik şartları ve
+              Konfeksiyon Yan Sanayicileri Derneği'nin kuruluş amacı, üyelik şartları ve
               organizasyon yapısını düzenleyen resmi tüzük belgesi.
             </p>
             <a
@@ -256,7 +256,7 @@ export default function Statute() {
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-gray-900 mb-2">
-                    Konfeksiyon Yan Sanayi Derneği Tüzüğü
+                    Konfeksiyon Yan Sanayicileri Derneği Tüzüğü
                   </h2>
                   <p className="text-gray-600 text-sm">
                     Bu tüzük, 5253 sayılı Dernekler Kanunu ve ilgili mevzuat hükümlerine uygun olarak

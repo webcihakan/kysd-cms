@@ -13,6 +13,7 @@ import AdBanner from '../../components/common/AdBanner'
 export default function Home() {
   const [sliders, setSliders] = useState([])
   const [news, setNews] = useState([])
+  const [sectorNews, setSectorNews] = useState([])
   const [announcements, setAnnouncements] = useState([])
   const [industryGroups, setIndustryGroups] = useState([])
   const [virtualFairs, setVirtualFairs] = useState([])
@@ -25,9 +26,10 @@ export default function Home() {
 
   const fetchData = async () => {
     try {
-      const [slidersRes, newsRes, announcementsRes, groupsRes, virtualFairsRes, settingsRes] = await Promise.all([
+      const [slidersRes, newsRes, sectorNewsRes, announcementsRes, groupsRes, virtualFairsRes, settingsRes] = await Promise.all([
         api.get('/sliders'),
         api.get('/news?limit=6&featured=true'),
+        api.get('/news?source=scraped&limit=3'),
         api.get('/announcements?limit=6'),
         api.get('/industry-groups'),
         api.get('/virtual-fairs'),
@@ -36,6 +38,7 @@ export default function Home() {
 
       setSliders(slidersRes.data)
       setNews(newsRes.data.news)
+      setSectorNews(sectorNewsRes.data.news || [])
       setAnnouncements(announcementsRes.data.announcements)
       setIndustryGroups(groupsRes.data)
       setVirtualFairs(virtualFairsRes.data || [])
@@ -67,10 +70,10 @@ export default function Home() {
             <div>
               <div className="inline-flex items-center gap-2 bg-accent-500/20 text-accent-300 px-4 py-2 rounded text-sm font-medium mb-6">
                 <Shield className="w-4 h-4" />
-                {settings.home_hero_badge || '1990\'dan Beri Sektorun Yaninda'}
+                {settings.home_hero_badge || '1995\'ten Beri Sektorun Yaninda'}
               </div>
               <h1 className="text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-                {settings.site_name || 'Konfeksiyon Yan Sanayi Dernegi'}
+                {settings.site_name || 'Konfeksiyon Yan Sanayicileri Derneği'}
               </h1>
               <p className="text-base sm:text-lg text-primary-200 mb-6 sm:mb-8 leading-relaxed max-w-xl">
                 {settings.home_hero_description || settings.site_description || 'Turkiye\'nin en koklu konfeksiyon yan sanayi kurulusu olarak, sektorun gelisimi ve uyelerimizin haklarini korumak icin calisiyoruz.'}
@@ -140,7 +143,7 @@ export default function Home() {
       {/* Stats Section */}
       <section className="bg-white border-b border-corporate-100">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 lg:grid-cols-4 -mt-8 relative z-20 gap-2 sm:gap-0">
+          <div className="grid grid-cols-2 lg:grid-cols-4 mt-0 sm:-mt-8 lg:-mt-8 relative z-20 gap-3 sm:gap-0">
             <div className="bg-white p-4 sm:p-6 lg:p-8 text-center sm:border-r border-corporate-100 shadow-corporate-lg rounded-lg sm:rounded-none sm:first:rounded-l-lg">
               <div className="w-10 h-10 sm:w-14 sm:h-14 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-4">
                 <Building2 className="w-5 h-5 sm:w-7 sm:h-7 text-primary-700" />
@@ -172,6 +175,58 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Sector News Section */}
+      {sectorNews.length > 0 && (
+        <section className="py-12 sm:py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <span className="inline-block text-primary-700 text-sm font-semibold tracking-wider uppercase mb-2">
+                  Sektörden
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-bold text-primary-900">
+                  Güncel Haberler
+                </h2>
+              </div>
+              <Link
+                to="/haberler"
+                className="inline-flex items-center gap-2 text-primary-700 font-semibold hover:text-primary-800 transition-colors text-sm"
+              >
+                Tümünü Gör
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {sectorNews.map((item) => (
+                <Link
+                  key={item.id}
+                  to={`/haberler/${item.slug}`}
+                  className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300"
+                >
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
+                      <Newspaper className="w-4 h-4" />
+                      <span>{formatDate(item.createdAt)}</span>
+                    </div>
+                    <h3 className="font-bold text-gray-900 mb-2 group-hover:text-primary-700 transition-colors line-clamp-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 line-clamp-3 mb-4">
+                      {stripHtml(item.excerpt || item.content)}
+                    </p>
+                    <span className="inline-flex items-center gap-1 text-primary-700 font-medium text-sm group-hover:gap-2 transition-all">
+                      Devamını Oku
+                      <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* About Section */}
       <section className="py-12 sm:py-20 bg-corporate-50">
@@ -234,7 +289,7 @@ export default function Home() {
                   className="w-32 mx-auto mb-6"
                 />
                 <h3 className="text-xl font-bold text-primary-900 text-center mb-4">
-                  Konfeksiyon Yan Sanayi Derneği
+                  Konfeksiyon Yan Sanayicileri Derneği
                 </h3>
                 <p className="text-corporate-500 text-center text-sm mb-6">
                   {settings.site_description || 'Türkiye konfeksiyon yan sanayi sektörünün en köklü meslek kuruluşu.'}

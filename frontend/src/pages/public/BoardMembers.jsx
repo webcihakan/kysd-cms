@@ -63,7 +63,7 @@ export default function BoardMembers() {
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">KYSD Yönetim Kurulu</h1>
           <p className="text-lg text-primary-100 max-w-2xl mx-auto">
-            Konfeksiyon Yan Sanayi Derneği yönetim kurulu üyelerimiz
+            Konfeksiyon Yan Sanayicileri Derneği yönetim kurulu üyelerimiz
           </p>
         </div>
       </div>

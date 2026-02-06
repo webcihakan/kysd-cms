@@ -59,12 +59,10 @@ export default function AdBanner({ code, className = '', wrapperClassName = '' }
       <img
         src={`${API_URL}${ad.imageDesktop}`}
         alt={ad.name || 'Reklam'}
-        className="w-auto h-auto object-contain"
+        className="w-full h-auto object-contain"
         style={{
-          maxWidth: position.width,
-          maxHeight: position.height,
-          width: position.width,
-          height: position.height
+          maxWidth: '100%',
+          height: 'auto'
         }}
       />
     )

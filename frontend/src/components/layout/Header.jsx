@@ -322,12 +322,12 @@ export default function Header() {
           <Link to="/" className="flex items-center gap-4">
             <img
               src={logoUrl}
-              alt={settings.site_name || 'KYSD'}
+              alt={settings.site_name || 'KYSD - Konfeksiyon Yan Sanayicileri Derneği'}
               className="h-14"
             />
             <div className="hidden sm:block border-l border-gray-200 pl-4">
-              <p className="font-bold text-primary-900 text-lg tracking-tight">{settings.site_name || 'KYSD'}</p>
-              <p className="text-xs text-corporate-500 tracking-wide">{settings.site_slogan || 'Konfeksiyon Yan Sanayi Dernegi'}</p>
+              <p className="font-bold text-primary-900 text-lg tracking-tight">{settings.site_name || 'KYSD - Konfeksiyon Yan Sanayicileri Derneği'}</p>
+              <p className="text-xs text-corporate-500 tracking-wide">{settings.site_slogan || 'Konfeksiyon Yan Sanayicileri Derneği'}</p>
             </div>
           </Link>
 

@@ -496,10 +496,201 @@ const sendJobApplicationToMembers = async (application, jobPosting, settings = {
   }
 }
 
+// Üyelik başvurusu bildirimi
+const sendMembershipApplicationNotification = async (application) => {
+  try {
+    const transporter = await createTransporter()
+    if (!transporter) return { success: false, error: 'SMTP ayarları eksik' }
+
+    const settings = await prisma.setting.findMany()
+    const settingsObj = {}
+    settings.forEach(s => { settingsObj[s.key] = s.value })
+
+    const siteName = settingsObj.site_name || 'KYSD'
+    const contactEmail = settingsObj.contact_email || 'kysd@kysd.org.tr'
+
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+    .content { background: #f8fafc; padding: 30px; border: 1px solid #e2e8f0; }
+    .info-box { background: white; border-radius: 10px; padding: 20px; margin: 20px 0; }
+    .info-table { width: 100%; border-collapse: collapse; }
+    .info-table td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
+    .info-table td:first-child { font-weight: bold; color: #64748b; width: 40%; }
+    .footer { background: #1e293b; color: #94a3b8; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; }
+    .btn { display: inline-block; background: #1e40af; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin-top: 15px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📋 Yeni Üyelik Başvurusu</h1>
+      <p>${siteName}</p>
+    </div>
+    <div class="content">
+      <p>Merhaba,</p>
+      <p>Web sitesinden yeni bir üyelik başvurusu alındı.</p>
+
+      <div class="info-box">
+        <h3 style="margin-top: 0; color: #1e40af;">Başvuru Detayları</h3>
+        <table class="info-table">
+          <tr>
+            <td>Firma Adı</td>
+            <td><strong>${application.company_name}</strong></td>
+          </tr>
+          <tr>
+            <td>Yetkili Adı</td>
+            <td>${application.authorized_person}</td>
+          </tr>
+          <tr>
+            <td>Email</td>
+            <td>${application.email}</td>
+          </tr>
+          <tr>
+            <td>Telefon</td>
+            <td>${application.phone}</td>
+          </tr>
+          ${application.sector ? `<tr><td>Sektör</td><td>${application.sector}</td></tr>` : ''}
+          ${application.address ? `<tr><td>Adres</td><td>${application.address}</td></tr>` : ''}
+          <tr>
+            <td>Tarih</td>
+            <td>${new Date(application.created_at).toLocaleString('tr-TR')}</td>
+          </tr>
+        </table>
+      </div>
+
+      <p style="text-align: center;">
+        <a href="https://kysd.org.tr/admin/uyelik-basvurulari" class="btn">Admin Panelinde Görüntüle</a>
+      </p>
+    </div>
+    <div class="footer">
+      <p>${siteName}</p>
+      <p>${settingsObj.contact_address || ''}</p>
+      <p>Tel: ${settingsObj.contact_phone || ''} | Email: ${contactEmail}</p>
+    </div>
+  </div>
+</body>
+</html>
+`
+
+    const mailOptions = {
+      from: `"${siteName}" <${settingsObj.smtp_user || contactEmail}>`,
+      to: contactEmail,
+      subject: `Yeni Üyelik Başvurusu - ${application.company_name}`,
+      html: htmlContent
+    }
+
+    await transporter.sendMail(mailOptions)
+    return { success: true }
+  } catch (error) {
+    console.error('Üyelik başvurusu maili gönderilemedi:', error)
+    return { success: false, error: error.message }
+  }
+}
+
+// İletişim formu bildirimi
+const sendContactFormNotification = async (contact) => {
+  try {
+    const transporter = await createTransporter()
+    if (!transporter) return { success: false, error: 'SMTP ayarları eksik' }
+
+    const settings = await prisma.setting.findMany()
+    const settingsObj = {}
+    settings.forEach(s => { settingsObj[s.key] = s.value })
+
+    const siteName = settingsObj.site_name || 'KYSD'
+    const contactEmail = settingsObj.contact_email || 'kysd@kysd.org.tr'
+
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+    .content { background: #f8fafc; padding: 30px; border: 1px solid #e2e8f0; }
+    .info-box { background: white; border-radius: 10px; padding: 20px; margin: 20px 0; }
+    .info-table { width: 100%; border-collapse: collapse; }
+    .info-table td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
+    .info-table td:first-child { font-weight: bold; color: #64748b; width: 40%; }
+    .message-box { background: #f1f5f9; border-left: 4px solid #1e40af; padding: 20px; border-radius: 8px; margin: 20px 0; }
+    .footer { background: #1e293b; color: #94a3b8; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>✉️ Yeni İletişim Mesajı</h1>
+      <p>${siteName}</p>
+    </div>
+    <div class="content">
+      <p>Merhaba,</p>
+      <p>Web sitesinden yeni bir iletişim formu mesajı alındı.</p>
+
+      <div class="info-box">
+        <h3 style="margin-top: 0; color: #1e40af;">İletişim Bilgileri</h3>
+        <table class="info-table">
+          <tr>
+            <td>Ad Soyad</td>
+            <td><strong>${contact.name}</strong></td>
+          </tr>
+          <tr>
+            <td>Email</td>
+            <td>${contact.email}</td>
+          </tr>
+          ${contact.phone ? `<tr><td>Telefon</td><td>${contact.phone}</td></tr>` : ''}
+          ${contact.subject ? `<tr><td>Konu</td><td>${contact.subject}</td></tr>` : ''}
+          <tr>
+            <td>Tarih</td>
+            <td>${new Date(contact.created_at).toLocaleString('tr-TR')}</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="message-box">
+        <strong>Mesaj:</strong>
+        <p style="margin-top: 10px; white-space: pre-wrap;">${contact.message}</p>
+      </div>
+    </div>
+    <div class="footer">
+      <p>${siteName}</p>
+      <p>${settingsObj.contact_address || ''}</p>
+      <p>Tel: ${settingsObj.contact_phone || ''} | Email: ${contactEmail}</p>
+    </div>
+  </div>
+</body>
+</html>
+`
+
+    const mailOptions = {
+      from: `"${siteName}" <${settingsObj.smtp_user || contactEmail}>`,
+      to: contactEmail,
+      subject: `İletişim Formu - ${contact.name}`,
+      html: htmlContent
+    }
+
+    await transporter.sendMail(mailOptions)
+    return { success: true }
+  } catch (error) {
+    console.error('İletişim formu maili gönderilemedi:', error)
+    return { success: false, error: error.message }
+  }
+}
+
 module.exports = {
   createTransporter,
   sendDueNotification,
   sendBulkDueNotifications,
   sendEventNotification,
-  sendJobApplicationToMembers
+  sendJobApplicationToMembers,
+  sendMembershipApplicationNotification,
+  sendContactFormNotification
 }

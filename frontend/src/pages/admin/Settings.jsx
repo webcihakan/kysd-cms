@@ -16,7 +16,7 @@ const settingGroups = [
     description: 'Site adi, aciklamasi ve temel bilgiler',
     fields: [
       { key: 'site_name', label: 'Site Adi', type: 'text', placeholder: 'KYSD' },
-      { key: 'site_slogan', label: 'Site Slogani', type: 'text', placeholder: 'Konfeksiyon Yan Sanayi Dernegi' },
+      { key: 'site_slogan', label: 'Site Slogani', type: 'text', placeholder: 'Konfeksiyon Yan Sanayicileri Derneği' },
       { key: 'site_description', label: 'Site Aciklamasi', type: 'textarea', placeholder: 'Site hakkinda kisa aciklama...' },
       { key: 'site_keywords', label: 'Anahtar Kelimeler', type: 'text', placeholder: 'tekstil, konfeksiyon, sanayi, dernek' }
     ]
@@ -105,7 +105,7 @@ const settingGroups = [
     icon: Layout,
     description: 'Ana sayfa bolum ayarlari',
     fields: [
-      { key: 'home_hero_badge', label: 'Hero Rozet Metni', type: 'text', placeholder: '1990\'dan Beri Sektorun Yaninda' },
+      { key: 'home_hero_badge', label: 'Hero Rozet Metni', type: 'text', placeholder: '1995\'ten Beri Sektorun Yaninda' },
       { key: 'home_hero_description', label: 'Hero Aciklama Metni', type: 'textarea', placeholder: 'Ana sayfada gorunecek tanitim metni...' },
       { key: 'home_news_count', label: 'Gosterilecek Haber Sayisi', type: 'number', placeholder: '6' },
       { key: 'home_announcements_count', label: 'Gosterilecek Duyuru Sayisi', type: 'number', placeholder: '4' },
@@ -124,7 +124,7 @@ const settingGroups = [
     icon: Search,
     description: 'Arama motoru optimizasyonu',
     fields: [
-      { key: 'seo_title', label: 'Varsayilan Sayfa Basligi', type: 'text', placeholder: 'KYSD - Konfeksiyon Yan Sanayi Dernegi' },
+      { key: 'seo_title', label: 'Varsayilan Sayfa Basligi', type: 'text', placeholder: 'KYSD - Konfeksiyon Yan Sanayicileri Derneği' },
       { key: 'seo_description', label: 'Varsayilan Meta Aciklama', type: 'textarea', placeholder: 'Site aciklamasi (160 karakter onerilen)' },
       { key: 'seo_robots', label: 'Robots Meta', type: 'select', options: ['index, follow', 'noindex, follow', 'index, nofollow', 'noindex, nofollow'] },
       { key: 'seo_canonical', label: 'Canonical URL', type: 'url', placeholder: 'https://www.kysd.org.tr' }

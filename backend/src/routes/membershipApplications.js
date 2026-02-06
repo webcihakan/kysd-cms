@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 
 const { auth, adminOnly } = require('../middleware/auth');
+const { sendMembershipApplicationNotification } = require('../utils/mailer');
 
 const router = express.Router();
 const prisma = require('../lib/prisma');
@@ -54,6 +55,22 @@ router.post('/', [
         status: 'PENDING'
       }
     });
+
+    // Email bildirimi gönder (arka planda, hata olsa da kullanıcıya etki etmesin)
+    try {
+      await sendMembershipApplicationNotification({
+        company_name: companyName,
+        authorized_person: contactName,
+        email,
+        phone,
+        sector: activityArea,
+        address: `${address}, ${city}${district ? ', ' + district : ''}`,
+        created_at: new Date()
+      });
+    } catch (emailError) {
+      console.error('Email gönderilemedi:', emailError);
+      // Email hatası başvuruyu etkilemez, devam et
+    }
 
     res.status(201).json({
       message: 'Üyelik başvurunuz başarıyla alındı. En kısa sürede sizinle iletişime geçeceğiz.',

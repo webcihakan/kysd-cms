@@ -476,12 +476,12 @@ export default function MembershipApplication() {
                       Web Sitesi
                     </label>
                     <input
-                      type="url"
+                      type="text"
                       name="website"
                       value={formData.website}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all bg-gray-50 focus:bg-white"
-                      placeholder="https://www.firmaniz.com"
+                      placeholder="www.firmaniz.com veya https://www.firmaniz.com"
                     />
                   </div>
                 </div>

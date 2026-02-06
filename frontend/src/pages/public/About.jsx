@@ -45,7 +45,7 @@ export default function About() {
   ]
 
   const defaultMilestones = [
-    { year: '1990', title: 'Kuruluş', desc: 'KYSD\'nin temelleri atıldı' },
+    { year: '1995', title: 'Kuruluş', desc: 'KYSD\'nin temelleri atıldı' },
     { year: '2000', title: 'Büyüme', desc: 'Üye sayısı 50\'yi aştı' },
     { year: '2010', title: 'Uluslararası', desc: 'İlk yurt dışı fuar katılımı' },
     { year: '2020', title: 'Dijitalleşme', desc: 'Online hizmetler başlatıldı' },
@@ -104,7 +104,7 @@ export default function About() {
     } catch (e) {}
 
     return {
-      title: pageData.title || 'Konfeksiyon Yan Sanayi Derneği',
+      title: pageData.title || 'Konfeksiyon Yan Sanayicileri Derneği',
       subtitle: extraData.subtitle || 'Türkiye\'nin önde gelen konfeksiyon yan sanayi kuruluşlarını bir araya getiren, sektörün güçlü sesi ve temsilcisi.',
       content: pageData.content || '',
       vision: extraData.vision || 'Türk konfeksiyon yan sanayini dünya standartlarına taşıyarak, sektörümüzün küresel rekabet gücünü artırmak ve uluslararası pazarlarda söz sahibi olmak.',
@@ -154,7 +154,7 @@ export default function About() {
             <div>
               <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
                 <Star className="w-5 h-5 text-accent-400" />
-                <span className="text-white/90 text-sm font-medium">1990'dan Beri</span>
+                <span className="text-white/90 text-sm font-medium">1995'ten Beri</span>
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                 {content.title}
@@ -233,8 +233,8 @@ export default function About() {
             ) : (
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  <strong className="text-gray-900">Konfeksiyon Yan Sanayi Derneği (KYSD)</strong>,
-                  1990 yılında İstanbul'da kurulmuş olup, konfeksiyon yan sanayi sektöründe faaliyet
+                  <strong className="text-gray-900">Konfeksiyon Yan Sanayicileri Derneği (KYSD)</strong>,
+                  1995 yılında İstanbul'da kurulmuş olup, konfeksiyon yan sanayi sektöründe faaliyet
                   gösteren firmaları bir araya getiren köklü bir meslek örgütüdür.
                 </p>
                 <p>

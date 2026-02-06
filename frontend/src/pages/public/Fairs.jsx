@@ -66,6 +66,12 @@ export default function Fairs() {
       return matchesFilter && matchesSearch
     })
     .sort((a, b) => {
+      // Önce order değerine göre sırala (küçük sayılar önce)
+      if (a.order !== b.order) {
+        return a.order - b.order
+      }
+
+      // Order aynıysa tarihe göre sırala
       const now = new Date()
       const dateA = a.startDate ? new Date(a.startDate) : new Date(0)
       const dateB = b.startDate ? new Date(b.startDate) : new Date(0)
