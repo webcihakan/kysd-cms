@@ -595,127 +595,56 @@ export default function Home() {
         </div>
       </section>
 
-      {/* News & Announcements - Grid yan yana */}
+      {/* Announcements */}
       <section className="py-12 sm:py-20 bg-corporate-50">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-10">
-            {/* News */}
+          <div className="flex items-center justify-between mb-8">
             <div>
-              <div className="flex items-center justify-between mb-8">
-                <div>
-                  <span className="inline-block text-primary-700 text-sm font-semibold tracking-wider uppercase mb-2">
-                    Haberler
-                  </span>
-                  <h2 className="text-2xl font-bold text-primary-900">Güncel Gelişmeler</h2>
-                </div>
-                <Link
-                  to="/haberler"
-                  className="inline-flex items-center gap-2 text-primary-700 font-semibold hover:text-primary-800 transition-colors"
-                >
-                  Tümü
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-
-              {news.length > 0 ? (
-                <div className="space-y-4">
-                  {news.slice(0, 4).map((item) => (
-                    <Link
-                      key={item.id}
-                      to={`/haber/${item.slug}`}
-                      className="group flex gap-4 bg-white rounded-lg overflow-hidden shadow-corporate hover:shadow-corporate-md transition-shadow p-4"
-                    >
-                      <div className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden">
-                        {item.image ? (
-                          <img
-                            src={item.image}
-                            alt={item.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-primary-100 flex items-center justify-center">
-                            <Newspaper className="w-8 h-8 text-primary-300" />
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-primary-900 group-hover:text-primary-700 line-clamp-2 mb-2 transition-colors">
-                          {item.title}
-                        </h3>
-                        <p className="text-corporate-500 text-sm line-clamp-1 mb-2">
-                          {item.excerpt || truncateText(stripHtml(item.content), 80)}
-                        </p>
-                        <div className="flex items-center gap-2 text-corporate-400 text-xs">
-                          <Calendar className="w-3.5 h-3.5" />
-                          {formatDate(item.createdAt)}
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <div className="bg-white rounded-lg p-12 text-center text-corporate-500">
-                  Henüz haber bulunmuyor
-                </div>
-              )}
+              <span className="inline-block text-accent-600 text-sm font-semibold tracking-wider uppercase mb-2">
+                Duyurular
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-primary-900">Önemli Bilgilendirmeler</h2>
             </div>
-
-            {/* Announcements */}
-            <div>
-              <div className="flex items-center justify-between mb-8">
-                <div>
-                  <span className="inline-block text-accent-600 text-sm font-semibold tracking-wider uppercase mb-2">
-                    Duyurular
-                  </span>
-                  <h2 className="text-2xl font-bold text-primary-900">Önemli Bilgilendirmeler</h2>
-                </div>
-                <Link
-                  to="/duyurular"
-                  className="inline-flex items-center gap-2 text-primary-700 font-semibold hover:text-primary-800 transition-colors"
-                >
-                  Tümü
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-
-              {announcements.length > 0 ? (
-                <div className="space-y-4">
-                  {announcements.slice(0, 4).map((item) => (
-                    <Link
-                      key={item.id}
-                      to={`/duyuru/${item.slug}`}
-                      className="group block bg-white rounded-lg shadow-corporate hover:shadow-corporate-md transition-shadow p-4"
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 bg-accent-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                          <Bell className="w-5 h-5 text-accent-600" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-primary-900 group-hover:text-primary-700 line-clamp-2 mb-2 transition-colors">
-                            {item.title}
-                          </h3>
-                          <div className="flex items-center gap-2 text-corporate-400 text-xs">
-                            <Calendar className="w-3.5 h-3.5" />
-                            {formatDate(item.createdAt)}
-                          </div>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-corporate-300 group-hover:text-primary-600 group-hover:translate-x-1 transition-all flex-shrink-0" />
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <div className="bg-white rounded-lg p-12 text-center text-corporate-500">
-                  Henüz duyuru bulunmuyor
-                </div>
-              )}
-            </div>
+            <Link
+              to="/duyurular"
+              className="inline-flex items-center gap-2 text-primary-700 font-semibold hover:text-primary-800 transition-colors text-sm"
+            >
+              Tümünü Gör
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
 
-          {/* Haberler Arası Banner */}
-          <div className="mt-10">
-            <AdBanner code="news-inline" />
-          </div>
+          {announcements.length > 0 ? (
+            <div className="grid md:grid-cols-2 gap-6">
+              {announcements.slice(0, 6).map((item) => (
+                <Link
+                  key={item.id}
+                  to={`/duyuru/${item.slug}`}
+                  className="group block bg-white rounded-lg shadow-corporate hover:shadow-corporate-md transition-shadow p-6"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-accent-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Bell className="w-6 h-6 text-accent-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-lg text-primary-900 group-hover:text-primary-700 line-clamp-2 mb-2 transition-colors">
+                        {item.title}
+                      </h3>
+                      <div className="flex items-center gap-2 text-corporate-400 text-sm">
+                        <Calendar className="w-4 h-4" />
+                        {formatDate(item.createdAt)}
+                      </div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-corporate-300 group-hover:text-primary-600 group-hover:translate-x-1 transition-all flex-shrink-0" />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white rounded-lg p-12 text-center text-corporate-500">
+              Henüz duyuru bulunmuyor
+            </div>
+          )}
         </div>
       </section>
 

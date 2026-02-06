@@ -164,6 +164,7 @@ export default function App() {
         <Route path="/sayfa/:slug" element={<Page />} />
         <Route path="/haberler" element={<NewsList />} />
         <Route path="/haber/:slug" element={<NewsDetail />} />
+        <Route path="/haberler/:slug" element={<NewsDetail />} />
         <Route path="/duyurular" element={<AnnouncementsList />} />
         <Route path="/duyuru/:slug" element={<AnnouncementDetail />} />
         <Route path="/sanayi-gruplari" element={<IndustryGroupList />} />

@@ -49,20 +49,19 @@ const createSlug = (text) => {
     .trim()
 }
 
-// Ulke listesi (fuar ulkeleri)
+// Ulke listesi (tur rehberi ulkeleri)
 router.get('/countries', async (req, res) => {
   try {
-    // Fairs tablosundan benzersiz ulkeleri al
-    const fairs = await prisma.fair.findMany({
+    // TravelGuide tablosundan benzersiz ulkeleri al
+    const guides = await prisma.travelGuide.findMany({
       where: {
-        country: { not: null },
         isActive: true
       },
       select: { country: true },
       distinct: ['country']
     })
 
-    const countries = fairs.map(f => f.country).filter(Boolean).sort()
+    const countries = guides.map(g => g.country).filter(Boolean).sort()
     res.json(countries)
   } catch (error) {
     console.error('Ulkeler getirilemedi:', error)

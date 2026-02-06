@@ -91,7 +91,7 @@ export default function Magazines() {
               Sektörel Dergiler
             </h1>
             <p className="text-lg text-primary-100">
-              Sektörümüze özel dergileri online olarak okuyun, PDF formatında indirin.
+              Tekstil sektörünün önde gelen dergilerini keşfedin, detaylı içeriklere ulaşın.
             </p>
           </div>
         </div>
@@ -154,9 +154,11 @@ export default function Magazines() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {magazines.map((magazine) => (
-                <Link
+                <a
                   key={magazine.id}
-                  to={`/dergiler/${magazine.slug}`}
+                  href={magazine.pdfFile || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300"
                 >
                   {/* Kapak Görseli */}
@@ -227,6 +229,12 @@ export default function Magazines() {
                       </p>
                     )}
 
+                    {magazine.description && (
+                      <p className="text-sm text-gray-500 line-clamp-2 mb-3">
+                        {magazine.description}
+                      </p>
+                    )}
+
                     <div className="flex items-center justify-between text-xs text-gray-500 pt-3 border-t border-gray-100">
                       {magazine.publishDate && (
                         <div className="flex items-center gap-1">
@@ -235,17 +243,13 @@ export default function Magazines() {
                         </div>
                       )}
 
-                      <div className="flex items-center gap-3">
-                        {magazine.viewCount > 0 && (
-                          <div className="flex items-center gap-1">
-                            <Eye className="w-3 h-3" />
-                            {magazine.viewCount}
-                          </div>
-                        )}
+                      <div className="flex items-center gap-2 text-primary-600 font-semibold">
+                        <span>Detay</span>
+                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>
                   </div>
-                </Link>
+                </a>
               ))}
             </div>
 
